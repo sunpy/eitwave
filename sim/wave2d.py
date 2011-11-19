@@ -17,10 +17,12 @@ def prep_coeff(coeff, order=2):
         new_coeff[0] = coeff
     return new_coeff
 
-def simulate_raw(params):
+#Simulate data in HG' coordinates (centered at wave epicenter)
+def simulate_raw(params, verbose = False):
     from sunpy.util import util
     import datetime
-    from scipy.special import erf
+    #from scipy.special import erf
+    from scipy.special import ndtr
 
     cadence = params["cadence"]
     direction = 90.+params["direction"]
@@ -89,13 +91,17 @@ def simulate_raw(params):
     
     header = sunpy.map.MapHeader(dict_header)
     
+    if verbose:
+        print("Simulating "+str(steps)+" raw maps")
+    
     for istep in xrange(steps):
         #Gaussian profile in longitudinal direction
         #Does not take into account spherical geometry (i.e., change in area element)
         if (wave_thickness[istep] <= 0):
             print("ERROR: wave thickness is non-physical!")
         z = (lat_edges-wave_peak[istep])/wave_thickness[istep]
-        wave_1d = wave_normalization[istep]*((erf(np.roll(z,-1)/np.sqrt(2))-erf(z/np.sqrt(2)))/2)[0:lat_num]
+        #wave_1d = wave_normalization[istep]*((erf(np.roll(z,-1)/np.sqrt(2))-erf(z/np.sqrt(2)))/2)[0:lat_num]
+        wave_1d = wave_normalization[istep]*(ndtr(np.roll(z,-1))-ndtr(z))[0:lat_num]
         
         wave_lon_min = direction-width[istep]/2
         wave_lon_max = direction+width[istep]/2
@@ -127,8 +133,9 @@ def simulate_raw(params):
     
     return wave_maps
 
-#Transformation is partially hard-coded, so use with caution
-def transform(params,wave_maps):
+#Transform raw data in HG' coordinates to HPC coordinates
+#Does not implement solar rotation!
+def transform(params,wave_maps, verbose = False):
     from sunpy.wcs import wcs
     from scipy.interpolate import griddata
     
@@ -170,7 +177,8 @@ def transform(params,wave_maps):
     header = sunpy.map.MapHeader(dict_header)
 
     for current_wave_map in wave_maps:
-        #print("Transforming map at "+str(current_wave_map.date))
+        if verbose:
+            print("Transforming map at "+str(current_wave_map.date))
         
         #Could instead use linspace or mgrid?
         lon = np.arange(current_wave_map.xrange[0]+0.5*current_wave_map.header["cdelt1"],current_wave_map.xrange[1],current_wave_map.header["cdelt1"])
@@ -211,14 +219,47 @@ def transform(params,wave_maps):
 
     return wave_maps_transformed
 
-def add_noise(params,wave_maps):
-    wave_maps_noise = []
-    for current_wave_map in wave_maps:
-        wave_maps_noise += [current_wave_map]
-    return wave_maps_noise
+#Adds simulated noise to a map
+def add_noise(params, wave_maps, verbose = False):
+    from scipy import stats
+    
+    noise_type = params["noise_type"]
+    noise_scale = params["noise_scale"]
+    noise_mean = params["noise_mean"]
+    noise_sdev = params["noise_sdev"]
+    
+    if noise_type is None:
+        if verbose:
+            print("No added noise")
+        return wave_maps
+    else:
+        wave_maps_noise = []
+        for current_wave_map in wave_maps:
+            wave = np.array(current_wave_map)
+            
+            if noise_type == "Normal":
+                if verbose:
+                    print("Adding normal noise to map at "+str(current_wave_map.date))
+                noise = noise_scale*stats.norm.rvs(loc=noise_mean,scale=noise_sdev,size=wave.size).reshape(wave.shape)
+            elif noise_type == "Poisson":
+                if verbose:
+                    print("Adding Poisson noise to map at "+str(current_wave_map.date))
+                noise = noise_scale*stats.poisson.rvs(noise_mean,size=wave.size).reshape(wave.shape)
+            else:
+                if verbose:
+                    print("Unkonwn noise requested to map at "+str(current_wave_map.date))
+                noise = np.zeros_like(wave)
+            
+            new_wave_map = sunpy.map.BaseMap(wave+noise, current_wave_map.header)
+            new_wave_map.name = current_wave_map.name
+            new_wave_map.date = current_wave_map.date
+            wave_maps_noise += [new_wave_map]
+            
+        return wave_maps_noise
 
-def simulate(params):
-    wave_maps_raw = simulate_raw(params)
-    wave_maps_transformed = transform(params,wave_maps_raw)
-    wave_maps_noise= add_noise(params,wave_maps_transformed)
+#Simulates wave in HPC coordinates with added noise
+def simulate(params, verbose = False):
+    wave_maps_raw = simulate_raw(params, verbose)
+    wave_maps_transformed = transform(params, wave_maps_raw, verbose)
+    wave_maps_noise = add_noise(params, wave_maps_transformed, verbose)
     return wave_maps_noise

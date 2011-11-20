@@ -9,10 +9,16 @@ params = {
     "epi_lon": 20., #degrees, HG longitude of wave epicenter
     
     #Parameters that evolve over time, be very careful of non-physical behavior
-    "width": [90., 1.], #degrees, full angle in azimuth, centered at 'direction'
-    "wave_thickness": [1., 0.02, -0.00005], #degrees, sigma of Gaussian profile in longitudinal direction
+    "width": [90., 1.5], #degrees, full angle in azimuth, centered at 'direction'
+    "wave_thickness": [0.5, 0.02, -0.00005], #degrees, sigma of Gaussian profile in longitudinal direction
     "wave_normalization": [1.], #integrated value of the 1D Gaussian profile
     "speed": [0.2, 0.002], #degrees/s, make sure that wave propagates all the way to lat_min for polynomial speed
+    
+    #Noise parameters
+    "noise_type": "Poisson", #can be None, "Normal", or "Poisson"
+    "noise_scale": 0.05,
+    "noise_mean": 1.,
+    "noise_sdev": 1.,
     
     "max_steps": 50,
     
@@ -34,4 +40,5 @@ params = {
 }
 
 wave_maps = wave2d.simulate(params)
+#wave_maps = wave2d.simulate(params, verbose = True)
 visualize(wave_maps)

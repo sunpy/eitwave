@@ -4,7 +4,10 @@ from visualize import visualize
 params = {
     "cadence": 12., #seconds
     
-    "direction": 25., #degrees, measured CCW from HPC +X
+    "hglt_obs": 0., #degrees
+    "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
+    
+    "direction": 25., #degrees, measured CCW from HG +longitude
     "epi_lat": 30., #degrees, HG latitude of wave epicenter
     "epi_lon": 20., #degrees, HG longitude of wave epicenter
     

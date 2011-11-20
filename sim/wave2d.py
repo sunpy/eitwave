@@ -17,6 +17,24 @@ def prep_coeff(coeff, order=2):
         new_coeff[0] = coeff
     return new_coeff
 
+#Rotation with Euler angles defined in the ZYZ convention
+#See https://en.wikipedia.org/wiki/Euler_angles, ZYZ with left-handed-positive
+#angles[0] is the angle CCW around moving Z axis (azimuth angle)
+#angles[1] is the angle CCW around moving Y axis (polar angle)
+#angles[2] is the angle CCW around Z axis (intrinsic rotation)
+#Note that (0,theta,phi) inverts (-phi,-theta,0)
+def euler_zyz(xyz,angles):
+    c1 = np.cos(np.deg2rad(angles[0]))
+    s1 = np.sin(np.deg2rad(angles[0]))
+    c2 = np.cos(np.deg2rad(angles[1]))
+    s2 = np.sin(np.deg2rad(angles[1]))
+    c3 = np.cos(np.deg2rad(angles[2]))
+    s3 = np.sin(np.deg2rad(angles[2]))
+    x = (c1*c2*c3-s1*s3)*xyz[0]+(-c3*s1-c1*c2*s3)*xyz[1]+(c1*s2)*xyz[2]
+    y = (+c1*s3+c2*c3*s1)*xyz[0]+(c1*c3-c2*s1*s3)*xyz[1]+(s1*s2)*xyz[2]
+    z = (-c3*s2)*xyz[0]+(s2*s3)*xyz[1]+(c2)*xyz[2]
+    return x, y, z
+
 #Simulate data in HG' coordinates (centered at wave epicenter)
 def simulate_raw(params, verbose = False):
     from sunpy.util import util
@@ -139,6 +157,9 @@ def transform(params,wave_maps, verbose = False):
     from sunpy.wcs import wcs
     from scipy.interpolate import griddata
     
+    hglt_obs = params["hglt_obs"]
+    rotation = params["rotation"]
+    
     epi_lat = params["epi_lat"]
     epi_lon = params["epi_lon"]
     
@@ -167,7 +188,7 @@ def transform(params,wave_maps, verbose = False):
         "crpix2": 0,
         "cunit2": "arcsec",
         "ctype2": "HPC",
-        "hglt_obs": 0,
+        "hglt_obs": hglt_obs,
         "hgln_obs": 0,
         "rsun_obs": 963.879683,
         "rsun_ref": 696000000.0,
@@ -175,6 +196,8 @@ def transform(params,wave_maps, verbose = False):
     }
     
     header = sunpy.map.MapHeader(dict_header)
+    
+    start_date = wave_maps[0].date
 
     for current_wave_map in wave_maps:
         if verbose:
@@ -187,6 +210,7 @@ def transform(params,wave_maps, verbose = False):
         
         #xx, yy = wcs.convert_hg_hpc(current_wave_map.header, lon_grid, lat_grid, units="arcsec", occultation=True)
         x, y, z = wcs.convert_hg_hcc_xyz(current_wave_map.header, lon_grid, lat_grid)
+        """
         coslat = np.cos(-np.deg2rad(90.-epi_lat))
         sinlat = np.sin(-np.deg2rad(90.-epi_lat))
         coslon = np.cos(-np.deg2rad(epi_lon))
@@ -194,7 +218,17 @@ def transform(params,wave_maps, verbose = False):
         xp = coslon*x-sinlon*(-sinlat*y+coslat*z)
         yp = coslat*y+sinlat*z
         zp = sinlon*x+coslon*(-sinlat*y+coslat*z)
-        xx, yy = wcs.convert_hcc_hpc(current_wave_map.header, xp, yp)
+        """
+
+        #HPC' to HPC''
+        #Moves the wave epicenter to HG coordinates, assuming HGLT_OBS = 0
+        zxy_p = euler_zyz((z,x,y),(epi_lon,90.-epi_lat,0.))
+        
+        #HPC'' to HPC
+        #Moves the observer to HGLT_OBS and adds rigid solar rotation
+        zpp, xpp, ypp = euler_zyz(zxy_p,(0.,hglt_obs,(current_wave_map.date-start_date).total_seconds()*rotation))
+        
+        xx, yy = wcs.convert_hcc_hpc(current_wave_map.header, xpp, ypp)
         xx *= 3600
         yy *= 3600
         
@@ -210,7 +244,7 @@ def transform(params,wave_maps, verbose = False):
         
         #2D interpolation
         #grid = griddata(points[np.isfinite(xx.ravel()),:], values[np.isfinite(xx.ravel())], (grid_x, grid_y), method="linear")
-        grid = griddata(points[zp.ravel() >= 0], values[zp.ravel() >= 0], (hpcx_grid, hpcy_grid), method="linear")
+        grid = griddata(points[zpp.ravel() >= 0], values[zpp.ravel() >= 0], (hpcx_grid, hpcy_grid), method="linear")
         
         transformed_wave_map = sunpy.map.BaseMap(grid, header)
         transformed_wave_map.name = current_wave_map.name

@@ -1,29 +1,38 @@
 from __future__ import absolute_import
 
 """
-
+Simulates a wave
 """
+
+__authors__ = ["Albert Shih"]
+__email__ = "albert.y.shih@nasa.gov"
 
 import numpy as np
 import sunpy
 
-#Prepares polynomial coefficients out to a certain order, outputs as ndarray
 def prep_coeff(coeff, order=2):
+    """
+    Prepares polynomial coefficients out to a certain order, outputs as ndarray
+    """
     new_coeff = np.zeros(order+1)
     if type(coeff) == list or type(coeff) == np.ndarray:
-        size = min(len(coeff),len(new_coeff))
+        size = min(len(coeff), len(new_coeff))
         new_coeff[0:size] = coeff[0:size]
     else:
         new_coeff[0] = coeff
     return new_coeff
 
-#Rotation with Euler angles defined in the ZYZ convention
-#See https://en.wikipedia.org/wiki/Euler_angles, ZYZ with left-handed-positive
-#angles[0] is the angle CCW around moving Z axis (azimuth angle)
-#angles[1] is the angle CCW around moving Y axis (polar angle)
-#angles[2] is the angle CCW around Z axis (intrinsic rotation)
-#Note that (0,theta,phi) inverts (-phi,-theta,0)
-def euler_zyz(xyz,angles):
+def euler_zyz(xyz, angles):
+    """
+    Rotation with Euler angles defined in the ZYZ convention.  See
+    https://en.wikipedia.org/wiki/Euler_angles, ZYZ with left-handed-positive.
+    
+    * angles[0] is the angle CCW around moving Z axis (azimuth angle)
+    * angles[1] is the angle CCW around moving Y axis (polar angle)
+    * angles[2] is the angle CCW around Z axis (intrinsic rotation)
+    
+    Note that (phi, theta, 0) inverts (-0, -theta, -phi)
+    """
     c1 = np.cos(np.deg2rad(angles[0]))
     s1 = np.sin(np.deg2rad(angles[0]))
     c2 = np.cos(np.deg2rad(angles[1]))
@@ -35,11 +44,14 @@ def euler_zyz(xyz,angles):
     z = (-c3*s2)*xyz[0]+(s2*s3)*xyz[1]+(c2)*xyz[2]
     return x, y, z
 
-#Simulate data in HG' coordinates (centered at wave epicenter)
 def simulate_raw(params, verbose = False):
+    """
+    Simulate data in HG' coordinates
+    
+    HG' = HG, except center at wave epicenter
+    """
     from sunpy.util import util
     import datetime
-    #from scipy.special import erf
     from scipy.special import ndtr
 
     cadence = params["cadence"]
@@ -57,18 +69,21 @@ def simulate_raw(params, verbose = False):
     lon_max = params["lon_max"]
     lon_bin = params["lon_bin"]
 
-    #This roundabout approach recalculates lat_bin and lon_bin to produce equally
-    #sized bins to exactly span the min/max ranges
+    #This roundabout approach recalculates lat_bin and lon_bin to produce
+    #equally sized bins to exactly span the min/max ranges
     lat_num = int(round((lat_max-lat_min)/lat_bin))
-    lat_edges, lat_bin = np.linspace(lat_min,lat_max,lat_num+1,retstep=True)
+    lat_edges, lat_bin = np.linspace(lat_min, lat_max, lat_num+1,
+                                     retstep=True)
     lon_num = int(round((lon_max-lon_min)/lon_bin))
-    lon_edges, lon_bin = np.linspace(lon_min,lon_max,lon_num+1,retstep=True)
+    lon_edges, lon_bin = np.linspace(lon_min, lon_max, lon_num+1,
+                                     retstep=True)
     
     #Propagates from 90. down to lat_min, irrespective of lat_max
-    p = np.poly1d([speed_coeff[2]/3.,speed_coeff[1]/2.,speed_coeff[0],-(90.-lat_min)])
+    p = np.poly1d([speed_coeff[2]/3., speed_coeff[1]/2., speed_coeff[0],
+                   -(90.-lat_min)])
     
     #Will fail if wave does not propogate all the way to lat_min
-    duration = p.r[np.logical_and(p.r.real > 0,p.r.imag == 0)][0]
+    duration = p.r[np.logical_and(p.r.real > 0, p.r.imag == 0)][0]
     
     steps = int(duration/cadence)+1
     if steps > params["max_steps"]:
@@ -76,11 +91,11 @@ def simulate_raw(params, verbose = False):
     
     #Maybe used np.poly1d() instead to do the polynomial calculation?
     time = np.arange(steps)*cadence
-    time_powers = np.vstack((time**0,time**1,time**2))
+    time_powers = np.vstack((time**0, time**1, time**2))
     
-    width = np.dot(width_coeff,time_powers).ravel()
-    wave_thickness = np.dot(wave_thickness_coeff,time_powers).ravel()
-    wave_normalization = np.dot(wave_normalization_coeff,time_powers).ravel()
+    width = np.dot(width_coeff, time_powers).ravel()
+    wave_thickness = np.dot(wave_thickness_coeff, time_powers).ravel()
+    wave_normalization = np.dot(wave_normalization_coeff, time_powers).ravel()
     
     #Propagates from 90., irrespective of lat_max
     wave_peak = 90.-(p(time)+(90.-lat_min))
@@ -114,28 +129,29 @@ def simulate_raw(params, verbose = False):
     
     for istep in xrange(steps):
         #Gaussian profile in longitudinal direction
-        #Does not take into account spherical geometry (i.e., change in area element)
+        #Does not take into account spherical geometry
+        #(i.e., change in area element)
         if (wave_thickness[istep] <= 0):
             print("ERROR: wave thickness is non-physical!")
         z = (lat_edges-wave_peak[istep])/wave_thickness[istep]
-        #wave_1d = wave_normalization[istep]*((erf(np.roll(z,-1)/np.sqrt(2))-erf(z/np.sqrt(2)))/2)[0:lat_num]
-        wave_1d = wave_normalization[istep]*(ndtr(np.roll(z,-1))-ndtr(z))[0:lat_num]
+        wave_1d = wave_normalization[istep]*(ndtr(np.roll(z, -1))-ndtr(z))[0:lat_num]
         
         wave_lon_min = direction-width[istep]/2
         wave_lon_max = direction+width[istep]/2
 
         if (width[istep]< 360.):
-            wave_lon_min_mod = ((wave_lon_min+180.) % 360.)-180. #does this need to be np.remainder() instead?
+            #Do these need to be np.remainder() instead?
+            wave_lon_min_mod = ((wave_lon_min+180.) % 360.)-180.
             wave_lon_max_mod = ((wave_lon_max+180.) % 360.)-180.
             
-            index1 = np.arange(lon_num+1)[np.roll(lon_edges,-1) > min(wave_lon_min_mod,wave_lon_max_mod)][0]
-            index2 = np.roll(np.arange(lon_num+1)[lon_edges < max(wave_lon_min_mod,wave_lon_max_mod)],1)[0]
+            index1 = np.arange(lon_num+1)[np.roll(lon_edges, -1) > min(wave_lon_min_mod, wave_lon_max_mod)][0]
+            index2 = np.roll(np.arange(lon_num+1)[lon_edges < max(wave_lon_min_mod, wave_lon_max_mod)], 1)[0]
     
             wave_lon = np.zeros(lon_num)
             wave_lon[index1+1:index2] = 1.
             #Possible weirdness if index1 == index2
-            wave_lon[index1] += (lon_edges[index1+1]-min(wave_lon_min_mod,wave_lon_max_mod))/lon_bin
-            wave_lon[index2] += (max(wave_lon_min_mod,wave_lon_max_mod)-lon_edges[index2])/lon_bin
+            wave_lon[index1] += (lon_edges[index1+1]-min(wave_lon_min_mod, wave_lon_max_mod))/lon_bin
+            wave_lon[index2] += (max(wave_lon_min_mod, wave_lon_max_mod)-lon_edges[index2])/lon_bin
             
             if (wave_lon_min_mod > wave_lon_max_mod):
                 wave_lon = 1.-wave_lon
@@ -143,17 +159,20 @@ def simulate_raw(params, verbose = False):
             wave_lon = np.ones(lon_num)
         
         #Could be accomplished with np.dot() without casting as matrices?
-        wave = np.mat(wave_1d).transpose()*np.mat(wave_lon)
+        wave = np.mat(wave_1d).T*np.mat(wave_lon)
         
         wave_maps += [sunpy.map.BaseMap(wave, header)]
         wave_maps[istep].name = "Simulation"
-        wave_maps[istep].date = util.anytim("2011-11-11")+datetime.timedelta(0,istep*cadence)
+        wave_maps[istep].date = util.anytim("2011-11-11")+datetime.timedelta(0, istep*cadence)
     
     return wave_maps
 
-#Transform raw data in HG' coordinates to HPC coordinates
-#Does not implement solar rotation!
-def transform(params,wave_maps, verbose = False):
+def transform(params, wave_maps, verbose = False):
+    """
+    Transform raw data in HG' coordinates to HPC coordinates
+    
+    HG' = HG, except center at wave epicenter
+    """
     from sunpy.wcs import wcs
     from scipy.interpolate import griddata
     
@@ -204,30 +223,25 @@ def transform(params,wave_maps, verbose = False):
             print("Transforming map at "+str(current_wave_map.date))
         
         #Could instead use linspace or mgrid?
-        lon = np.arange(current_wave_map.xrange[0]+0.5*current_wave_map.header["cdelt1"],current_wave_map.xrange[1],current_wave_map.header["cdelt1"])
-        lat = np.arange(current_wave_map.yrange[0]+0.5*current_wave_map.header["cdelt2"],current_wave_map.yrange[1],current_wave_map.header["cdelt2"])
-        lon_grid,lat_grid = np.meshgrid(lon,lat)
+        lon = np.arange(current_wave_map.xrange[0]+0.5*current_wave_map.header["cdelt1"], current_wave_map.xrange[1], current_wave_map.header["cdelt1"])
+        lat = np.arange(current_wave_map.yrange[0]+0.5*current_wave_map.header["cdelt2"], current_wave_map.yrange[1], current_wave_map.header["cdelt2"])
+        lon_grid, lat_grid = np.meshgrid(lon, lat)
         
-        #xx, yy = wcs.convert_hg_hpc(current_wave_map.header, lon_grid, lat_grid, units="arcsec", occultation=True)
-        x, y, z = wcs.convert_hg_hcc_xyz(current_wave_map.header, lon_grid, lat_grid)
-        """
-        coslat = np.cos(-np.deg2rad(90.-epi_lat))
-        sinlat = np.sin(-np.deg2rad(90.-epi_lat))
-        coslon = np.cos(-np.deg2rad(epi_lon))
-        sinlon = np.sin(-np.deg2rad(epi_lon))
-        xp = coslon*x-sinlon*(-sinlat*y+coslat*z)
-        yp = coslat*y+sinlat*z
-        zp = sinlon*x+coslon*(-sinlat*y+coslat*z)
-        """
+        #HG' to HCC'
+        #HCC' = HCC, except centered at wave epicenter
+        x, y, z = wcs.convert_hg_hcc_xyz(current_wave_map.header,
+                                         lon_grid, lat_grid)
 
-        #HPC' to HPC''
-        #Moves the wave epicenter to HG coordinates, assuming HGLT_OBS = 0
-        zxy_p = euler_zyz((z,x,y),(epi_lon,90.-epi_lat,0.))
+        #HCC' to HCC''
+        #Moves the wave epicenter to initial conditions
+        #HCC'' = HCC, except assuming that HGLT_OBS = 0
+        zxy_p = euler_zyz((z, x, y), (epi_lon, 90.-epi_lat, 0.))
         
-        #HPC'' to HPC
+        #HCC'' to HCC
         #Moves the observer to HGLT_OBS and adds rigid solar rotation
-        zpp, xpp, ypp = euler_zyz(zxy_p,(0.,hglt_obs,(current_wave_map.date-start_date).total_seconds()*rotation))
+        zpp, xpp, ypp = euler_zyz(zxy_p, (0., hglt_obs, (current_wave_map.date-start_date).total_seconds()*rotation))
         
+        #HCC to HPC (arcsec)
         xx, yy = wcs.convert_hcc_hpc(current_wave_map.header, xpp, ypp)
         xx *= 3600
         yy *= 3600
@@ -238,12 +252,11 @@ def transform(params,wave_maps, verbose = False):
         
         #Destination HPC grid
         #Could instead use linspace or mgrid?
-        hpcx = np.arange(hpcx_min+0.5*hpcx_bin,hpcx_max,hpcx_bin)
-        hpcy = np.arange(hpcy_min+0.5*hpcy_bin,hpcy_max,hpcy_bin)
-        hpcx_grid,hpcy_grid = np.meshgrid(hpcx,hpcy)
+        hpcx = np.arange(hpcx_min+0.5*hpcx_bin, hpcx_max, hpcx_bin)
+        hpcy = np.arange(hpcy_min+0.5*hpcy_bin, hpcy_max, hpcy_bin)
+        hpcx_grid, hpcy_grid = np.meshgrid(hpcx, hpcy)
         
         #2D interpolation
-        #grid = griddata(points[np.isfinite(xx.ravel()),:], values[np.isfinite(xx.ravel())], (grid_x, grid_y), method="linear")
         grid = griddata(points[zpp.ravel() >= 0], values[zpp.ravel() >= 0], (hpcx_grid, hpcy_grid), method="linear")
         
         transformed_wave_map = sunpy.map.BaseMap(grid, header)
@@ -253,8 +266,10 @@ def transform(params,wave_maps, verbose = False):
 
     return wave_maps_transformed
 
-#Adds simulated noise to a map
 def add_noise(params, wave_maps, verbose = False):
+    """
+    Adds simulated noise to a map
+    """
     from scipy import stats
     
     noise_type = params["noise_type"]
@@ -274,11 +289,11 @@ def add_noise(params, wave_maps, verbose = False):
             if noise_type == "Normal":
                 if verbose:
                     print("Adding normal noise to map at "+str(current_wave_map.date))
-                noise = noise_scale*stats.norm.rvs(loc=noise_mean,scale=noise_sdev,size=wave.size).reshape(wave.shape)
+                noise = noise_scale*stats.norm.rvs(loc=noise_mean, scale=noise_sdev, size=wave.size).reshape(wave.shape)
             elif noise_type == "Poisson":
                 if verbose:
                     print("Adding Poisson noise to map at "+str(current_wave_map.date))
-                noise = noise_scale*stats.poisson.rvs(noise_mean,size=wave.size).reshape(wave.shape)
+                noise = noise_scale*stats.poisson.rvs(noise_mean, size=wave.size).reshape(wave.shape)
             else:
                 if verbose:
                     print("Unkonwn noise requested to map at "+str(current_wave_map.date))
@@ -291,8 +306,10 @@ def add_noise(params, wave_maps, verbose = False):
             
         return wave_maps_noise
 
-#Simulates wave in HPC coordinates with added noise
 def simulate(params, verbose = False):
+    """
+    Simulates wave in HPC coordinates with added noise
+    """
     wave_maps_raw = simulate_raw(params, verbose)
     wave_maps_transformed = transform(params, wave_maps_raw, verbose)
     wave_maps_noise = add_noise(params, wave_maps_transformed, verbose)

@@ -1,4 +1,12 @@
-def visualize(wave_maps,delay=0.1):
+from __future__ import absolute_import
+
+__authors__ = ["Albert Shih"]
+__email__ = "albert.y.shih@nasa.gov"
+
+def visualize(wave_maps, delay=0.1):
+    """
+    Visualizes a list of SunPy Maps.  Requires matplotlib 1.1
+    """
     import matplotlib.pyplot as plt
 
     fig = plt.figure()
@@ -13,11 +21,11 @@ def visualize(wave_maps,delay=0.1):
         "cmap": wave_maps[0].cmap,
         "norm": wave_maps[0].norm()
     }
-    im = axes.imshow(wave_maps[0], origin='lower', extent=extent, **params)
-    fig.colorbar(im)
+    img = axes.imshow(wave_maps[0], origin='lower', extent=extent, **params)
+    fig.colorbar(img)
     fig.show()
     
     for current_wave_map in wave_maps[1:]:
         axes.set_title("%s %s" % (current_wave_map.name, current_wave_map.date))
-        im.set_data(current_wave_map)
+        img.set_data(current_wave_map)
         plt.pause(delay)

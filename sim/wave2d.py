@@ -24,14 +24,42 @@ def prep_coeff(coeff, order=2):
 
 def euler_zyz(xyz, angles):
     """
-    Rotation with Euler angles defined in the ZYZ convention.  See
-    https://en.wikipedia.org/wiki/Euler_angles, ZYZ with left-handed-positive.
+    Rotation with Euler angles defined in the ZYZ convention with left-handed
+    positive sign convention.
     
-    * angles[0] is the angle CCW around moving Z axis (azimuth angle)
-    * angles[1] is the angle CCW around moving Y axis (polar angle)
-    * angles[2] is the angle CCW around Z axis (intrinsic rotation)
+    Parameters
+    ----------
+        xyz : tuple of ndarrays
+            Input coordinates
+        angles : tuple of scalars
+            Angular rotations are applied in the following order
+            * angles[2] is the angle CCW around Z axis (intrinsic rotation)
+            * angles[1] is the angle CCW around Y axis (polar angle)
+            * angles[0] is the angle CCW around Z axis (azimuth angle)
     
-    Note that (phi, theta, 0) inverts (-0, -theta, -phi)
+    Returns
+    -------
+        X, Y, Z : ndarray
+            Output coordinates
+    
+    Notes
+    -----
+    angles = (phi, theta, psi) inverts angles = (-psi, -theta, -phi)
+
+    References
+    ----------
+    https://en.wikipedia.org/wiki/Euler_angles#Matrix_orientation
+        ("Left-handed positive sign convention", "ZYZ")
+    
+    Examples
+    --------
+    >>> wave2d.euler_zyz((np.array([1,0,0]),
+                          np.array([0,1,0]),
+                          np.array([0,0,1])),
+                         (45,45,0))
+    (array([ 0.5       , -0.70710678,  0.5       ]),
+     array([ 0.5       ,  0.70710678,  0.5       ]),
+     array([-0.70710678,  0.        ,  0.70710678]))
     """
     c1 = np.cos(np.deg2rad(angles[0]))
     s1 = np.sin(np.deg2rad(angles[0]))
@@ -254,10 +282,11 @@ def transform(params, wave_maps, verbose = False):
         #Could instead use linspace or mgrid?
         hpcx = np.arange(hpcx_min+0.5*hpcx_bin, hpcx_max, hpcx_bin)
         hpcy = np.arange(hpcy_min+0.5*hpcy_bin, hpcy_max, hpcy_bin)
-        hpcx_grid, hpcy_grid = np.meshgrid(hpcx, hpcy)
+        hpc_grid = np.meshgrid(hpcx, hpcy)
         
         #2D interpolation
-        grid = griddata(points[zpp.ravel() >= 0], values[zpp.ravel() >= 0], (hpcx_grid, hpcy_grid), method="linear")
+        grid = griddata(points[zpp.ravel() >= 0], values[zpp.ravel() >= 0],
+                               hpc_grid, method="linear")
         
         transformed_wave_map = sunpy.map.BaseMap(grid, header)
         transformed_wave_map.name = current_wave_map.name

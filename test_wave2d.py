@@ -4,11 +4,19 @@ from visualize import visualize
 params = {
     "cadence": 12., #seconds
     
-    "direction": 25., #degrees, measured CCW from HPC +X
+    "hglt_obs": 0., #degrees
+    "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
+    
+    #Wave parameters that are initial conditions
+    "direction": 25., #degrees, measured CCW from HG +latitude
     "epi_lat": 30., #degrees, HG latitude of wave epicenter
     "epi_lon": 20., #degrees, HG longitude of wave epicenter
     
-    #Parameters that evolve over time, be very careful of non-physical behavior
+    #Wave parameters that can evolve over time
+    #The first element is constant in time
+    #The second element (if present) is linear in time
+    #The third element (if present) is quadratic in time
+    #Be very careful of non-physical behavior
     "width": [90., 1.5], #degrees, full angle in azimuth, centered at 'direction'
     "wave_thickness": [0.5, 0.02, -0.00005], #degrees, sigma of Gaussian profile in longitudinal direction
     "wave_normalization": [1.], #integrated value of the 1D Gaussian profile

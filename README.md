@@ -12,8 +12,10 @@ from [Warmuth et al. (2004)](http://adsabs.harvard.edu/abs/2004A%26A...418.1117W
 
  * Fitting the profiles using a second-order polynomial fit (r = r0 + v0*t + 1/2*a0*t^2) for 12 events.
  * The mean parameters were found to be v0 = 933 +/- 252 km/s, a0 = −1495 +/- 1262 m/s^2.
-                                                                          
 
+from [Long et al. 2011](http://adsabs.harvard.edu/abs/2011SPD....42.0505L)
+
+ * "Significant pulse broadening was also measured using both STEREO ( 55 km/s) andSDO ( 65 km/s) observations."
 
 Download test data from:
   [http://www.sunpy.org/research/agu-2011/testdata1.zip](http://www.sunpy.org/research/agu-2011/testdata1.zip)

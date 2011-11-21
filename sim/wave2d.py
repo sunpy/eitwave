@@ -83,7 +83,7 @@ def simulate_raw(params, verbose = False):
     from scipy.special import ndtr
 
     cadence = params["cadence"]
-    direction = 90.+params["direction"]
+    direction = 180.+params["direction"]
     
     width_coeff = prep_coeff(params["width"])
     wave_thickness_coeff = prep_coeff(params["wave_thickness"])

@@ -8,7 +8,7 @@ params = {
     "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
     
     #Wave parameters that are initial conditions
-    "direction": 25., #degrees, measured CCW from HG +longitude
+    "direction": 25., #degrees, measured CCW from HG +latitude
     "epi_lat": 30., #degrees, HG latitude of wave epicenter
     "epi_lon": 20., #degrees, HG longitude of wave epicenter
     

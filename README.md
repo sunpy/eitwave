@@ -22,3 +22,4 @@ References
 ----------
  * [Hough Transform](http://en.wikipedia.org/wiki/Hough_transform)
  * [Mendelev list of papers](http://www.mendeley.com/groups/1335103/sunpy-eit-wave/papers/)
+ * [The Kinematics and Energetics of Globally-propagating Coronal Disturbance](http://www.maths.tcd.ie/~dlong/Presentations/BUKS_apr_09.pdf)

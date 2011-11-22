@@ -26,7 +26,7 @@ params = {
     
     #Noise parameters
     "noise_type": "Poisson", #can be None, "Normal", or "Poisson"
-    "noise_scale": 0.3,
+    "noise_scale": 0.1,
     "noise_mean": 1.,
     "noise_sdev": 1.,
     

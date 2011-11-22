@@ -4,7 +4,7 @@ from __future__ import absolute_import
 Simulates a wave
 """
 
-__all__ = ["simulate","simulate_raw","transform","add_noise"]
+__all__ = ["simulate", "simulate_raw", "transform", "add_noise"]
 
 __authors__ = ["Albert Shih"]
 __email__ = "albert.y.shih@nasa.gov"

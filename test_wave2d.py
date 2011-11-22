@@ -26,7 +26,7 @@ params = {
     
     #Noise parameters
     "noise_type": "Poisson", #can be None, "Normal", or "Poisson"
-    "noise_scale": 0.3,
+    "noise_scale": 0.1,
     "noise_mean": 1.,
     "noise_sdev": 1.,
     
@@ -41,14 +41,18 @@ params = {
     "lon_bin": 5.,
     
     #HPC grid, probably would only want to change the bin sizes
-    "hpcx_min": -1025.,
-    "hpcx_max": 1023.,
-    "hpcx_bin": 2.,
-    "hpcy_min": -1025.,
-    "hpcy_max": 1023.,
-    "hpcy_bin": 2.
+    "hpcx_min": -1230.0,
+    "hpcx_max": 1227.6,
+    "hpcx_bin": 2.4,
+    "hpcy_min": -1230.0,
+    "hpcy_max": 1227.6,
+    "hpcy_bin": 2.4
 }
 
 wave_maps = wave2d.simulate(params)
 #wave_maps = wave2d.simulate(params, verbose = True)
+
+#To get simulated HG' maps (centered at wave epicenter):
+#wave_maps_raw = wave2d.simulate_raw(params)
+
 visualize(wave_maps)

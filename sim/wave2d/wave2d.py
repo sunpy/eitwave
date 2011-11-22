@@ -1,8 +1,8 @@
-from __future__ import absolute_import
-
 """
 Simulates a wave
 """
+
+from __future__ import absolute_import
 
 __all__ = ["simulate", "simulate_raw", "transform", "add_noise"]
 
@@ -256,8 +256,12 @@ def transform(params, wave_maps, verbose = False):
     start_date = wave_maps[0].date
     
     #Could instead use linspace or mgrid?
-    lon = np.arange(wave_maps[0].xrange[0]+0.5*wave_maps[0].header["cdelt1"], wave_maps[0].xrange[1], wave_maps[0].header["cdelt1"])
-    lat = np.arange(wave_maps[0].yrange[0]+0.5*wave_maps[0].header["cdelt2"], wave_maps[0].yrange[1], wave_maps[0].header["cdelt2"])
+    lon = np.arange(wave_maps[0].xrange[0]+0.5*wave_maps[0].header["cdelt1"],
+                    wave_maps[0].xrange[1],
+                    wave_maps[0].header["cdelt1"])
+    lat = np.arange(wave_maps[0].yrange[0]+0.5*wave_maps[0].header["cdelt2"],
+                    wave_maps[0].yrange[1],
+                    wave_maps[0].header["cdelt2"])
     lon_grid, lat_grid = np.meshgrid(lon, lat)
     
     #HG' to HCC'
@@ -295,7 +299,7 @@ def transform(params, wave_maps, verbose = False):
         
         #2D interpolation
         grid = griddata(points[zpp.ravel() >= 0], values[zpp.ravel() >= 0],
-                               hpc_grid, method="linear")
+                        hpc_grid, method="linear")
         
         transformed_wave_map = sunpy.map.BaseMap(grid, header)
         transformed_wave_map.name = current_wave_map.name
@@ -337,7 +341,8 @@ def add_noise(params, wave_maps, verbose = False):
                     print("Unkonwn noise requested to map at "+str(current_wave_map.date))
                 noise = np.zeros_like(wave)
             
-            new_wave_map = sunpy.map.BaseMap(wave+noise, current_wave_map.header)
+            new_wave_map = sunpy.map.BaseMap(wave+noise,
+                                             current_wave_map.header)
             new_wave_map.name = current_wave_map.name
             new_wave_map.date = current_wave_map.date
             wave_maps_noise += [new_wave_map]

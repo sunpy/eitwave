@@ -41,14 +41,14 @@ params = {
     "lon_bin": 5.,
     
     #HPC grid, probably would only want to change the bin sizes
-    "hpcx_min": -1000.,
-    "hpcx_max": 1000.,
-    "hpcx_bin": 10.,
-    "hpcy_min": -1000.,
-    "hpcy_max": 1000.,
-    "hpcy_bin": 10.
+    "hpcx_min": -1025.,
+    "hpcx_max": 1023.,
+    "hpcx_bin": 2.,
+    "hpcy_min": -1025.,
+    "hpcy_max": 1023.,
+    "hpcy_bin": 2.
 }
 
-wave_maps = wave2d.simulate(params)
-#wave_maps = wave2d.simulate(params, verbose = True)
+#wave_maps = wave2d.simulate(params)
+wave_maps = wave2d.simulate(params, verbose = True)
 visualize(wave_maps)

@@ -52,6 +52,7 @@ params = {
 wave_maps = wave2d.simulate(params)
 #wave_maps = wave2d.simulate(params, verbose = True)
 
-#wave_maps_raw = wave2d.simulate_raw(params) #to get HG' maps (centered at wave epicenter)
+#To get simulated HG' maps (centered at wave epicenter):
+#wave_maps_raw = wave2d.simulate_raw(params)
 
 visualize(wave_maps)

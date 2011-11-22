@@ -4,6 +4,8 @@ from __future__ import absolute_import
 Simulates a wave
 """
 
+__all__ = ["simulate","simulate_raw","transform","add_noise"]
+
 __authors__ = ["Albert Shih"]
 __email__ = "albert.y.shih@nasa.gov"
 
@@ -90,6 +92,8 @@ def simulate_raw(params, verbose = False):
     wave_normalization_coeff = prep_coeff(params["wave_normalization"])
     speed_coeff = prep_coeff(params["speed"])
     
+    steps = params["max_steps"]
+    
     lat_min = params["lat_min"]
     lat_max = params["lat_max"]
     lat_bin = params["lat_bin"]
@@ -111,11 +115,11 @@ def simulate_raw(params, verbose = False):
                    -(90.-lat_min)])
     
     #Will fail if wave does not propogate all the way to lat_min
-    duration = p.r[np.logical_and(p.r.real > 0, p.r.imag == 0)][0]
+    #duration = p.r[np.logical_and(p.r.real > 0, p.r.imag == 0)][0]
     
-    steps = int(duration/cadence)+1
-    if steps > params["max_steps"]:
-        steps = params["max_steps"]
+    #steps = int(duration/cadence)+1
+    #if steps > params["max_steps"]:
+    #    steps = params["max_steps"]
     
     #Maybe used np.poly1d() instead to do the polynomial calculation?
     time = np.arange(steps)*cadence
@@ -128,6 +132,10 @@ def simulate_raw(params, verbose = False):
     #Propagates from 90., irrespective of lat_max
     wave_peak = 90.-(p(time)+(90.-lat_min))
     
+    out_of_bounds = np.logical_or(wave_peak < lat_min, wave_peak > lat_max)
+    if out_of_bounds.any():
+        steps = np.where(out_of_bounds)[0][0]
+        
     wave_maps = []
     
     dict_header = {
@@ -163,6 +171,7 @@ def simulate_raw(params, verbose = False):
             print("ERROR: wave thickness is non-physical!")
         z = (lat_edges-wave_peak[istep])/wave_thickness[istep]
         wave_1d = wave_normalization[istep]*(ndtr(np.roll(z, -1))-ndtr(z))[0:lat_num]
+        wave_1d /= lat_bin
         
         wave_lon_min = direction-width[istep]/2
         wave_lon_max = direction+width[istep]/2
@@ -245,25 +254,31 @@ def transform(params, wave_maps, verbose = False):
     header = sunpy.map.MapHeader(dict_header)
     
     start_date = wave_maps[0].date
-
+    
+    #Could instead use linspace or mgrid?
+    lon = np.arange(wave_maps[0].xrange[0]+0.5*wave_maps[0].header["cdelt1"], wave_maps[0].xrange[1], wave_maps[0].header["cdelt1"])
+    lat = np.arange(wave_maps[0].yrange[0]+0.5*wave_maps[0].header["cdelt2"], wave_maps[0].yrange[1], wave_maps[0].header["cdelt2"])
+    lon_grid, lat_grid = np.meshgrid(lon, lat)
+    
+    #HG' to HCC'
+    #HCC' = HCC, except centered at wave epicenter
+    x, y, z = wcs.convert_hg_hcc_xyz(wave_maps[0].header,
+                                     lon_grid, lat_grid)
+    
+    #HCC' to HCC''
+    #Moves the wave epicenter to initial conditions
+    #HCC'' = HCC, except assuming that HGLT_OBS = 0
+    zxy_p = euler_zyz((z, x, y), (epi_lon, 90.-epi_lat, 0.))
+    
+    #Destination HPC grid
+    #Could instead use linspace or mgrid?
+    hpcx = np.arange(hpcx_min+0.5*hpcx_bin, hpcx_max, hpcx_bin)
+    hpcy = np.arange(hpcy_min+0.5*hpcy_bin, hpcy_max, hpcy_bin)
+    hpc_grid = np.meshgrid(hpcx, hpcy)
+    
     for current_wave_map in wave_maps:
         if verbose:
             print("Transforming map at "+str(current_wave_map.date))
-        
-        #Could instead use linspace or mgrid?
-        lon = np.arange(current_wave_map.xrange[0]+0.5*current_wave_map.header["cdelt1"], current_wave_map.xrange[1], current_wave_map.header["cdelt1"])
-        lat = np.arange(current_wave_map.yrange[0]+0.5*current_wave_map.header["cdelt2"], current_wave_map.yrange[1], current_wave_map.header["cdelt2"])
-        lon_grid, lat_grid = np.meshgrid(lon, lat)
-        
-        #HG' to HCC'
-        #HCC' = HCC, except centered at wave epicenter
-        x, y, z = wcs.convert_hg_hcc_xyz(current_wave_map.header,
-                                         lon_grid, lat_grid)
-
-        #HCC' to HCC''
-        #Moves the wave epicenter to initial conditions
-        #HCC'' = HCC, except assuming that HGLT_OBS = 0
-        zxy_p = euler_zyz((z, x, y), (epi_lon, 90.-epi_lat, 0.))
         
         #HCC'' to HCC
         #Moves the observer to HGLT_OBS and adds rigid solar rotation
@@ -277,12 +292,6 @@ def transform(params, wave_maps, verbose = False):
         #Coordinate positions (HPC) with corresponding map data
         points = np.vstack((xx.ravel(), yy.ravel())).T
         values = np.array(current_wave_map).ravel()
-        
-        #Destination HPC grid
-        #Could instead use linspace or mgrid?
-        hpcx = np.arange(hpcx_min+0.5*hpcx_bin, hpcx_max, hpcx_bin)
-        hpcy = np.arange(hpcy_min+0.5*hpcy_bin, hpcy_max, hpcy_bin)
-        hpc_grid = np.meshgrid(hpcx, hpcy)
         
         #2D interpolation
         grid = griddata(points[zpp.ravel() >= 0], values[zpp.ravel() >= 0],

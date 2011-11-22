@@ -92,6 +92,8 @@ def simulate_raw(params, verbose = False):
     wave_normalization_coeff = prep_coeff(params["wave_normalization"])
     speed_coeff = prep_coeff(params["speed"])
     
+    steps = params["max_steps"]
+    
     lat_min = params["lat_min"]
     lat_max = params["lat_max"]
     lat_bin = params["lat_bin"]
@@ -113,11 +115,11 @@ def simulate_raw(params, verbose = False):
                    -(90.-lat_min)])
     
     #Will fail if wave does not propogate all the way to lat_min
-    duration = p.r[np.logical_and(p.r.real > 0, p.r.imag == 0)][0]
+    #duration = p.r[np.logical_and(p.r.real > 0, p.r.imag == 0)][0]
     
-    steps = int(duration/cadence)+1
-    if steps > params["max_steps"]:
-        steps = params["max_steps"]
+    #steps = int(duration/cadence)+1
+    #if steps > params["max_steps"]:
+    #    steps = params["max_steps"]
     
     #Maybe used np.poly1d() instead to do the polynomial calculation?
     time = np.arange(steps)*cadence
@@ -130,6 +132,10 @@ def simulate_raw(params, verbose = False):
     #Propagates from 90., irrespective of lat_max
     wave_peak = 90.-(p(time)+(90.-lat_min))
     
+    out_of_bounds = np.logical_or(wave_peak < lat_min, wave_peak > lat_max)
+    if out_of_bounds.any():
+        steps = np.where(out_of_bounds)[0][0]
+        
     wave_maps = []
     
     dict_header = {
@@ -165,6 +171,7 @@ def simulate_raw(params, verbose = False):
             print("ERROR: wave thickness is non-physical!")
         z = (lat_edges-wave_peak[istep])/wave_thickness[istep]
         wave_1d = wave_normalization[istep]*(ndtr(np.roll(z, -1))-ndtr(z))[0:lat_num]
+        wave_1d /= lat_bin
         
         wave_lon_min = direction-width[istep]/2
         wave_lon_max = direction+width[istep]/2

@@ -25,6 +25,11 @@
 
 import numpy as N
 
+import pylab as P
+
+import scikits.image.transform
+
+
 itype = N.uint16 # See ticket 225
 
 def houghtf(img, angles=None):
@@ -46,7 +51,8 @@ def houghtf(img, angles=None):
     img = img.astype(bool)
     
     if not angles:
-        angles = N.linspace(-90,90,180)
+        angles = N.linspace(-90,90,1800)
+        print angles
 
     theta = angles / 180. * N.pi
     d = N.ceil(N.hypot(*img.shape))
@@ -65,26 +71,65 @@ def houghtf(img, angles=None):
         out[:len(bc),i] = bc
 
     return out,angles,bins
-    
+
+def htLine(distance,angle,img):
+    shape = img.shape
+    nx = shape[0]
+    ny = shape[1]
+    eps = 0.001
+
+    if abs(N.sin(angle)) > eps:
+        gradient = - N.cos(angle) / N.sin(angle)
+        constant = distance / N.sin(angle)
+        print gradient, constant
+        for x in range(0,nx):
+            y = gradient*x + constant
+            if y <= ny-1 and y >= 0:
+                img[x,y] = 1
+    else:
+        img[distance,:] = 1
+
+    return img
+
+
 if __name__ == '__main__':
     # Generate a test image
+    initial = N.zeros((100,150),dtype=bool)
     img = N.zeros((100,150),dtype=bool)
     img[30,:] = 1
     img[:,65] = 1
-    img[35:45,35:50] = 1
+    #img[35:45,35:50] = 1
     for i in range(90):
         img[i,i] = 1
     img += N.random.random(img.shape) > 0.95
-
-    import pylab as P
-
     print "Performing straight line Hough transform on %s array..." % str(img.shape)
-    out,angles,d = houghtf(img)
+    #out,angles,d = houghtf(img)
+    out,angles,d = scikits.image.transform.hough(img)
 
-    P.subplot(121)
+    P.subplot(131)
     P.imshow(img,cmap=P.cm.gray)
-    P.subplot(122)
+    P.subplot(132)
     P.imshow(out,cmap=P.cm.bone)
     P.xlabel('Angle (degree)')
     P.ylabel('Distance %d (pixel)' % d[0])
+
+    # Filter the transform results and perform the inverse
+    # transform
+    votethresh = 80
+    indices =  (out >votethresh).nonzero()
+
+    distances = d[indices[0]]
+    angles = angles[indices[1]]
+
+    print 'distances ', distances
+    print 'angles ', angles
+    n =len(indices[1])
+    invTransform = initial
+    for i in range(0,n):
+        print i
+        nextLine = htLine( distances[i],angles[i], initial   )
+        invTransform = invTransform + nextLine
+
+    P.subplot(133)
+    P.imshow(invTransform)
     P.show()

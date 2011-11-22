@@ -286,8 +286,8 @@ def transform(params, wave_maps, verbose = False):
         
         #HCC'' to HCC
         #Moves the observer to HGLT_OBS and adds rigid solar rotation
-	td = current_wave_map.date-start_date
-	total_seconds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        td = current_wave_map.date-start_date
+        total_seconds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
         zpp, xpp, ypp = euler_zyz(zxy_p, (0., hglt_obs, total_seconds*rotation))
         
         #HCC to HPC (arcsec)

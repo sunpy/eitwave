@@ -26,7 +26,7 @@ params = {
     
     #Noise parameters
     "noise_type": "Poisson", #can be None, "Normal", or "Poisson"
-    "noise_scale": 0.2,
+    "noise_scale": 0.3,
     "noise_mean": 1.,
     "noise_sdev": 1.,
     
@@ -49,6 +49,6 @@ params = {
     "hpcy_bin": 2.
 }
 
-#wave_maps = wave2d.simulate(params)
-wave_maps = wave2d.simulate(params, verbose = True)
+wave_maps = wave2d.simulate(params)
+#wave_maps = wave2d.simulate(params, verbose = True)
 visualize(wave_maps)

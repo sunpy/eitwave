@@ -39,30 +39,27 @@ import sunpy
 aia = sunpy.Map("data/AIA20101016_191207_0193.fits")
 saia = aia.resample([500,500])
 
-lon_bin = 1
-lat_bin = 1
-lon = np.arange(-90,90, lon_bin)
-lat = np.arange(-90, 90, lat_bin)
-lon_grid, lat_grid = np.meshgrid(lon, lat)
+def map_to_hg(map):
+    import sunpy
+    from sunpy.wcs  import wcs as wcs
+    from scipy.interpolate import griddata
 
-from sunpy.wcs  import wcs as wcs
-from scipy.interpolate import griddata
+    lon_bin = 1
+    lat_bin = 1
+    lon = np.arange(-90,90, lon_bin)
+    lat = np.arange(-90, 90, lat_bin)
+    lon_grid, lat_grid = np.meshgrid(lon, lat)
 
-newgrid = wcs.convert_hg_hpc(saia.header, lon_grid, lat_grid, units = 'arcsec')
+    newgrid = wcs.convert_hg_hpc(saia.header, lon_grid, lat_grid, units = 'arcsec')
 
-x,y = wcs.convert_pixel_to_data(saia.header)
+    x,y = wcs.convert_pixel_to_data(saia.header)
 
-points = np.vstack((x.ravel(), y.ravel())).T
-values = np.array(saia).ravel()
+    points = np.vstack((x.ravel(), y.ravel())).T
+    values = np.array(saia).ravel()
 
-grid = griddata(points, values,newgrid, method="linear")
+    newdata = griddata(points, values,newgrid, method="linear")
 
-import matplotlib.pyplot as plt
-plt.subplot(111)
-plt.imshow(grid, extent = [-90,90,-90,90])
-plt.show()
-
-dict_header = {
+    dict_header = {
         "cdelt1": lon_bin,
         "naxis1": len(lon),
         "crval1": lon.min(),
@@ -81,8 +78,13 @@ dict_header = {
         "rsun_ref": aia.header.get('rsun_ref'),
         "dsun_obs": aia.header.get('dsun_obs'),
         'wavelnth': aia.header.get('wavelnth')
-}
+    }
     
-header = sunpy.map.MapHeader(dict_header)
-transformed_map = sunpy.map.BaseMap(grid, header)
+    header = sunpy.map.MapHeader(dict_header)
+    transformed_map = sunpy.map.BaseMap(newdata, header)
+    return transformed_map
 
+import matplotlib.pyplot as plt
+plt.subplot(111)
+plt.imshow(grid, extent = [-90,90,-90,90])
+plt.show()

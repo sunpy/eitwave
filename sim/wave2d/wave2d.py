@@ -210,7 +210,6 @@ def transform(params, wave_maps, verbose = False):
     
     HG' = HG, except center at wave epicenter
     """
-    from sunpy.wcs import wcs
     from scipy.interpolate import griddata
     
     hglt_obs = params["hglt_obs"]
@@ -255,43 +254,38 @@ def transform(params, wave_maps, verbose = False):
     
     start_date = wave_maps[0].date
     
-    #Could instead use linspace or mgrid?
-    lon = np.arange(wave_maps[0].xrange[0]+0.5*wave_maps[0].header["cdelt1"],
-                    wave_maps[0].xrange[1],
-                    wave_maps[0].header["cdelt1"])
-    lat = np.arange(wave_maps[0].yrange[0]+0.5*wave_maps[0].header["cdelt2"],
-                    wave_maps[0].yrange[1],
-                    wave_maps[0].header["cdelt2"])
-    lon_grid, lat_grid = np.meshgrid(lon, lat)
+    #Origin grid, HG'
+    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].header)
+    lon_grid += 0.5*wave_maps[0].header["cdelt1"]
+    lat_grid += 0.5*wave_maps[0].header["cdelt2"]
     
-    #HG' to HCC'
+    #Origin grid, HG' to HCC'
     #HCC' = HCC, except centered at wave epicenter
-    x, y, z = wcs.convert_hg_hcc_xyz(wave_maps[0].header,
-                                     lon_grid, lat_grid)
+    x, y, z = sunpy.wcs.convert_hg_hcc_xyz(wave_maps[0].header,
+                                           lon_grid, lat_grid)
     
-    #HCC' to HCC''
+    #Origin grid, HCC' to HCC''
     #Moves the wave epicenter to initial conditions
     #HCC'' = HCC, except assuming that HGLT_OBS = 0
     zxy_p = euler_zyz((z, x, y), (epi_lon, 90.-epi_lat, 0.))
     
     #Destination HPC grid
-    #Could instead use linspace or mgrid?
-    hpcx = np.arange(hpcx_min+0.5*hpcx_bin, hpcx_max, hpcx_bin)
-    hpcy = np.arange(hpcy_min+0.5*hpcy_bin, hpcy_max, hpcy_bin)
-    hpc_grid = np.meshgrid(hpcx, hpcy)
+    hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(dict_header)
+    hpcx_grid += 0.5*dict_header["cdelt1"]
+    hpcy_grid += 0.5*dict_header["cdelt2"]
     
     for current_wave_map in wave_maps:
         if verbose:
             print("Transforming map at "+str(current_wave_map.date))
         
-        #HCC'' to HCC
+        #Origin grid, HCC'' to HCC
         #Moves the observer to HGLT_OBS and adds rigid solar rotation
         td = current_wave_map.date-start_date
         total_seconds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
         zpp, xpp, ypp = euler_zyz(zxy_p, (0., hglt_obs, total_seconds*rotation))
         
-        #HCC to HPC (arcsec)
-        xx, yy = wcs.convert_hcc_hpc(current_wave_map.header, xpp, ypp)
+        #Origin grid, HCC to HPC (arcsec)
+        xx, yy = sunpy.wcs.convert_hcc_hpc(current_wave_map.header, xpp, ypp)
         xx *= 3600
         yy *= 3600
         
@@ -299,9 +293,9 @@ def transform(params, wave_maps, verbose = False):
         points = np.vstack((xx.ravel(), yy.ravel())).T
         values = np.array(current_wave_map).ravel()
         
-        #2D interpolation
+        #2D interpolation from origin grid to destination grid
         grid = griddata(points[zpp.ravel() >= 0], values[zpp.ravel() >= 0],
-                        hpc_grid, method="linear")
+                        (hpcx_grid, hpcy_grid), method="linear")
         
         transformed_wave_map = sunpy.map.BaseMap(grid, header)
         transformed_wave_map.name = current_wave_map.name
@@ -340,7 +334,7 @@ def add_noise(params, wave_maps, verbose = False):
                 noise = noise_scale*stats.poisson.rvs(noise_mean, size=wave.size).reshape(wave.shape)
             else:
                 if verbose:
-                    print("Unkonwn noise requested to map at "+str(current_wave_map.date))
+                    print("Unknown noise requested to map at "+str(current_wave_map.date))
                 noise = np.zeros_like(wave)
             
             new_wave_map = sunpy.map.BaseMap(wave+noise,

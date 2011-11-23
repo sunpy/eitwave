@@ -142,13 +142,13 @@ def simulate_raw(params, verbose = False):
         "cdelt1": lon_bin,
         "naxis1": lon_num,
         "crval1": lon_min,
-        "crpix1": 0,
+        "crpix1": 0.5, #this makes the left edge of the first bin lon_min
         "cunit1": "deg",
         "ctype1": "HG",
         "cdelt2": lat_bin,
         "naxis2": lat_num,
         "crval2": lat_min,
-        "crpix2": 0,
+        "crpix2": 0.5, #this makes the left edge of the first bin lat_min
         "cunit2": "deg",
         "ctype2": "HG",
         "hglt_obs": 0,
@@ -234,13 +234,13 @@ def transform(params, wave_maps, verbose = False):
         "cdelt1": hpcx_bin,
         "naxis1": hpcx_num,
         "crval1": hpcx_min,
-        "crpix1": 0,
+        "crpix1": 0.5, #this makes the left edge of the first bin hpcx_min
         "cunit1": "arcsec",
         "ctype1": "HPC",
         "cdelt2": hpcy_bin,
         "naxis2": hpcy_num,
         "crval2": hpcy_min,
-        "crpix2": 0,
+        "crpix2": 0.5, #this makes the left edge of the first bin hpcy_min
         "cunit2": "arcsec",
         "ctype2": "HPC",
         "hglt_obs": hglt_obs,
@@ -255,7 +255,7 @@ def transform(params, wave_maps, verbose = False):
     start_date = wave_maps[0].date
     
     #Origin grid, HG'
-    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].header, center = True)
+    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].header)
     
     #Origin grid, HG' to HCC'
     #HCC' = HCC, except centered at wave epicenter
@@ -268,7 +268,7 @@ def transform(params, wave_maps, verbose = False):
     zxy_p = euler_zyz((z, x, y), (epi_lon, 90.-epi_lat, 0.))
     
     #Destination HPC grid
-    hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(dict_header, center = True)
+    hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(dict_header)
     
     for current_wave_map in wave_maps:
         if verbose:

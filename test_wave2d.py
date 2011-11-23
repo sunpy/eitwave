@@ -41,11 +41,11 @@ params = {
     "lon_bin": 5.,
     
     #HPC grid, probably would only want to change the bin sizes
-    "hpcx_min": -1230.0,
-    "hpcx_max": 1227.6,
+    "hpcx_min": -1228.8,
+    "hpcx_max": 1228.8,
     "hpcx_bin": 2.4,
-    "hpcy_min": -1230.0,
-    "hpcy_max": 1227.6,
+    "hpcy_min": -1228.8,
+    "hpcy_max": 1228.8,
     "hpcy_bin": 2.4
 }
 

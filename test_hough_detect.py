@@ -4,6 +4,7 @@ from scikits.image.transform import hough
 from scikits.image.morphology import greyscale_dilate
 import numpy as np
 import pylab as plt
+import sunpy
 
 def htLine(distance,angle,img):
     shape = img.shape
@@ -97,19 +98,25 @@ wave_maps = wave2d.simulate_raw(params)
 ndiff = len(wave_maps)-1
 
 # difference threshold
-diffthresh = 0.2
+diffthresh = 0.01
 
 # Hough transform voting threshold
-votethresh = 20
+votethresh = 10
 
 # shape of the data
 imgShape = wave_maps[0].shape
 
 # storage for the detection
 detection = []
+diffs = []
 
 for i in range(0,ndiff):
+    # difference map
     diffmap = 255*(abs(wave_maps[i+1] - wave_maps[i]) > diffthresh)
+
+    # keep
+    diffs.append(diffmap)
+
     # extract the image
     img = diffmap
 
@@ -126,7 +133,7 @@ for i in range(0,ndiff):
 
     # Perform the inverse transform to get a series of rectangular
     # images that show where the wavefront is.
-    invTransform = wave_maps[i+1]
+    invTransform = invTransform = sunpy.map.BaseMap(wave_maps[i+1])
     invTransform.data = np.zeros(imgShape)
     for i in range(0,n):
         nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )
@@ -135,5 +142,7 @@ for i in range(0,ndiff):
     # Dump the inverse transform back into a series of maps
     detection.append(invTransform)
 
+
+visualize(diffs)
 visualize(detection)
 

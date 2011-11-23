@@ -255,9 +255,7 @@ def transform(params, wave_maps, verbose = False):
     start_date = wave_maps[0].date
     
     #Origin grid, HG'
-    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].header)
-    lon_grid += 0.5*wave_maps[0].header["cdelt1"]
-    lat_grid += 0.5*wave_maps[0].header["cdelt2"]
+    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].header, center = True)
     
     #Origin grid, HG' to HCC'
     #HCC' = HCC, except centered at wave epicenter
@@ -270,9 +268,7 @@ def transform(params, wave_maps, verbose = False):
     zxy_p = euler_zyz((z, x, y), (epi_lon, 90.-epi_lat, 0.))
     
     #Destination HPC grid
-    hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(dict_header)
-    hpcx_grid += 0.5*dict_header["cdelt1"]
-    hpcy_grid += 0.5*dict_header["cdelt2"]
+    hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(dict_header, center = True)
     
     for current_wave_map in wave_maps:
         if verbose:

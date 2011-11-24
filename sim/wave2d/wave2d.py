@@ -142,13 +142,13 @@ def simulate_raw(params, verbose = False):
         "cdelt1": lon_bin,
         "naxis1": lon_num,
         "crval1": lon_min,
-        "crpix1": 0.5, #this makes the left edge of the first bin lon_min
+        "crpix1": 0.5, #this makes lon_min the left edge of the first bin
         "cunit1": "deg",
         "ctype1": "HG",
         "cdelt2": lat_bin,
         "naxis2": lat_num,
         "crval2": lat_min,
-        "crpix2": 0.5, #this makes the left edge of the first bin lat_min
+        "crpix2": 0.5, #this makes lat_min the left edge of the first bin
         "cunit2": "deg",
         "ctype2": "HG",
         "hglt_obs": 0,
@@ -234,13 +234,13 @@ def transform(params, wave_maps, verbose = False):
         "cdelt1": hpcx_bin,
         "naxis1": hpcx_num,
         "crval1": hpcx_min,
-        "crpix1": 0.5, #this makes the left edge of the first bin hpcx_min
+        "crpix1": 0.5, #this makes hpcx_min the left edge of the first bin
         "cunit1": "arcsec",
         "ctype1": "HPC",
         "cdelt2": hpcy_bin,
         "naxis2": hpcy_num,
         "crval2": hpcy_min,
-        "crpix2": 0.5, #this makes the left edge of the first bin hpcy_min
+        "crpix2": 0.5, #this makes hpcy_min the left edge of the first bin
         "cunit2": "arcsec",
         "ctype2": "HPC",
         "hglt_obs": hglt_obs,

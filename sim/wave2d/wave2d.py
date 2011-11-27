@@ -139,23 +139,23 @@ def simulate_raw(params, verbose = False):
     wave_maps = []
     
     dict_header = {
-        "cdelt1": lon_bin,
-        "naxis1": lon_num,
-        "crval1": lon_min,
-        "crpix1": 0.5, #this makes lon_min the left edge of the first bin
-        "cunit1": "deg",
-        "ctype1": "HG",
-        "cdelt2": lat_bin,
-        "naxis2": lat_num,
-        "crval2": lat_min,
-        "crpix2": 0.5, #this makes lat_min the left edge of the first bin
-        "cunit2": "deg",
-        "ctype2": "HG",
-        "hglt_obs": 0,
-        "hgln_obs": 0,
-        "rsun_obs": 963.879683,
-        "rsun_ref": 696000000.0,
-        "dsun_obs": 148940609626.98
+        "CDELT1": lon_bin,
+        "NAXIS1": lon_num,
+        "CRVAL1": lon_min,
+        "CRPIX1": 0.5, #this makes lon_min the left edge of the first bin
+        "CUNIT1": "deg",
+        "CTYPE1": "HG",
+        "CDELT2": lat_bin,
+        "NAXIS2": lat_num,
+        "CRVAL2": lat_min,
+        "CRPIX2": 0.5, #this makes lat_min the left edge of the first bin
+        "CUNIT2": "deg",
+        "CTYPE2": "HG",
+        "HGLT_OBS": 0,
+        "HGLN_OBS": 0,
+        "RSUN_OBS": 963.879683,
+        "RSUN_REF": 696000000.0,
+        "DSUN_OBS": 148940609626.98
     }
     
     header = sunpy.map.MapHeader(dict_header)
@@ -231,23 +231,23 @@ def transform(params, wave_maps, verbose = False):
     wave_maps_transformed = []
     
     dict_header = {
-        "cdelt1": hpcx_bin,
-        "naxis1": hpcx_num,
-        "crval1": hpcx_min,
-        "crpix1": 0.5, #this makes hpcx_min the left edge of the first bin
-        "cunit1": "arcsec",
-        "ctype1": "HPC",
-        "cdelt2": hpcy_bin,
-        "naxis2": hpcy_num,
-        "crval2": hpcy_min,
-        "crpix2": 0.5, #this makes hpcy_min the left edge of the first bin
-        "cunit2": "arcsec",
-        "ctype2": "HPC",
-        "hglt_obs": hglt_obs,
-        "hgln_obs": 0,
-        "rsun_obs": 963.879683,
-        "rsun_ref": 696000000.0,
-        "dsun_obs": 148940609626.98
+        "CDELT1": hpcx_bin,
+        "NAXIS1": hpcx_num,
+        "CRVAL1": hpcx_min,
+        "CRPIX1": 0.5, #this makes hpcx_min the left edge of the first bin
+        "CUNIT1": "arcsec",
+        "CTYOE1": "HPC",
+        "CDELT2": hpcy_bin,
+        "NAXIS2": hpcy_num,
+        "CRVAL2": hpcy_min,
+        "CRPIX2": 0.5, #this makes hpcy_min the left edge of the first bin
+        "CUNIT2": "arcsec",
+        "CTYPE2": "HPC",
+        "hglt_OBS": hglt_obs,
+        "hgln_OBS": 0,
+        "RSUN_OBS": 963.879683,
+        "RSUN_REF": 696000000.0,
+        "DSUN_OBS": 148940609626.98
     }
     
     header = sunpy.map.MapHeader(dict_header)

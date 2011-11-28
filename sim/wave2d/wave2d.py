@@ -236,15 +236,15 @@ def transform(params, wave_maps, verbose = False):
         "CRVAL1": hpcx_min,
         "CRPIX1": 0.5, #this makes hpcx_min the left edge of the first bin
         "CUNIT1": "arcsec",
-        "CTYOE1": "HPC",
+        "CTYPE1": "HPC",
         "CDELT2": hpcy_bin,
         "NAXIS2": hpcy_num,
         "CRVAL2": hpcy_min,
         "CRPIX2": 0.5, #this makes hpcy_min the left edge of the first bin
         "CUNIT2": "arcsec",
         "CTYPE2": "HPC",
-        "hglt_OBS": hglt_obs,
-        "hgln_OBS": 0,
+        "HGLT_OBS": hglt_obs,
+        "HGLN_OBS": 0,
         "RSUN_OBS": 963.879683,
         "RSUN_REF": 696000000.0,
         "DSUN_OBS": 148940609626.98
@@ -268,7 +268,7 @@ def transform(params, wave_maps, verbose = False):
     zxy_p = euler_zyz((z, x, y), (epi_lon, 90.-epi_lat, 0.))
     
     #Destination HPC grid
-    hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(dict_header)
+    hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(header)
     
     for current_wave_map in wave_maps:
         if verbose:

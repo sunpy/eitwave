@@ -2,6 +2,27 @@ from sim import wave2d
 from visualize import visualize
 from scikits.image.transform import hough
 from scikits.image.morphology import greyscale_dilate
+import numpy as np
+import pylab as plt
+import sunpy
+
+def htLine(distance,angle,img):
+    shape = img.shape
+    ny = shape[0]
+    nx = shape[1]
+    eps = 1.0/float(ny)
+
+    if abs(np.sin(angle)) > eps:
+        gradient = - np.cos(angle) / np.sin(angle)
+        constant = distance / np.sin(angle)
+        for x in range(0,nx):
+            y = gradient*x + constant
+            if y <= ny-1 and y >= 0:
+                img[y,x] = 255
+    else:
+        img[:,distance] = 255
+
+    return img
 
 m2deg = 360./(2*3.1415926*6.96e8)
 
@@ -51,33 +72,51 @@ params = {
     "hpcy_bin": 2.
 }
 
-wave_maps = wave2d.simulate(params)
+wave_maps = wave2d.simulate_raw(params)
 #wave_maps = wave2d.simulate(params, verbose = True)
 #visualize(wave_maps)
 #
 # Use Albert's wavemaps to test the hough transform as a means
-# of detecting waves
-#
-# First, transform to rectangular solar images
-#
+# of detecting EIT waves
 
+#
+# Initial detection is based on Hough transform of absolute
+# value of the running difference.
+#
+# Possible algorithm outline
+#
+# (1) Hough transform (HT) of absolute value of the running difference.
+# (2) Threshold HT and transform back
+# (3) Remove areas which are 'small', keep areas which are large
+# (4) Use the remaining detected areas as a mask in the original data
+# (5) Apply HT to masked original data
+# (6) Threshold and transform back
+# (7) Remove areas which are 'small', keep areas which are large
+# (8) This localises the wavefront
+#
 
 ndiff = len(wave_maps)-1
 
 # difference threshold
-diffthresh = 0.2
+diffthresh = 0.01
 
 # Hough transform voting threshold
-votethresh = 20
+votethresh = 10
 
 # shape of the data
 imgShape = wave_maps[0].shape
 
 # storage for the detection
-detection = wave_maps[:-1]
+detection = []
+diffs = []
 
 for i in range(0,ndiff):
+    # difference map
     diffmap = 255*(abs(wave_maps[i+1] - wave_maps[i]) > diffthresh)
+
+    # keep
+    diffs.append(diffmap)
+
     # extract the image
     img = diffmap
 
@@ -90,14 +129,20 @@ for i in range(0,ndiff):
     distances = d[indices[0]]
     theta = theta[indices[1]]
     n =len(indices[1])
+    print n
 
     # Perform the inverse transform to get a series of rectangular
     # images that show where the wavefront is.
-    invTransform = np.zeros(imgShape)
+    invTransform = invTransform = sunpy.map.BaseMap(wave_maps[i+1])
+    invTransform.data = np.zeros(imgShape)
     for i in range(0,n):
         nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )
         invTransform = invTransform + nextLine
 
     # Dump the inverse transform back into a series of maps
-    detection[i] = invTransform
+    detection.append(invTransform)
+
+
+visualize(diffs)
+visualize(detection)
 

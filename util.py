@@ -118,8 +118,6 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     from sim.wave2d.wave2d import euler_zyz
     from matplotlib import colors
     
-    xbin = 1
-    ybin = 1
     # epi_lon = -10
     # epi_lat = 0
     
@@ -131,9 +129,9 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     
     x, y = wcs.convert_pixel_to_data(map.header)
     
-    hccxyz = wcs.convert_hpc_hcc_xyz(map.header, x, y)
+    hccx, hccy, hccz = wcs.convert_hpc_hcc_xyz(map.header, x, y)
     
-    rot_hccx, rot_hccy, rot_hccz = euler_zyz(hccxyz, (epi_lon, 90.-epi_lat, 0.))
+    rot_hccz, rot_hccy, rot_hccx = euler_zyz((hccz, hccx, hccy), (epi_lon, 90.-epi_lat, 0.))
     
     # zpp, xpp, ypp = euler_zyz(zxy_p, (0., hglt_obs, total_seconds*rotation))
 

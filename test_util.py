@@ -12,11 +12,11 @@ tmap_rot.show()
 # BUG at the edges where the Sun wraps around, HPC to HG gives the same longitude
 # for points behind and in front of the limb.
 
-# no rotation
+# no rotation, or put the NP at the NP
 rotmap = util.map_hpc_to_hg_rotate(aia, epi_lon = 0, epi_lat = 90)
 
-# the following command seems to move a feature at -6, -32 to the NP
-rotmap = util.map_hpc_to_hg_rotate(aia, epi_lon = 105, epi_lat = 115)
+# the following command puts a feature at -6, -32 to the NP
+rotmap = util.map_hpc_to_hg_rotate(aia, epi_lon = -6, epi_lat = -32)
 
 ttmap = util.map_hg_to_hpc(tmap)
 ttmap.show()

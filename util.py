@@ -131,8 +131,8 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     
     hccx, hccy, hccz = wcs.convert_hpc_hcc_xyz(map.header, x, y)
     
-    rot_hccz, rot_hccy, rot_hccx = euler_zyz((hccz, hccx, hccy), (epi_lon, 90.-epi_lat, 0.))
-    
+    # rot_hccz, rot_hccy, rot_hccx = euler_zyz((hccz, hccx, hccy), (epi_lon, 90.-epi_lat, 0.))
+    rot_hccz, rot_hccx, rot_hccy = euler_zyz((hccz, hccx, hccy), (0., epi_lat-90., -epi_lon))
     # zpp, xpp, ypp = euler_zyz(zxy_p, (0., hglt_obs, total_seconds*rotation))
 
     lon_map, lat_map = wcs.convert_hcc_hg(map.header, rot_hccx, rot_hccy, z = rot_hccz)

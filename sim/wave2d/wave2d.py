@@ -242,7 +242,7 @@ def transform(params, wave_maps, verbose = False):
         "CRVAL2": hpcy_min,
         "CRPIX2": 0.5, #this makes hpcy_min the left edge of the first bin
         "CUNIT2": "arcsec",
-        "CTYPE2": "HPLT-LAN",
+        "CTYPE2": "HPLT-TAN",
         "HGLT_OBS": hglt_obs,
         "HGLN_OBS": 0,
         "RSUN_OBS": 963.879683,

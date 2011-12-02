@@ -66,11 +66,26 @@ wave_maps = wave2d.simulate(params, verbose = True)
 
 visualize(wave_maps)
 
+"""
+import util
 
-#import util
+new_wave_maps = []
 
-#new_wave_maps = []
+for wave in wave_maps:
+    print("Unraveling map at "+str(wave.date))
+    new_wave_maps += [util.map_hpc_to_hg_rotate(wave, epi_lon = 45., epi_lat = 30., xbin = 5, ybin = 0.2)]
 
-#for wave in wave_maps:
-#    print("Unraveling map at "+str(wave.date))
-#    new_wave_maps += [util.map_hpc_to_hg_rotate(wave, epi_lon = 45., epi_lat = 30., xbin = 5, ybin = 0.2)]
+
+from matplotlib import colors
+
+wave_maps_raw = wave2d.simulate_raw(params)
+wave_maps_transformed = wave2d.transform(params, wave_maps_raw, verbose = True)
+
+#First simulation slide
+wave_maps_raw[19].show()
+wave_maps_transformed[19].show()
+
+#Second simulation slide
+wave_maps[19].show(norm = colors.Normalize(0,1))
+new_wave_maps[19].show(norm = colors.Normalize(0,1))
+"""

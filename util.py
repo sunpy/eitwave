@@ -30,9 +30,7 @@ def map_hpc_to_hg(map, xbin = 1, ybin = 1):
     # get rid of all of the bad (nan) indices (i.e. those off of the sun)
     index = np.isfinite(points[:,0]) * np.isfinite(points[:,1])
     points = np.vstack((points[index,0], points[index,1])).T
-    print(index)
-    index.shape
-    len(index)
+  
     values = values[index]
     
     newdata = griddata(points, values, newgrid, method="linear")

@@ -300,46 +300,112 @@ def transform(params, wave_maps, verbose = False):
 
     return wave_maps_transformed
 
-def add_noise(params, wave_maps, verbose = False):
-    """
-    Adds simulated noise to a map
-    """
-    from scipy import stats
+def noise_random(params, shape):
+    """Return an ndarray of random noise"""
     
-    noise_type = params["noise_type"]
-    noise_scale = params["noise_scale"]
-    noise_mean = params["noise_mean"]
-    noise_sdev = params["noise_sdev"]
+    noise_type = params.get("noise_type")
+    noise_scale = params.get("noise_scale")
+    noise_mean = params.get("noise_mean")
+    noise_sdev = params.get("noise_sdev")
     
     if noise_type is None:
-        if verbose:
-            print("No added noise")
-        return wave_maps
+        noise = np.zeros(shape)
     else:
-        wave_maps_noise = []
-        for current_wave_map in wave_maps:
-            wave = np.array(current_wave_map)
+        if noise_type == "Normal":
+            noise = noise_scale*np.random.normal(noise_mean, noise_sdev, shape)
+        elif noise_type == "Poisson":
+            noise = noise_scale*np.random.poisson(noise_mean, shape)
+        else:
+            noise = np.zeros(shape)
+    
+    return noise
+   
+def noise_structure(params, shape):
+    """Return an ndarray of structured noise"""
+    
+    struct_type = params.get("struct_type")
+    struct_scale = params.get("struct_scale")
+    struct_num = params.get("struct_num")
+    struct_seed = params.get("struct_seed")
+    
+    if struct_type is None:
+        struct = np.zeros(shape)
+    else:
+        np.random.seed(struct_seed)
+        
+        if struct_type == "Arcs":
+            struct = np.zeros(shape)
             
-            if noise_type == "Normal":
-                if verbose:
-                    print("Adding normal noise to map at "+str(current_wave_map.date))
-                noise = noise_scale*stats.norm.rvs(loc=noise_mean, scale=noise_sdev, size=wave.size).reshape(wave.shape)
-            elif noise_type == "Poisson":
-                if verbose:
-                    print("Adding Poisson noise to map at "+str(current_wave_map.date))
-                noise = noise_scale*stats.poisson.rvs(noise_mean, size=wave.size).reshape(wave.shape)
-            else:
-                if verbose:
-                    print("Unknown noise requested to map at "+str(current_wave_map.date))
-                noise = np.zeros_like(wave)
+            rsigma = 5
             
-            new_wave_map = sunpy.map.BaseMap(wave+noise,
-                                             current_wave_map.header)
-            new_wave_map.name = current_wave_map.name
-            new_wave_map.date = current_wave_map.date
-            wave_maps_noise += [new_wave_map]
+            xc = np.random.random_sample(struct_num)*shape[0]
+            yc = np.random.random_sample(struct_num)*shape[1]
+            xo = np.random.random_sample(struct_num)*shape[0]
+            yo = np.random.random_sample(struct_num)*shape[1]
+            halfangle = np.random.random_sample(struct_num)*np.pi/4.
             
-        return wave_maps_noise
+            r0 = np.sqrt((xc-xo)**2+(yc-yo)**2)
+            #theta0 = np.arctan2(yc-yo, xc-xo)
+                        
+            x0, y0 = np.mgrid[0:shape[0], 0:shape[1]]
+            
+            np.random.seed()
+            
+            for index in xrange(struct_num):
+                x = x0 + rsigma*(np.random.random_sample()-0.5)
+                y = y0 + rsigma*(np.random.random_sample()-0.5)
+                
+                r = np.sqrt((x-xo[index])**2+(y-yo[index])**2)
+                #theta = np.arctan2(y-yo[index], x-xo[index])
+                
+                theta = np.arccos(((x-xo[index])*(xc[index]-xo[index])+(y-yo[index])*(yc[index]-yo[index]))/(r*r0[index]))
+                
+                struct += struct_scale*1/np.sqrt(2*np.pi*rsigma**2)*np.exp(-((r-r0[index])/rsigma)**2/2.)*(theta<=halfangle[index])
+            
+        elif struct_type == "Random":
+            struct = struct_scale*noise_random(params, shape)
+        else:
+            struct = np.zeros(shape)
+        
+        np.random.seed()
+    
+    return struct
+
+def add_noise(params, wave_maps, verbose = False):
+    """
+    Adds simulated noise to a list of maps
+    """
+    wave_maps_noise = []
+    for current_wave_map in wave_maps:
+        if verbose:
+            print("Adding noise to map at "+str(current_wave_map.date))
+
+        noise = noise_random(params, current_wave_map.shape)
+        struct = noise_structure(params, current_wave_map.shape)
+        
+        wave_maps_noise += [current_wave_map + noise + struct]
+        
+    return wave_maps_noise
+
+def clean(params, wave_maps, verbose = False):
+    """
+    Cleans a list of maps
+    """
+    wave_maps_clean = []
+    for current_wave_map in wave_maps:
+        if verbose:
+            print("Cleaning map at "+str(current_wave_map.date))
+
+        data = np.asarray(current_wave_map)
+        if params.get("clean_nans"):
+            data[np.isnan(data)] = 0.
+                
+        cleaned_wave_map = sunpy.map.BaseMap(data, current_wave_map.header)
+        cleaned_wave_map.name = current_wave_map.name
+        cleaned_wave_map.date = current_wave_map.date
+        wave_maps_clean += [cleaned_wave_map]
+
+    return wave_maps_clean
 
 def simulate(params, verbose = False):
     """
@@ -348,4 +414,6 @@ def simulate(params, verbose = False):
     wave_maps_raw = simulate_raw(params, verbose)
     wave_maps_transformed = transform(params, wave_maps_raw, verbose)
     wave_maps_noise = add_noise(params, wave_maps_transformed, verbose)
-    return wave_maps_noise
+    wave_maps_out = clean(params, wave_maps_noise, verbose)
+    
+    return wave_maps_out

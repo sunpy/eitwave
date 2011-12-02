@@ -3,11 +3,12 @@ from __future__ import absolute_import
 __authors__ = ["Albert Shih"]
 __email__ = "albert.y.shih@nasa.gov"
 
-def visualize(wave_maps, delay=0.1):
+def visualize(wave_maps, delay = 0.1, range = None):
     """
     Visualizes a list of SunPy Maps.  Requires matplotlib 1.1
     """
     import matplotlib.pyplot as plt
+    from matplotlib import colors
 
     fig = plt.figure()
     
@@ -21,6 +22,8 @@ def visualize(wave_maps, delay=0.1):
         "cmap": wave_maps[0].cmap,
         "norm": wave_maps[0].norm()
     }
+    if range != None:
+        params["norm"] = colors.Normalize(range[0],range[1])
     img = axes.imshow(wave_maps[0], origin='lower', extent=extent, **params)
     fig.colorbar(img)
     fig.show()

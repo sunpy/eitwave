@@ -4,7 +4,8 @@ from visualize import visualize
 m2deg = 360./(2*3.1415926*6.96e8)
 
 params = {
-    "cadence": 12., #seconds
+    # "cadence": 12., #seconds
+    "cadence": 60., #seconds
     
     "hglt_obs": 0., #degrees
     "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
@@ -22,7 +23,8 @@ params = {
     "width": [90., 1.5], #degrees, full angle in azimuth, centered at 'direction'
     "wave_thickness": [6.0e6*m2deg,6.0e4*m2deg], #degrees, sigma of Gaussian profile in longitudinal direction
     "wave_normalization": [1.], #integrated value of the 1D Gaussian profile
-    "speed": [9.33e5*m2deg, -1.495e3*m2deg], #degrees/s, make sure that wave propagates all the way to lat_min for polynomial speed
+    #"speed": [9.33e5*m2deg, -1.495e3*m2deg], #degrees/s, make sure that wave propagates all the way to lat_min for polynomial speed
+    "speed": [9.33e5*m2deg, 0],
     
     #Random noise parameters
     "noise_type": "Poisson", #can be None, "Normal", or "Poisson"
@@ -61,16 +63,15 @@ params = {
 wave_maps = wave2d.simulate(params, verbose = True)
 
 #To get simulated HG' maps (centered at wave epicenter):
-#wave_maps_raw = wave2d.simulate_raw(params)
-#wave_maps_raw_noise = wave2d.add_noise(params, wave_maps_raw)
+wave_maps_raw = wave2d.simulate_raw(params)
+wave_maps_raw_noise = wave2d.add_noise(params, wave_maps_raw)
 
 visualize(wave_maps)
 
+import util
 
-#import util
+new_wave_maps = []
 
-#new_wave_maps = []
-
-#for wave in wave_maps:
-#    print("Unraveling map at "+str(wave.date))
-#    new_wave_maps += [util.map_hpc_to_hg_rotate(wave, epi_lon = 45., epi_lat = 30., xbin = 5, ybin = 0.2)]
+for wave in wave_maps:
+    print("Unraveling map at "+str(wave.date))
+    new_wave_maps += [util.map_hpc_to_hg_rotate(wave, epi_lon = params.get('epi_lon'), epi_lat = params.get('epi_lat'), xbin = 5, ybin = 0.2)]

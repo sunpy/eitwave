@@ -68,6 +68,7 @@ for i in range(0,n):
     invTransform = invTransform + nextLine
 
 plt.subplot(133)
+plt.title('Output Image')
 plt.imshow(invTransform)
 plt.show()
 

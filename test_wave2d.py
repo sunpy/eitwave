@@ -24,13 +24,21 @@ params = {
     "wave_normalization": [1.], #integrated value of the 1D Gaussian profile
     "speed": [9.33e5*m2deg, -1.495e3*m2deg], #degrees/s, make sure that wave propagates all the way to lat_min for polynomial speed
     
-    #Noise parameters
+    #Random noise parameters
     "noise_type": "Poisson", #can be None, "Normal", or "Poisson"
     "noise_scale": 0.1,
     "noise_mean": 1.,
     "noise_sdev": 1.,
     
+    #Structured noise parameters
+    "struct_type": None, #can be None, "Arcs", or "Random"
+    "struct_scale": 5.,
+    "struct_num": 10,
+    "struct_seed": 13092,
+    
     "max_steps": 20,
+    
+    "clean_nans": True,
     
     #HG grid, probably would only want to change the bin sizes
     "lat_min": -90.,
@@ -49,10 +57,20 @@ params = {
     "hpcy_bin": 2.4
 }
 
-wave_maps = wave2d.simulate(params)
-#wave_maps = wave2d.simulate(params, verbose = True)
+#wave_maps = wave2d.simulate(params)
+wave_maps = wave2d.simulate(params, verbose = True)
 
 #To get simulated HG' maps (centered at wave epicenter):
 #wave_maps_raw = wave2d.simulate_raw(params)
+#wave_maps_raw_noise = wave2d.add_noise(params, wave_maps_raw)
 
 visualize(wave_maps)
+
+
+#import util
+
+#new_wave_maps = []
+
+#for wave in wave_maps:
+#    print("Unraveling map at "+str(wave.date))
+#    new_wave_maps += [util.map_hpc_to_hg_rotate(wave, epi_lon = 45., epi_lat = 30., xbin = 5, ybin = 0.2)]

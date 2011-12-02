@@ -1,9 +1,9 @@
 import sunpy
-from sunpy.wcs  import wcs as wcs
+from sunpy import wcs
 from scipy.interpolate import griddata
 import numpy as np
-from sim.wave2d.wave2d import euler_zyz
-from matplotlib import colors
+#from sim.wave2d.wave2d import euler_zyz
+#from matplotlib import colors
 
 __authors__ = ["Steven Christe"]
 __email__ = "steven.d.christe@nasa.gov"
@@ -34,7 +34,7 @@ def map_hpc_to_hg(map, xbin = 1, ybin = 1):
 
     newdata = griddata(points, values, newgrid, method="cubic")
 
-    header = map.header
+    header = map.header.copy()
     header['CDELT1'] = lon_bin
     header['NAXIS1'] = len(lon)
     header['CRVAL1'] = lon.min()
@@ -80,7 +80,7 @@ def map_hg_to_hpc(map, xbin = 10, ybin = 10):
     newdata = griddata(points, values, newgrid, method="linear")
     
     # now grab the original map header and update it
-    header = map.header
+    header = map.header.copy()
     header["CDELT1"] = xbin
     header["NAXIS1"] = len(x)
     header["CRVAL1"] = x.min()
@@ -109,22 +109,22 @@ def map_hg_to_hpc(map, xbin = 10, ybin = 10):
 def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     """Take a map (like an AIA map) and convert it from HPC to HG."""
 
-    import sunpy
-    import util
-    from sunpy.wcs import wcs
-    import numpy as np
-    from scipy.interpolate import griddata
+    #import sunpy
+    #import util
+    #from sunpy import wcs
+    #import numpy as np
+    #from scipy.interpolate import griddata
     from sim.wave2d.wave2d import euler_zyz
-    from matplotlib import colors
+    #from matplotlib import colors
     
     # epi_lon = -10
     # epi_lat = 0
     
-    # aia = sunpy.Map(sunpy.AIA_171_IMAGE).resample([500,500])
+    #aia = sunpy.Map(sunpy.AIA_171_IMAGE).resample([500,500])
     # tmap = util.map_hpc_to_hg(aia)
     # tmap.show()
     
-    # map = aia
+    #map = aia
     
     x, y = wcs.convert_pixel_to_data(map.header)
     
@@ -160,7 +160,7 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     
     newdata = griddata(points, values, newgrid, method="cubic")
     
-    header = map.header
+    header = map.header.copy()
     header['CDELT1'] = lon_bin
     header['NAXIS1'] = len(lon)
     header['CRVAL1'] = lon.min()
@@ -183,6 +183,6 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
         "x": wcs.get_center(header, axis='x'),
         "y": wcs.get_center(header, axis='y')}
     
-    # transformed_map.show(norm = colors.Normalize(0,1000))
+    #transformed_map.show(norm = colors.Normalize(0,1000))
     
     return transformed_map

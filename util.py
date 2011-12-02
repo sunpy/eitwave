@@ -150,12 +150,7 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     
     points = np.vstack((lon_map.ravel(), lat_map.ravel())).T
     values = np.array(map).ravel()
-    
-    #get rid of al of the z negative values
-    #index = rot_hccz.ravel() >= 0
-    #points = points[index]
-    #values = values[index]
-    
+        
     # get rid of all of the bad (nan) indices (i.e. those off of the sun)
     index = np.isfinite(points[:,0]) * np.isfinite(points[:,1])
     points = np.vstack((points[index,0], points[index,1])).T

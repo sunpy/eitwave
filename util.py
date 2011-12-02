@@ -104,7 +104,6 @@ def map_hg_to_hpc(map, xbin = 10, ybin = 10):
         "x": wcs.get_center(header, axis='x'),
         "y": wcs.get_center(header, axis='y')}
 
-
     return transformed_map
 
 def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
@@ -121,11 +120,11 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     # epi_lon = -10
     # epi_lat = 0
     
-    aia = sunpy.Map(sunpy.AIA_171_IMAGE).resample([500,500])
+    # aia = sunpy.Map(sunpy.AIA_171_IMAGE).resample([500,500])
     # tmap = util.map_hpc_to_hg(aia)
     # tmap.show()
     
-    map = aia
+    # map = aia
     
     x, y = wcs.convert_pixel_to_data(map.header)
     
@@ -184,6 +183,6 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
         "x": wcs.get_center(header, axis='x'),
         "y": wcs.get_center(header, axis='y')}
     
-    transformed_map.show(norm = colors.Normalize(0,1000))
+    # transformed_map.show(norm = colors.Normalize(0,1000))
     
     return transformed_map

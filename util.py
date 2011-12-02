@@ -146,6 +146,13 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     lat = np.arange(lat_range[0], lat_range[1], lat_bin)
     newgrid = np.meshgrid(lon, lat)
     
+    #This extra conversion and rotation back are needed to determine where to
+    #mask out points that can't have corresponding data
+    ng_xyz = wcs.convert_hg_hcc_xyz(map.header, newgrid[0], newgrid[1])
+    ng_zp, ng_xp, ng_yp = euler_zyz((ng_xyz[2], ng_xyz[0], ng_xyz[1]),
+                                    (epi_lon, 90.-epi_lat, 0.))
+    
+    
     points = np.vstack((lon_map.ravel(), lat_map.ravel())).T
     values = np.array(map).ravel()
     
@@ -156,10 +163,12 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     
     # get rid of all of the bad (nan) indices (i.e. those off of the sun)
     index = np.isfinite(points[:,0]) * np.isfinite(points[:,1])
-    points = np.vstack((points[index,0], points[index,1])).T
+    #points = np.vstack((points[index,0], points[index,1])).T
+    points = points[index]
     values = values[index]
     
     newdata = griddata(points, values, newgrid, method="cubic")
+    newdata[ng_zp < 0] = np.nan
     
     header = map.header.copy()
     header['CDELT1'] = lon_bin

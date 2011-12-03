@@ -26,15 +26,17 @@ def htLine(distance,angle,img):
 
 m2deg = 360./(2*3.1415926*6.96e8)
 
+max_steps = 20
+
 params = {
     # "cadence": 12., #seconds
-    "cadence": 60., #seconds
+    "cadence": 30., #seconds
     
     "hglt_obs": 0., #degrees
     "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
     
     #Wave parameters that are initial conditions
-    "direction": 25., #degrees, measured CCW from HG +latitude
+    "direction": 65., #degrees, measured CCW from HG +latitude
     "epi_lat": 30., #degrees, HG latitude of wave epicenter
     "epi_lon": 45., #degrees, HG longitude of wave epicenter
     
@@ -43,8 +45,8 @@ params = {
     #The second element (if present) is linear in time
     #The third element (if present) is quadratic in time
     #Be very careful of non-physical behavior
-    "width": [90., 1.5], #degrees, full angle in azimuth, centered at 'direction'
-    "wave_thickness": [6.0e6*m2deg,6.0e4*m2deg], #degrees, sigma of Gaussian profile in longitudinal direction
+    "width": [90., 0.0], #degrees, full angle in azimuth, centered at 'direction'
+    "wave_thickness": [6.0e6*m2deg,2.0e4*m2deg], #degrees, sigma of Gaussian profile in longitudinal direction
     "wave_normalization": [1.], #integrated value of the 1D Gaussian profile
     #"speed": [9.33e5*m2deg, -1.495e3*m2deg], #degrees/s, make sure that wave propagates all the way to lat_min for polynomial speed
     "speed": [9.33e5*m2deg, 0],
@@ -61,7 +63,7 @@ params = {
     "struct_num": 10,
     "struct_seed": 13092,
     
-    "max_steps": 6,
+    "max_steps": max_steps,
     
     "clean_nans": True,
     
@@ -137,7 +139,7 @@ imgShape = input_maps[0].shape
 detection = []
 diffs = []
 
-temp = 255*(abs(input_maps[2] - input_maps[1]) > diffthresh)
+temp = 255*(abs(input_maps[14] - input_maps[13]) > diffthresh)
 
 for i in range(0,ndiff):
     # difference map
@@ -175,5 +177,17 @@ for i in range(0,ndiff):
 visualize(diffs)
 visualize(detection)
 
-plot_map = sunpy.make_map(input_maps[3], detection[3], type ="composite")
+from matplotlib import cm
+from matplotlib import colors
 
+wmap = sunpy.make_map(wave_maps[max_steps/2], wave_maps[0], type = "composite")
+wmap.set_colors(1, cm.Reds)
+wmap.set_alpha(1,0.1)
+#wmap.set_norm(1, colors.Normalize(0.1,1))
+wmap.show()
+
+pmap = sunpy.make_map(detection[max_steps/2],input_maps[max_steps/2], type ="composite")
+pmap.set_alpha(1,0.6)
+pmap.set_colors(0, cm.Blues)
+pmap.set_colors(1, cm.Reds)
+pmap.show()

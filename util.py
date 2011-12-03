@@ -162,7 +162,7 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     points = points[index]
     values = values[index]
     
-    newdata = griddata(points, values, newgrid, method="cubic")
+    newdata = griddata(points, values, newgrid, method="linear")
     newdata[ng_zp < 0] = np.nan
     
     header = map.header.copy()

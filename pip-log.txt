@@ -1630,3 +1630,147 @@ Traceback (most recent call last):
   File "/usr/lib/python2.6/dist-packages/pip.py", line 3543, in call_subprocess
     % (command_desc, proc.returncode))
 InstallationError: Command python setup.py egg_info failed with error code 1
+------------------------------------------------------------
+/usr/bin/pip run on Mon May 21 09:47:33 2012
+Downloading/unpacking sunpy
+  Getting page http://pypi.python.org/simple/sunpy
+  URLs to search for versions for sunpy:
+  * http://pypi.python.org/simple/sunpy
+  Getting page http://www.sunpy.org/
+  Getting page http://www.sunpy.org/download/
+  Analyzing links from page http://pypi.python.org/simple/sunpy/
+    Found link http://pypi.python.org/packages/source/s/sunpy/sunpy-0.1.tar.gz#md5=e0506b27c16b642e4f9c50c54ad0b3f2 (from http://pypi.python.org/simple/sunpy/), version: 0.1
+    Skipping link http://www.sunpy.org/ (from http://pypi.python.org/simple/sunpy/); not a file
+    Skipping link http://www.sunpy.org/download/ (from http://pypi.python.org/simple/sunpy/); not a file
+  Analyzing links from page http://www.sunpy.org/
+    Skipping link http://gmpg.org/xfn/11 (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/themes/twentyten/style.css (from http://www.sunpy.org/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php (from http://www.sunpy.org/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/feed/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/comments/feed/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/plugins/media-element-html5-video-and-audio-player/mediaelement/mediaelementplayer.css?ver=3.3.1 (from http://www.sunpy.org/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php?rsd (from http://www.sunpy.org/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/v1/wp-includes/wlwmanifest.xml (from http://www.sunpy.org/); unknown archive format: .xml
+    Skipping link http://www.sunpy.org/blog/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/ (from http://www.sunpy.org/); not a file
+    Skipping link http://wp.me/P1sIdM-21 (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/#content (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/doc/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/download/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.python.org/ (from http://www.sunpy.org/); not a file
+    Skipping link https://groups.google.com/forum/#%21forum/sunpy (from http://www.sunpy.org/); not a file
+    Skipping link http://wordpress.org/ (from http://www.sunpy.org/); not a file
+  Analyzing links from page http://www.sunpy.org/download/
+    Skipping link http://gmpg.org/xfn/11 (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/themes/twentyten/style.css (from http://www.sunpy.org/download/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php (from http://www.sunpy.org/download/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/feed/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/comments/feed/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/plugins/media-element-html5-video-and-audio-player/mediaelement/mediaelementplayer.css?ver=3.3.1 (from http://www.sunpy.org/download/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php?rsd (from http://www.sunpy.org/download/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/v1/wp-includes/wlwmanifest.xml (from http://www.sunpy.org/download/); unknown archive format: .xml
+    Skipping link http://www.sunpy.org/doc/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/download/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://wp.me/P1sIdM-b (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/download/#content (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/blog/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.python.org/download/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://numpy.scipy.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://matplotlib.sourceforge.net/index.html (from http://www.sunpy.org/download/); unknown archive format: .html
+    Skipping link http://www.stsci.edu/resources/software_hardware/pyfits/Download (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.riverbankcomputing.co.uk/software/pyqt/download (from http://www.sunpy.org/download/); not a file
+    Skipping link https://fedorahosted.org/suds/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://pandas.pydata.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://sunpy.org/doc/guide/installation/index.html (from http://www.sunpy.org/download/); unknown archive format: .html
+    Skipping link https://github.com/sunpy/sunpy/tarball/master (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/sunpy/sunpy/zipball/master (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/sunpy/sunpy (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/signup/free (from http://www.sunpy.org/download/); not a file
+    Skipping link http://git-scm.com/documentation (from http://www.sunpy.org/download/); not a file
+    Skipping link http://help.github.com/fork-a-repo/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://wordpress.org/ (from http://www.sunpy.org/download/); not a file
+  Analyzing links from page http://www.sunpy.org/
+    Skipping link http://gmpg.org/xfn/11 (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/themes/twentyten/style.css (from http://www.sunpy.org/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php (from http://www.sunpy.org/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/feed/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/comments/feed/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/plugins/media-element-html5-video-and-audio-player/mediaelement/mediaelementplayer.css?ver=3.3.1 (from http://www.sunpy.org/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php?rsd (from http://www.sunpy.org/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/v1/wp-includes/wlwmanifest.xml (from http://www.sunpy.org/); unknown archive format: .xml
+    Skipping link http://www.sunpy.org/blog/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/ (from http://www.sunpy.org/); not a file
+    Skipping link http://wp.me/P1sIdM-21 (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/#content (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/doc/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/download/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.python.org/ (from http://www.sunpy.org/); not a file
+    Skipping link https://groups.google.com/forum/#%21forum/sunpy (from http://www.sunpy.org/); not a file
+    Skipping link http://wordpress.org/ (from http://www.sunpy.org/); not a file
+  Analyzing links from page http://www.sunpy.org/download/
+    Skipping link http://gmpg.org/xfn/11 (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/themes/twentyten/style.css (from http://www.sunpy.org/download/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php (from http://www.sunpy.org/download/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/feed/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/comments/feed/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/plugins/media-element-html5-video-and-audio-player/mediaelement/mediaelementplayer.css?ver=3.3.1 (from http://www.sunpy.org/download/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php?rsd (from http://www.sunpy.org/download/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/v1/wp-includes/wlwmanifest.xml (from http://www.sunpy.org/download/); unknown archive format: .xml
+    Skipping link http://www.sunpy.org/doc/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/download/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://wp.me/P1sIdM-b (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/download/#content (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/blog/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.python.org/download/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://numpy.scipy.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://matplotlib.sourceforge.net/index.html (from http://www.sunpy.org/download/); unknown archive format: .html
+    Skipping link http://www.stsci.edu/resources/software_hardware/pyfits/Download (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.riverbankcomputing.co.uk/software/pyqt/download (from http://www.sunpy.org/download/); not a file
+    Skipping link https://fedorahosted.org/suds/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://pandas.pydata.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://sunpy.org/doc/guide/installation/index.html (from http://www.sunpy.org/download/); unknown archive format: .html
+    Skipping link https://github.com/sunpy/sunpy/tarball/master (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/sunpy/sunpy/zipball/master (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/sunpy/sunpy (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/signup/free (from http://www.sunpy.org/download/); not a file
+    Skipping link http://git-scm.com/documentation (from http://www.sunpy.org/download/); not a file
+    Skipping link http://help.github.com/fork-a-repo/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://wordpress.org/ (from http://www.sunpy.org/download/); not a file
+  Downloading from URL http://pypi.python.org/packages/source/s/sunpy/sunpy-0.1.tar.gz#md5=e0506b27c16b642e4f9c50c54ad0b3f2 (from http://pypi.python.org/simple/sunpy/)
+  Running setup.py egg_info for package sunpy
+    The required version of distribute (>=0.6.24) is not available,
+    and can't be installed while this script is running. Please
+    install a more recent version first, using
+    'easy_install -U distribute'.
+    
+    (Currently using distribute 0.6.10 (/usr/lib/python2.6/dist-packages))
+    Complete output from command python setup.py egg_info:
+    The required version of distribute (>=0.6.24) is not available,
+
+and can't be installed while this script is running. Please
+
+install a more recent version first, using
+
+'easy_install -U distribute'.
+
+
+
+(Currently using distribute 0.6.10 (/usr/lib/python2.6/dist-packages))
+
+----------------------------------------
+Command python setup.py egg_info failed with error code 2
+Exception information:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1775, in install_files
+    req_to_install.run_egg_info()
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1346, in run_egg_info
+    command_desc='python setup.py egg_info')
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 3543, in call_subprocess
+    % (command_desc, proc.returncode))
+InstallationError: Command python setup.py egg_info failed with error code 2

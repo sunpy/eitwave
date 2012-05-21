@@ -114,30 +114,15 @@ params = {
     "hpcy_bin": 2.
 }
 
-wave_maps = wave2d.simulate_raw(params)
-#wave_maps = wave2d.simulate(params, verbose = True)
-#visualize(wave_maps)
-#
-# Use Albert's wavemaps to test the hough transform as a means
-# of detecting EIT waves
+# load in all the data
 
-#
-# Initial detection is based on Hough transform of absolute
-# value of the running difference.
-#
-# Possible algorithm outline
-#
-# (1) Hough transform (HT) of absolute value of the running difference.
-# (2) Threshold HT and transform back
-# (3) Remove areas which are 'small', keep areas which are large
-# (4) Use the remaining detected areas as a mask in the original data
-# (5) Apply HT to masked original data
-# (6) Threshold and transform back
-# (7) Remove areas which are 'small', keep areas which are large
-# (8) This localises the wavefront
-#
+# normalize all the images
 
-ndiff = len(wave_maps)-1
+# number of scales
+nscale = 6
+
+# number of running differences
+ndiff = len(maps)-1
 
 # difference threshold
 diffthresh = 0.01
@@ -152,39 +137,49 @@ imgShape = wave_maps[0].shape
 detection = []
 diffs = []
 
-for i in range(0,ndiff):
-    # difference map
-    diffmap = 255*(abs(wave_maps[i+1] - wave_maps[i]) > diffthresh)
+# Sum in space over multiple lengthscales
+for j in range(0,nscale):
+    lengthscale = 2^j
+    
+    # calculate running difference images
+    for i in range(0,ndiff):
+        
+        # get the summed images
+        map_after = maps[i+1].sum(lengthscale,lengthscale)
+        map_now   = maps[i].sum(lengthscale,lengthscale)
+    
+        # take the difference
+        diffmap = abs(map_after - map_now) > diffthresh
 
-    # keep
-    diffs.append(diffmap)
+        # keep
+        diffs.append(diffmap)
 
-    # extract the image
-    img = diffmap
+        # extract the image from the storage array
+        img = diffmap
 
-    # Perform the hough transform on each of the difference maps
-    transform,theta,d = hough(img)
+        # Perform the hough transform on each of the difference maps
+        transform,theta,d = hough(img)
 
-    # Filter the hough transform results and find the best lines
-    # in the data
-    indices =  (transform >votethresh).nonzero()
-    distances = d[indices[0]]
-    theta = theta[indices[1]]
-    n =len(indices[1])
-    print n
+        # Filter the hough transform results and find the best lines
+        # in the data
+        indices =  (transform >votethresh).nonzero()
+        distances = d[indices[0]]
+        theta = theta[indices[1]]
+        n =len(indices[1])
+        print n
 
-    # Perform the inverse transform to get a series of rectangular
-    # images that show where the wavefront is.
-    invTransform = sunpy.map.BaseMap(wave_maps[i+1])
-    invTransform.data = np.zeros(imgShape)
-    for i in range(0,n):
-        nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )
-        invTransform = invTransform + nextLine
+        # Perform the inverse transform to get a series of rectangular
+        # images that show where the wavefront is.
+        invTransform = sunpy.map.BaseMap(wave_maps[i+1])
+        invTransform.data = np.zeros(imgShape)
+        for i in range(0,n):
+            nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )
+            invTransform = invTransform + nextLine
 
-    # Dump the inverse transform back into a series of maps
-    detection.append(invTransform)
+        
+        # Dump the inverse transform back into a series of maps
+        detection.append(invTransform.resample([4096,4096]))
 
 
-visualize(diffs)
 visualize(detection)
 

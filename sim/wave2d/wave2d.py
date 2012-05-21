@@ -80,7 +80,7 @@ def simulate_raw(params, verbose = False):
     
     HG' = HG, except center at wave epicenter
     """
-    from sunpy.util import util
+    from sunpy.time import parse_time
     import datetime
     from scipy.special import ndtr
 
@@ -200,7 +200,7 @@ def simulate_raw(params, verbose = False):
         
         wave_maps += [sunpy.map.BaseMap(wave, header)]
         wave_maps[istep].name = "Simulation"
-        wave_maps[istep].date = util.anytim("2011-11-11")+datetime.timedelta(0, istep*cadence)
+        wave_maps[istep].date = parse_time("2011-11-11")+datetime.timedelta(0, istep*cadence)
     
     return wave_maps
 

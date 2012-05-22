@@ -1,51 +1,9 @@
-from sim import wave2d
+
 from visualize import visualize
 from scikits.image.transform import hough
-from scikits.image.morphology import greyscale_dilate
 import numpy as np
-import pylab as plt
 import sunpy
-
-def reshaper(img,sx=1,sy=1):
-    """ Sum the input image into sx by sy superpixels.  Taken from
-    http://mail.scipy.org/pipermail/numpy-discussion/2010-July/051760.html
-    """
-    if img.ndim != 2:
-        print('Input must have exactly two dimensions; input passed to function has %i dimension(s)', img.ndim)
-        return None
-    
-    sz = np.shape(img)
-    if sz[0] % sx != 0:
-        print('Sum value "sx" must divide exactly into the image x-dimension size')
-        return None
-    if sz[1] % sy != 0:
-        print('Sum value "sy" must divide exactly into the image y-dimension size')
-        return None
-   
-    # Get the size of the new super-pixel array
-    nx = sz[0]/sx
-    ny = sz[1]/sy
-    # Perform the summing by reshaping up to a higher dimensional array and
-    # summing along the higher dimensions
-    reshaped = img.reshape(nx,sx,ny,sy)
-    return reshaped
-
-
-def sum(img,sx=1,sy=1):
-    """ Sum the input image into sx by sy superpixels.  Taken from
-    http://mail.scipy.org/pipermail/numpy-discussion/2010-July/051760.html
-    """
-    y = reshaper(img,sx=sx,sy=sy)
-    summed = y.sum(axis=3).sum(axis=1)
-    return summed
-
-def avg(img,sx=1,sy=1):
-    """ Average the input image into sx by sy superpixels.  Taken from
-    http://mail.scipy.org/pipermail/numpy-discussion/2010-July/051760.html
-    """
-    y = reshaper(img,sx=sx,sy=sy)
-    average = (y.sum(axis=3).sum(axis=1))/(np.float32(sx*sy))
-    return average
+import os
 
 
 def htLine(distance,angle,img):
@@ -114,12 +72,46 @@ params = {
     "hpcy_bin": 2.
 }
 
-# load in all the data
+# Lots of big images.  Need to be smart about how to handle the data
 
-# normalize all the images
+# load in the data with a single EIT wave
+directory = "/home/ireland/eitwave_data/jp2/20110601_02_04/"
+extension = ".jp2"
+# get the file list
+list = []
+for f in os.listdir(directory):
+    if f.endswith(extension):
+        list.append(f)
 
-# number of scales
-nscale = 6
+# accumulate every "naccum" files
+naccum = 4
+
+# accumulate using superpixels
+nsuper = 4
+
+# number of files to consider
+nfiles = len(list)
+
+# storage for all the maps
+maps = []
+
+# accumulate naccum files, super-pixel them, then add them together.
+j = 0
+while j+naccum <= nfiles:
+    i = 0
+    while i <= naccum:
+        filename = os.path.join(directory,list[j+i])
+        print('File %(#)i out of %(nfiles)i' % {'#':i+j, 'nfiles':nfiles})
+        print('Reading in file '+filename)
+        map1 = (sunpy.make_map(filename)).superpixel((nsuper,nsuper))
+        if i == 0:
+            map = map1
+        else:
+            map = map + map1
+    j = j + naccum
+    map.show()
+    maps.append(map)
+
 
 # number of running differences
 ndiff = len(maps)-1
@@ -131,54 +123,46 @@ diffthresh = 0.01
 votethresh = 10
 
 # shape of the data
-imgShape = wave_maps[0].shape
+imgShape = maps[0].shape
 
 # storage for the detection
 detection = []
 diffs = []
-
-# Sum in space over multiple lengthscales
-for j in range(0,nscale):
-    lengthscale = 2^j
+ 
+# calculate running difference images
+for i in range(0,ndiff):
     
-    # calculate running difference images
-    for i in range(0,ndiff):
-        
-        # get the summed images
-        map_after = maps[i+1].sum(lengthscale,lengthscale)
-        map_now   = maps[i].sum(lengthscale,lengthscale)
-    
-        # take the difference
-        diffmap = abs(map_after - map_now) > diffthresh
+    # take the difference
+    diffmap = abs(maps[i+1] - maps[i]) > diffthresh
 
-        # keep
-        diffs.append(diffmap)
+    # keep
+    diffs.append(diffmap)
 
-        # extract the image from the storage array
-        img = diffmap
+    # extract the image from the storage array
+    img = diffmap
 
-        # Perform the hough transform on each of the difference maps
-        transform,theta,d = hough(img)
+    # Perform the hough transform on each of the difference maps
+    transform,theta,d = hough(img)
 
-        # Filter the hough transform results and find the best lines
-        # in the data
-        indices =  (transform >votethresh).nonzero()
-        distances = d[indices[0]]
-        theta = theta[indices[1]]
-        n =len(indices[1])
-        print n
+    # Filter the hough transform results and find the best lines
+    # in the data
+    indices =  (transform >votethresh).nonzero()
+    distances = d[indices[0]]
+    theta = theta[indices[1]]
+    n =len(indices[1])
+    print n
 
-        # Perform the inverse transform to get a series of rectangular
-        # images that show where the wavefront is.
-        invTransform = sunpy.map.BaseMap(wave_maps[i+1])
-        invTransform.data = np.zeros(imgShape)
-        for i in range(0,n):
-            nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )
-            invTransform = invTransform + nextLine
+    # Perform the inverse transform to get a series of rectangular
+    # images that show where the wavefront is.
+    invTransform = sunpy.make_map(maps[i+1])
+    invTransform.data = np.zeros(imgShape)
+    for i in range(0,n):
+        nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )
+        invTransform = invTransform + nextLine
 
         
         # Dump the inverse transform back into a series of maps
-        detection.append(invTransform.resample([4096,4096]))
+    detection.append(invTransform)
 
 
 visualize(detection)

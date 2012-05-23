@@ -1,10 +1,10 @@
-from __future__ import absolute_import
-
 """
 Simulates a wave
 """
 
-__all__ = ["simulate","simulate_raw","transform","add_noise"]
+from __future__ import absolute_import
+
+__all__ = ["simulate", "simulate_raw", "transform", "add_noise"]
 
 __authors__ = ["Albert Shih"]
 __email__ = "albert.y.shih@nasa.gov"
@@ -139,23 +139,23 @@ def simulate_raw(params, verbose = False):
     wave_maps = []
     
     dict_header = {
-        "cdelt1": lon_bin,
-        "naxis1": lon_num,
-        "crval1": lon_min,
-        "crpix1": 0,
-        "cunit1": "deg",
-        "ctype1": "HG",
-        "cdelt2": lat_bin,
-        "naxis2": lat_num,
-        "crval2": lat_min,
-        "crpix2": 0,
-        "cunit2": "deg",
-        "ctype2": "HG",
-        "hglt_obs": 0,
-        "hgln_obs": 0,
-        "rsun_obs": 963.879683,
-        "rsun_ref": 696000000.0,
-        "dsun_obs": 148940609626.98
+        "CDELT1": lon_bin,
+        "NAXIS1": lon_num,
+        "CRVAL1": lon_min,
+        "CRPIX1": 0.5, #this makes lon_min the left edge of the first bin
+        "CUNIT1": "deg",
+        "CTYPE1": "HG",
+        "CDELT2": lat_bin,
+        "NAXIS2": lat_num,
+        "CRVAL2": lat_min,
+        "CRPIX2": 0.5, #this makes lat_min the left edge of the first bin
+        "CUNIT2": "deg",
+        "CTYPE2": "HG",
+        "HGLT_OBS": 0,
+        "HGLN_OBS": 0,
+        "RSUN_OBS": 963.879683,
+        "RSUN_REF": 696000000.0,
+        "DSUN_OBS": 148940609626.98
     }
     
     header = sunpy.map.MapHeader(dict_header)
@@ -210,7 +210,6 @@ def transform(params, wave_maps, verbose = False):
     
     HG' = HG, except center at wave epicenter
     """
-    from sunpy.wcs import wcs
     from scipy.interpolate import griddata
     
     hglt_obs = params["hglt_obs"]
@@ -232,62 +231,57 @@ def transform(params, wave_maps, verbose = False):
     wave_maps_transformed = []
     
     dict_header = {
-        "cdelt1": hpcx_bin,
-        "naxis1": hpcx_num,
-        "crval1": hpcx_min,
-        "crpix1": 0,
-        "cunit1": "arcsec",
-        "ctype1": "HPC",
-        "cdelt2": hpcy_bin,
-        "naxis2": hpcy_num,
-        "crval2": hpcy_min,
-        "crpix2": 0,
-        "cunit2": "arcsec",
-        "ctype2": "HPC",
-        "hglt_obs": hglt_obs,
-        "hgln_obs": 0,
-        "rsun_obs": 963.879683,
-        "rsun_ref": 696000000.0,
-        "dsun_obs": 148940609626.98
+        "CDELT1": hpcx_bin,
+        "NAXIS1": hpcx_num,
+        "CRVAL1": hpcx_min,
+        "CRPIX1": 0.5, #this makes hpcx_min the left edge of the first bin
+        "CUNIT1": "arcsec",
+        "CTYPE1": "HPLN-TAN",
+        "CDELT2": hpcy_bin,
+        "NAXIS2": hpcy_num,
+        "CRVAL2": hpcy_min,
+        "CRPIX2": 0.5, #this makes hpcy_min the left edge of the first bin
+        "CUNIT2": "arcsec",
+        "CTYPE2": "HPLT-TAN",
+        "HGLT_OBS": hglt_obs,
+        "HGLN_OBS": 0,
+        "RSUN_OBS": 963.879683,
+        "RSUN_REF": 696000000.0,
+        "DSUN_OBS": 148940609626.98
     }
     
     header = sunpy.map.MapHeader(dict_header)
     
     start_date = wave_maps[0].date
     
-    #Could instead use linspace or mgrid?
-    lon = np.arange(wave_maps[0].xrange[0]+0.5*wave_maps[0].header["cdelt1"], wave_maps[0].xrange[1], wave_maps[0].header["cdelt1"])
-    lat = np.arange(wave_maps[0].yrange[0]+0.5*wave_maps[0].header["cdelt2"], wave_maps[0].yrange[1], wave_maps[0].header["cdelt2"])
-    lon_grid, lat_grid = np.meshgrid(lon, lat)
+    #Origin grid, HG'
+    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].header)
     
-    #HG' to HCC'
+    #Origin grid, HG' to HCC'
     #HCC' = HCC, except centered at wave epicenter
-    x, y, z = wcs.convert_hg_hcc_xyz(wave_maps[0].header,
-                                     lon_grid, lat_grid)
+    x, y, z = sunpy.wcs.convert_hg_hcc_xyz(wave_maps[0].header,
+                                           lon_grid, lat_grid)
     
-    #HCC' to HCC''
+    #Origin grid, HCC' to HCC''
     #Moves the wave epicenter to initial conditions
     #HCC'' = HCC, except assuming that HGLT_OBS = 0
     zxy_p = euler_zyz((z, x, y), (epi_lon, 90.-epi_lat, 0.))
     
     #Destination HPC grid
-    #Could instead use linspace or mgrid?
-    hpcx = np.arange(hpcx_min+0.5*hpcx_bin, hpcx_max, hpcx_bin)
-    hpcy = np.arange(hpcy_min+0.5*hpcy_bin, hpcy_max, hpcy_bin)
-    hpc_grid = np.meshgrid(hpcx, hpcy)
+    hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(header)
     
     for current_wave_map in wave_maps:
         if verbose:
             print("Transforming map at "+str(current_wave_map.date))
         
-        #HCC'' to HCC
+        #Origin grid, HCC'' to HCC
         #Moves the observer to HGLT_OBS and adds rigid solar rotation
-	td = current_wave_map.date-start_date
-	total_seconds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        td = current_wave_map.date-start_date
+        total_seconds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
         zpp, xpp, ypp = euler_zyz(zxy_p, (0., hglt_obs, total_seconds*rotation))
         
-        #HCC to HPC (arcsec)
-        xx, yy = wcs.convert_hcc_hpc(current_wave_map.header, xpp, ypp)
+        #Origin grid, HCC to HPC (arcsec)
+        xx, yy = sunpy.wcs.convert_hcc_hpc(current_wave_map.header, xpp, ypp)
         xx *= 3600
         yy *= 3600
         
@@ -295,9 +289,9 @@ def transform(params, wave_maps, verbose = False):
         points = np.vstack((xx.ravel(), yy.ravel())).T
         values = np.array(current_wave_map).ravel()
         
-        #2D interpolation
+        #2D interpolation from origin grid to destination grid
         grid = griddata(points[zpp.ravel() >= 0], values[zpp.ravel() >= 0],
-                               hpc_grid, method="linear")
+                        (hpcx_grid, hpcy_grid), method="linear")
         
         transformed_wave_map = sunpy.map.BaseMap(grid, header)
         transformed_wave_map.name = current_wave_map.name
@@ -306,45 +300,112 @@ def transform(params, wave_maps, verbose = False):
 
     return wave_maps_transformed
 
-def add_noise(params, wave_maps, verbose = False):
-    """
-    Adds simulated noise to a map
-    """
-    from scipy import stats
+def noise_random(params, shape):
+    """Return an ndarray of random noise"""
     
-    noise_type = params["noise_type"]
-    noise_scale = params["noise_scale"]
-    noise_mean = params["noise_mean"]
-    noise_sdev = params["noise_sdev"]
+    noise_type = params.get("noise_type")
+    noise_scale = params.get("noise_scale")
+    noise_mean = params.get("noise_mean")
+    noise_sdev = params.get("noise_sdev")
     
     if noise_type is None:
-        if verbose:
-            print("No added noise")
-        return wave_maps
+        noise = np.zeros(shape)
     else:
-        wave_maps_noise = []
-        for current_wave_map in wave_maps:
-            wave = np.array(current_wave_map)
+        if noise_type == "Normal":
+            noise = noise_scale*np.random.normal(noise_mean, noise_sdev, shape)
+        elif noise_type == "Poisson":
+            noise = noise_scale*np.random.poisson(noise_mean, shape)
+        else:
+            noise = np.zeros(shape)
+    
+    return noise
+   
+def noise_structure(params, shape):
+    """Return an ndarray of structured noise"""
+    
+    struct_type = params.get("struct_type")
+    struct_scale = params.get("struct_scale")
+    struct_num = params.get("struct_num")
+    struct_seed = params.get("struct_seed")
+    
+    if struct_type is None:
+        struct = np.zeros(shape)
+    else:
+        np.random.seed(struct_seed)
+        
+        if struct_type == "Arcs":
+            struct = np.zeros(shape)
             
-            if noise_type == "Normal":
-                if verbose:
-                    print("Adding normal noise to map at "+str(current_wave_map.date))
-                noise = noise_scale*stats.norm.rvs(loc=noise_mean, scale=noise_sdev, size=wave.size).reshape(wave.shape)
-            elif noise_type == "Poisson":
-                if verbose:
-                    print("Adding Poisson noise to map at "+str(current_wave_map.date))
-                noise = noise_scale*stats.poisson.rvs(noise_mean, size=wave.size).reshape(wave.shape)
-            else:
-                if verbose:
-                    print("Unkonwn noise requested to map at "+str(current_wave_map.date))
-                noise = np.zeros_like(wave)
+            rsigma = 5
             
-            new_wave_map = sunpy.map.BaseMap(wave+noise, current_wave_map.header)
-            new_wave_map.name = current_wave_map.name
-            new_wave_map.date = current_wave_map.date
-            wave_maps_noise += [new_wave_map]
+            xc = np.random.random_sample(struct_num)*shape[0]
+            yc = np.random.random_sample(struct_num)*shape[1]
+            xo = np.random.random_sample(struct_num)*shape[0]
+            yo = np.random.random_sample(struct_num)*shape[1]
+            halfangle = np.random.random_sample(struct_num)*np.pi/4.
             
-        return wave_maps_noise
+            r0 = np.sqrt((xc-xo)**2+(yc-yo)**2)
+            #theta0 = np.arctan2(yc-yo, xc-xo)
+                        
+            x0, y0 = np.mgrid[0:shape[0], 0:shape[1]]
+            
+            np.random.seed()
+            
+            for index in xrange(struct_num):
+                x = x0 + rsigma*(np.random.random_sample()-0.5)
+                y = y0 + rsigma*(np.random.random_sample()-0.5)
+                
+                r = np.sqrt((x-xo[index])**2+(y-yo[index])**2)
+                #theta = np.arctan2(y-yo[index], x-xo[index])
+                
+                theta = np.arccos(((x-xo[index])*(xc[index]-xo[index])+(y-yo[index])*(yc[index]-yo[index]))/(r*r0[index]))
+                
+                struct += struct_scale*1/np.sqrt(2*np.pi*rsigma**2)*np.exp(-((r-r0[index])/rsigma)**2/2.)*(theta<=halfangle[index])
+            
+        elif struct_type == "Random":
+            struct = struct_scale*noise_random(params, shape)
+        else:
+            struct = np.zeros(shape)
+        
+        np.random.seed()
+    
+    return struct
+
+def add_noise(params, wave_maps, verbose = False):
+    """
+    Adds simulated noise to a list of maps
+    """
+    wave_maps_noise = []
+    for current_wave_map in wave_maps:
+        if verbose:
+            print("Adding noise to map at "+str(current_wave_map.date))
+
+        noise = noise_random(params, current_wave_map.shape)
+        struct = noise_structure(params, current_wave_map.shape)
+        
+        wave_maps_noise += [current_wave_map + noise + struct]
+        
+    return wave_maps_noise
+
+def clean(params, wave_maps, verbose = False):
+    """
+    Cleans a list of maps
+    """
+    wave_maps_clean = []
+    for current_wave_map in wave_maps:
+        if verbose:
+            print("Cleaning map at "+str(current_wave_map.date))
+
+        data = np.asarray(current_wave_map)
+        if params.get("clean_nans"):
+            data[np.isnan(data)] = 0.
+                
+        cleaned_wave_map = sunpy.map.BaseMap(data, current_wave_map.header)
+        cleaned_wave_map.name = current_wave_map.name
+        cleaned_wave_map.date = current_wave_map.date
+        wave_maps_clean += [cleaned_wave_map]
+
+    return wave_maps_clean
 
 def simulate(params, verbose = False):
     """
@@ -353,4 +414,6 @@ def simulate(params, verbose = False):
     wave_maps_raw = simulate_raw(params, verbose)
     wave_maps_transformed = transform(params, wave_maps_raw, verbose)
     wave_maps_noise = add_noise(params, wave_maps_transformed, verbose)
-    return wave_maps_noise
+    wave_maps_out = clean(params, wave_maps_noise, verbose)
+    
+    return wave_maps_out

@@ -6,48 +6,6 @@ import numpy as np
 import pylab as plt
 import sunpy
 
-def reshaper(img,sx=1,sy=1):
-    """ Sum the input image into sx by sy superpixels.  Taken from
-    http://mail.scipy.org/pipermail/numpy-discussion/2010-July/051760.html
-    """
-    if img.ndim != 2:
-        print('Input must have exactly two dimensions; input passed to function has %i dimension(s)', img.ndim)
-        return None
-    
-    sz = np.shape(img)
-    if sz[0] % sx != 0:
-        print('Sum value "sx" must divide exactly into the image x-dimension size')
-        return None
-    if sz[1] % sy != 0:
-        print('Sum value "sy" must divide exactly into the image y-dimension size')
-        return None
-   
-    # Get the size of the new super-pixel array
-    nx = sz[0]/sx
-    ny = sz[1]/sy
-    # Perform the summing by reshaping up to a higher dimensional array and
-    # summing along the higher dimensions
-    reshaped = img.reshape(nx,sx,ny,sy)
-    return reshaped
-
-
-def sum(img,sx=1,sy=1):
-    """ Sum the input image into sx by sy superpixels.  Taken from
-    http://mail.scipy.org/pipermail/numpy-discussion/2010-July/051760.html
-    """
-    y = reshaper(img,sx=sx,sy=sy)
-    summed = y.sum(axis=3).sum(axis=1)
-    return summed
-
-def avg(img,sx=1,sy=1):
-    """ Average the input image into sx by sy superpixels.  Taken from
-    http://mail.scipy.org/pipermail/numpy-discussion/2010-July/051760.html
-    """
-    y = reshaper(img,sx=sx,sy=sy)
-    average = (y.sum(axis=3).sum(axis=1))/(np.float32(sx*sy))
-    return average
-
-
 def htLine(distance,angle,img):
     shape = img.shape
     ny = shape[0]
@@ -69,7 +27,8 @@ def htLine(distance,angle,img):
 m2deg = 360./(2*3.1415926*6.96e8)
 
 params = {
-    "cadence": 12., #seconds
+    # "cadence": 12., #seconds
+    "cadence": 60., #seconds
     
     "hglt_obs": 0., #degrees
     "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
@@ -87,15 +46,24 @@ params = {
     "width": [90., 1.5], #degrees, full angle in azimuth, centered at 'direction'
     "wave_thickness": [6.0e6*m2deg,6.0e4*m2deg], #degrees, sigma of Gaussian profile in longitudinal direction
     "wave_normalization": [1.], #integrated value of the 1D Gaussian profile
-    "speed": [9.33e5*m2deg, -1.495e3*m2deg], #degrees/s, make sure that wave propagates all the way to lat_min for polynomial speed
+    #"speed": [9.33e5*m2deg, -1.495e3*m2deg], #degrees/s, make sure that wave propagates all the way to lat_min for polynomial speed
+    "speed": [9.33e5*m2deg, 0],
     
-    #Noise parameters
+    #Random noise parameters
     "noise_type": "Poisson", #can be None, "Normal", or "Poisson"
-    "noise_scale": 0.3,
+    "noise_scale": 0.05,
     "noise_mean": 1.,
     "noise_sdev": 1.,
     
-    "max_steps": 20,
+    #Structured noise parameters
+    "struct_type": None, #can be None, "Arcs", or "Random"
+    "struct_scale": 5.,
+    "struct_num": 10,
+    "struct_seed": 13092,
+    
+    "max_steps": 6,
+    
+    "clean_nans": True,
     
     #HG grid, probably would only want to change the bin sizes
     "lat_min": -90.,
@@ -106,15 +74,32 @@ params = {
     "lon_bin": 5.,
     
     #HPC grid, probably would only want to change the bin sizes
-    "hpcx_min": -1025.,
-    "hpcx_max": 1023.,
-    "hpcx_bin": 2.,
-    "hpcy_min": -1025.,
-    "hpcy_max": 1023.,
-    "hpcy_bin": 2.
+    "hpcx_min": -1228.8,
+    "hpcx_max": 1228.8,
+    "hpcx_bin": 2.4,
+    "hpcy_min": -1228.8,
+    "hpcy_max": 1228.8,
+    "hpcy_bin": 2.4
 }
 
-wave_maps = wave2d.simulate_raw(params)
+wave_maps = wave2d.simulate(params, verbose = True)
+    
+    #To get simulated HG' maps (centered at wave epicenter):
+wave_maps_raw = wave2d.simulate_raw(params)
+wave_maps_raw_noise = wave2d.add_noise(params, wave_maps_raw)
+    
+visualize(wave_maps)
+    
+import util
+    
+new_wave_maps = []
+    
+for wave in wave_maps:
+    print("Unraveling map at "+str(wave.date))
+    new_wave_maps += [util.map_hpc_to_hg_rotate(wave, epi_lon = params.get('epi_lon'), epi_lat = params.get('epi_lat'), xbin = 5, ybin = 0.2)]
+
+input_maps = new_wave_maps
+
 #wave_maps = wave2d.simulate(params, verbose = True)
 #visualize(wave_maps)
 #
@@ -137,24 +122,26 @@ wave_maps = wave2d.simulate_raw(params)
 # (8) This localises the wavefront
 #
 
-ndiff = len(wave_maps)-1
+ndiff = len(input_maps)-1
 
 # difference threshold
-diffthresh = 0.01
+diffthresh = 0.2
 
 # Hough transform voting threshold
 votethresh = 10
 
 # shape of the data
-imgShape = wave_maps[0].shape
+imgShape = input_maps[0].shape
 
 # storage for the detection
 detection = []
 diffs = []
 
+temp = 255*(abs(input_maps[2] - input_maps[1]) > diffthresh)
+
 for i in range(0,ndiff):
     # difference map
-    diffmap = 255*(abs(wave_maps[i+1] - wave_maps[i]) > diffthresh)
+    diffmap = 255*(abs(input_maps[i+1] - input_maps[i]) > diffthresh)
 
     # keep
     diffs.append(diffmap)
@@ -171,11 +158,11 @@ for i in range(0,ndiff):
     distances = d[indices[0]]
     theta = theta[indices[1]]
     n =len(indices[1])
-    print n
+    print("Found " + str(n) + " lines.")
 
     # Perform the inverse transform to get a series of rectangular
     # images that show where the wavefront is.
-    invTransform = sunpy.map.BaseMap(wave_maps[i+1])
+    invTransform = sunpy.map.BaseMap(input_maps[i+1])
     invTransform.data = np.zeros(imgShape)
     for i in range(0,n):
         nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )
@@ -187,4 +174,6 @@ for i in range(0,ndiff):
 
 visualize(diffs)
 visualize(detection)
+
+plot_map = sunpy.make_map(input_maps[3], detection[3], type ="composite")
 

@@ -255,11 +255,35 @@ def transform(params, wave_maps, verbose = False):
     start_date = wave_maps[0].date
     
     #Origin grid, HG'
-    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].header)
+    #lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].header)
+    # Changed call to keep up to date with updated wcs library
+    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].shape[0],
+                                                         wave_maps[0].shape[1],
+                                                         wave_maps[0].scale['x'], 
+                                                         wave_maps[0].scale['y'],
+                                                         wave_maps[0].center['x'],
+                                                         wave_maps[0].center['y'],   
+                                                         wave_maps[0].reference_coordinate['x'],
+                                                         wave_maps[0].reference_coordinate['y'],
+                                                         wave_maps[0].coordinate_system)         
     
     #Origin grid, HG' to HCC'
     #HCC' = HCC, except centered at wave epicenter
-    x, y, z = sunpy.wcs.convert_hg_hcc_xyz(wave_maps[0].header,
+    #x, y, z = sunpy.wcs.convert_hg_hcc_xyz(wave_maps[0].header,
+    #                                       lon_grid, lat_grid)
+    original_fits_header = wave_maps[0]._original_fits_header
+    if 'BZERO' in original_fits_header:
+        bzero = original_fits_header['BZERO']
+    else:
+        bzero = 0.0
+    if 'L0' in original_fits_header:
+        lzero = original_fits_header['L0']
+    else:
+        lzero = 0.0
+
+    x, y, z = sunpy.wcs.convert_hg_hcc_xyz(wave_maps[0].rsun_arcseconds,
+                                           bzero,
+                                           lzero,
                                            lon_grid, lat_grid)
     
     #Origin grid, HCC' to HCC''
@@ -268,7 +292,17 @@ def transform(params, wave_maps, verbose = False):
     zxy_p = euler_zyz((z, x, y), (epi_lon, 90.-epi_lat, 0.))
     
     #Destination HPC grid
-    hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(header)
+    #hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(header)
+    # Updated to use new wcs function calls
+    hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(header['NAXIS1'],
+                                                           header['NAXIS2'],
+                                                           header['CDELT1'],
+                                                           header['CDELT2'],
+                                                           header['CRPIX1'],
+                                                           header['CRPIX2'],
+                                                           header['CRVAL1'],
+                                                           header['CRVAL2'],
+                                                           header['CTYPE1'])
     
     for current_wave_map in wave_maps:
         if verbose:

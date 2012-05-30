@@ -1,6 +1,7 @@
 
 from visualize import visualize
-from scikits.image.transform import hough
+from sim import wave2d
+from skimage.transform import hough
 import numpy as np
 import sunpy
 import os
@@ -26,6 +27,26 @@ def htLine(distance,angle,img):
 def main():
 
     m2deg = 360./(2*3.1415926*6.96e8)
+    params = {
+              "epi_lat": 30., #degrees, HG latitude of wave epicenter
+              "epi_lon": 45., #degrees, HG longitude of wave epicenter
+              #HG grid, probably would only want to change the bin sizes
+              "lat_min": -90.,
+              "lat_max": 90.,
+              "lat_bin": 0.2,
+              "lon_min": -180.,
+              "lon_max": 180.,
+              "lon_bin": 5.,
+              #    #HPC grid, probably would only want to change the bin sizes
+              "hpcx_min": -1025.,
+              "hpcx_max": 1023.,
+              "hpcx_bin": 2.,
+              "hpcy_min": -1025.,
+              "hpcy_max": 1023.,
+              "hpcy_bin": 2.,
+              "hglt_obs": 0,
+              "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
+              }
     
     #params = {
     #    "cadence": 12., #seconds
@@ -115,15 +136,20 @@ def main():
             i = i + 1
         j = j + naccum
         maps.append(m)
+    print 1
+    z = wave2d.transform(params,maps[0])
     
     # number of running differences
     ndiff = len(maps)-1
     
-    # difference threshold
-    diffthresh = 0.01
+    # Each JP2 file has a maximum of 255
+    maxval = 255 * nsuper * nsuper * naccum
+    
+    # difference threshold as a function of the maximum value
+    diffthresh = 0.01 * maxval #300
     
     # Hough transform voting threshold
-    votethresh = 10
+    votethresh = 5000
     
     # shape of the data
     imgShape = maps[0].shape
@@ -136,7 +162,7 @@ def main():
     for i in range(0,ndiff):
         
         # take the difference
-        diffmap = abs(maps[i+1] - maps[i]) > diffthresh
+        diffmap = ( maps[i+1] -maps[i] )  > diffthresh
     
         # keep
         diffs.append(diffmap)

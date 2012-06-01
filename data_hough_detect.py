@@ -100,11 +100,11 @@ def main():
     directory = "/home/ireland/eitwave_data/jp2/20110601_02_04/"
     extension = ".jp2"
     # get the file list
-    lll = []
+    lst = []
     for f in os.listdir(directory):
         if f.endswith(extension):
-            lll.append(f)
-    
+            lst.append(f)
+    lll = sorted(lst)
     # accumulate every "naccum" files
     naccum = 2
     
@@ -136,8 +136,8 @@ def main():
             i = i + 1
         j = j + naccum
         maps.append(m)
-    print 1
-    z = wave2d.transform(params,maps[0])
+
+    z = wave2d.transform(params,maps)
     
     # number of running differences
     ndiff = len(maps)-1

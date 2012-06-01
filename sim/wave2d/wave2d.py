@@ -257,6 +257,7 @@ def transform(params, wave_maps, verbose = False):
     #Origin grid, HG'
     #lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].header)
     # Changed call to keep up to date with updated wcs library
+    print('Calling unpy.wcs.convert_pixel_to_data')
     lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].shape[0],
                                                          wave_maps[0].shape[1],
                                                          wave_maps[0].scale['x'], 
@@ -265,35 +266,28 @@ def transform(params, wave_maps, verbose = False):
                                                          wave_maps[0].center['y'],   
                                                          wave_maps[0].reference_coordinate['x'],
                                                          wave_maps[0].reference_coordinate['y'],
-                                                         wave_maps[0].coordinate_system)         
+                                                         wave_maps[0].coordinate_system['x'])         
     
     #Origin grid, HG' to HCC'
     #HCC' = HCC, except centered at wave epicenter
     #x, y, z = sunpy.wcs.convert_hg_hcc_xyz(wave_maps[0].header,
     #                                       lon_grid, lat_grid)
-    original_fits_header = wave_maps[0]._original_fits_header
-    if 'BZERO' in original_fits_header:
-        bzero = original_fits_header['BZERO']
-    else:
-        bzero = 0.0
-    if 'L0' in original_fits_header:
-        lzero = original_fits_header['L0']
-    else:
-        lzero = 0.0
-
+    print('Calling sunpy.wcs.convert_hg_hcc_xyz')
     x, y, z = sunpy.wcs.convert_hg_hcc_xyz(wave_maps[0].rsun_arcseconds,
-                                           bzero,
-                                           lzero,
+                                           wave_maps[0].heliographic_latitude,
+                                           wave_maps[0].carrington_longitude,
                                            lon_grid, lat_grid)
     
     #Origin grid, HCC' to HCC''
     #Moves the wave epicenter to initial conditions
     #HCC'' = HCC, except assuming that HGLT_OBS = 0
+    print('Calling euler_zyz')
     zxy_p = euler_zyz((z, x, y), (epi_lon, 90.-epi_lat, 0.))
     
     #Destination HPC grid
     #hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(header)
     # Updated to use new wcs function calls
+    print('Calling sunpy.wcs.convert_pixel_to_data')
     hpcx_grid, hpcy_grid = sunpy.wcs.convert_pixel_to_data(header['NAXIS1'],
                                                            header['NAXIS2'],
                                                            header['CDELT1'],
@@ -305,17 +299,22 @@ def transform(params, wave_maps, verbose = False):
                                                            header['CTYPE1'])
     
     for current_wave_map in wave_maps:
-        if verbose:
-            print("Transforming map at "+str(current_wave_map.date))
+        print("Transforming map at "+str(current_wave_map.date))
         
         #Origin grid, HCC'' to HCC
         #Moves the observer to HGLT_OBS and adds rigid solar rotation
         td = current_wave_map.date-start_date
         total_seconds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        print(' calling euler_zyz')
         zpp, xpp, ypp = euler_zyz(zxy_p, (0., hglt_obs, total_seconds*rotation))
         
         #Origin grid, HCC to HPC (arcsec)
-        xx, yy = sunpy.wcs.convert_hcc_hpc(current_wave_map.header, xpp, ypp)
+        #xx, yy = sunpy.wcs.convert_hcc_hpc(current_wave_map.header, xpp, ypp)
+        print(' calling sunpy.wcs.convert_hcc_hpc')
+        xx, yy = sunpy.wcs.convert_hcc_hpc(current_wave_map.rsun_arcseconds,
+                                           current_wave_map.dsun,
+                                           xpp,
+                                           ypp)
         xx *= 3600
         yy *= 3600
         
@@ -327,7 +326,7 @@ def transform(params, wave_maps, verbose = False):
         grid = griddata(points[zpp.ravel() >= 0], values[zpp.ravel() >= 0],
                         (hpcx_grid, hpcy_grid), method="linear")
         
-        transformed_wave_map = sunpy.map.BaseMap(grid, header)
+        transformed_wave_map = sunpy.make_map(grid, header)
         transformed_wave_map.name = current_wave_map.name
         transformed_wave_map.date = current_wave_map.date
         wave_maps_transformed += [transformed_wave_map]

@@ -1,0 +1,1776 @@
+Downloading/unpacking scipy
+  Getting page http://pypi.python.org/simple/scipy
+  URLs to search for versions for scipy:
+  * http://pypi.python.org/simple/scipy
+  Getting page http://www.scipy.org
+  Getting page http://sourceforge.net/project/showfiles.php?group_id=27747&amp;package_id=19531
+  Getting page http://new.scipy.org/Wiki/Download
+  Could not fetch URL http://new.scipy.org/Wiki/Download (from http://pypi.python.org/simple/scipy/): HTTP Error 404: Not Found
+  Will skip URL http://new.scipy.org/Wiki/Download when looking for download links for scipy
+  Analyzing links from page http://pypi.python.org/simple/scipy/
+    Found link http://pypi.python.org/packages/source/s/scipy/scipy-0.10.0.zip#md5=d1a4242266739433dcfe2096b0ab4007 (from http://pypi.python.org/simple/scipy/), version: 0.10.0
+    Found link http://pypi.python.org/packages/source/s/scipy/scipy-0.10.0.tar.gz#md5=e357c08425fd031dce63bc4905789088 (from http://pypi.python.org/simple/scipy/), version: 0.10.0
+    Found link http://pypi.python.org/packages/source/s/scipy/scipy-0.9.0.zip#md5=a37933c9e3c4fdf8d087624cd7dcb47d (from http://pypi.python.org/simple/scipy/), version: 0.9.0
+    Found link http://pypi.python.org/packages/source/s/scipy/scipy-0.9.0.tar.gz#md5=ebfef6e8e82d15c875a4ee6a46d4e1cd (from http://pypi.python.org/simple/scipy/), version: 0.9.0
+    Found link http://pypi.python.org/packages/source/s/scipy/scipy-0.8.0.tar.gz#md5=f0bfc6141b90e6a31555b31486602251 (from http://pypi.python.org/simple/scipy/), version: 0.8.0
+    Skipping link http://www.scipy.org (from http://pypi.python.org/simple/scipy/); not a file
+    Skipping link http://sourceforge.net/project/showfiles.php?group_id=27747&amp;package_id=19531 (from http://pypi.python.org/simple/scipy/); unknown archive format: .php
+    Skipping link http://new.scipy.org/Wiki/Download (from http://pypi.python.org/simple/scipy/); not a file
+  Analyzing links from page http://www.scipy.org
+    Skipping link http://www.scipy.org/images/favicon.ico (from http://www.scipy.org); unknown archive format: .ico
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/common.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/screen.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/print.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/projection.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/RecentChanges?action=rss_rc&amp;ddiffs=1&amp;unique=1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=raw (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=print (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=C1.jpg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=NumPyOptimizationSmallsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=bggrad.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon-100.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=pymagsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf-sm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2c.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2d.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2e.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm3b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm4b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm5b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydevlogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosmb.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipylogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scr_bessel3dgistsmall.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FindPage (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/TitleIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/WordIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/HelpOnFormatting (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=login (from http://www.scipy.org); not a file
+    Skipping link http://enthought.com (from http://www.scipy.org); not a file
+    Skipping link http://docs.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Mailing_Lists (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Download (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Installing_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Topical_Software (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Developer_Zone (from http://www.scipy.org); not a file
+    Skipping link http://planet.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://conference.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=info (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=edit (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=diff (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=subscribe (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=fullsearch&amp;value=linkto%3A%22SciPy%22&amp;context=180 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.10.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sc11.supercomputing.org/ (from http://www.scipy.org); not a file
+    Skipping link http://www.dlr.de/sc/desktopdefault.aspx/tabid-1183/1638_read-31733/ (from http://www.scipy.org); not a file
+    Skipping link http://de.pycon.org/2011/home (from http://www.scipy.org); not a file
+    Skipping link http://www.euroscipy.org/conference/euroscipy2011 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.1/ (from http://www.scipy.org); unknown archive format: .1
+    Skipping link http://conference.scipy.org/scipy2011/ (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.9.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://www.scipy.org/Getting_Started (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/BugReport (from http://www.scipy.org); not a file
+    Skipping link http://numpy.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook/OptimizationDemo1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPyDotOrg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/more_about_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Projects (from http://www.scipy.org); not a file
+    Skipping link http://scikits.appspot.com/ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Documentation (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FAQ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/EnthoughtInc (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/RalfGommers (from http://www.scipy.org); not a file
+    Skipping link http://moinmoin.wikiwikiweb.de/ (from http://www.scipy.org); not a file
+    Skipping link http://www.python.org/ (from http://www.scipy.org); not a file
+    Skipping link http://validator.w3.org/check?uri=referer (from http://www.scipy.org); not a file
+  Analyzing links from page http://sourceforge.net/projects/scipy/files/OldFiles/
+    Skipping link http://a.fsdn.com/con/img/sftheme/favicon.ico (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .ico
+    Skipping link http://fonts.googleapis.com/css?family=Ubuntu:regular (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://a.fsdn.com/con/css/sf.css?1321644888 (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .css
+    Skipping link http://sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/directory/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/blog/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://jobs.sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/user/registration (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/events/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/account/login.php (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .php
+    Skipping link http://sourceforge.net/projects/scipy/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/edschofield (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/ericjones (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/jarrodmillman (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/teoliphant (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/tvaught (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/reviews/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/develop (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://www.scipy.org (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/news/?group_id=27747 (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/stats/traffic (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/downloads/scipy/stats_timeline (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download#SCP (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/latest/download?source=files (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/api/file/index/project-id/27747/mtime/desc/limit/20/rss (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://twitter.com/sfnet_ops (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/terms-of-use (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/privacy-statement (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/advertise/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/about (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%%20if%20%28this.type%20===%20%27f%27%29%20%7b%20%%3e%3c%=%20this.download_url%20%%3e%3c%%20%7d%20else%20%7b%20%%3e%3c%=%20this.url%20%%3e%3c%%20%7d%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .url%20%%3e%3c%%20%7d%20%%3e
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%=%20this.legacy_release_notes%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .legacy_release_notes%20%%3e
+  Analyzing links from page http://www.scipy.org
+    Skipping link http://www.scipy.org/images/favicon.ico (from http://www.scipy.org); unknown archive format: .ico
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/common.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/screen.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/print.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/projection.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/RecentChanges?action=rss_rc&amp;ddiffs=1&amp;unique=1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=raw (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=print (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=C1.jpg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=NumPyOptimizationSmallsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=bggrad.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon-100.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=pymagsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf-sm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2c.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2d.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2e.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm3b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm4b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm5b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydevlogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosmb.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipylogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scr_bessel3dgistsmall.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FindPage (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/TitleIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/WordIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/HelpOnFormatting (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=login (from http://www.scipy.org); not a file
+    Skipping link http://enthought.com (from http://www.scipy.org); not a file
+    Skipping link http://docs.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Mailing_Lists (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Download (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Installing_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Topical_Software (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Developer_Zone (from http://www.scipy.org); not a file
+    Skipping link http://planet.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://conference.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=info (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=edit (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=diff (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=subscribe (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=fullsearch&amp;value=linkto%3A%22SciPy%22&amp;context=180 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.10.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sc11.supercomputing.org/ (from http://www.scipy.org); not a file
+    Skipping link http://www.dlr.de/sc/desktopdefault.aspx/tabid-1183/1638_read-31733/ (from http://www.scipy.org); not a file
+    Skipping link http://de.pycon.org/2011/home (from http://www.scipy.org); not a file
+    Skipping link http://www.euroscipy.org/conference/euroscipy2011 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.1/ (from http://www.scipy.org); unknown archive format: .1
+    Skipping link http://conference.scipy.org/scipy2011/ (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.9.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://www.scipy.org/Getting_Started (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/BugReport (from http://www.scipy.org); not a file
+    Skipping link http://numpy.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook/OptimizationDemo1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPyDotOrg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/more_about_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Projects (from http://www.scipy.org); not a file
+    Skipping link http://scikits.appspot.com/ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Documentation (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FAQ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/EnthoughtInc (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/RalfGommers (from http://www.scipy.org); not a file
+    Skipping link http://moinmoin.wikiwikiweb.de/ (from http://www.scipy.org); not a file
+    Skipping link http://www.python.org/ (from http://www.scipy.org); not a file
+    Skipping link http://validator.w3.org/check?uri=referer (from http://www.scipy.org); not a file
+  Analyzing links from page http://sourceforge.net/projects/scipy/files/OldFiles/
+    Skipping link http://a.fsdn.com/con/img/sftheme/favicon.ico (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .ico
+    Skipping link http://fonts.googleapis.com/css?family=Ubuntu:regular (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://a.fsdn.com/con/css/sf.css?1321644888 (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .css
+    Skipping link http://sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/directory/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/blog/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://jobs.sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/user/registration (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/events/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/account/login.php (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .php
+    Skipping link http://sourceforge.net/projects/scipy/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/edschofield (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/ericjones (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/jarrodmillman (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/teoliphant (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/tvaught (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/reviews/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/develop (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://www.scipy.org (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/news/?group_id=27747 (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/stats/traffic (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/downloads/scipy/stats_timeline (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download#SCP (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/latest/download?source=files (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/api/file/index/project-id/27747/mtime/desc/limit/20/rss (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://twitter.com/sfnet_ops (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/terms-of-use (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/privacy-statement (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/advertise/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/about (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%%20if%20%28this.type%20===%20%27f%27%29%20%7b%20%%3e%3c%=%20this.download_url%20%%3e%3c%%20%7d%20else%20%7b%20%%3e%3c%=%20this.url%20%%3e%3c%%20%7d%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .url%20%%3e%3c%%20%7d%20%%3e
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%=%20this.legacy_release_notes%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .legacy_release_notes%20%%3e
+  Analyzing links from page http://www.scipy.org
+    Skipping link http://www.scipy.org/images/favicon.ico (from http://www.scipy.org); unknown archive format: .ico
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/common.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/screen.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/print.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/projection.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/RecentChanges?action=rss_rc&amp;ddiffs=1&amp;unique=1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=raw (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=print (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=C1.jpg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=NumPyOptimizationSmallsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=bggrad.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon-100.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=pymagsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf-sm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2c.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2d.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2e.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm3b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm4b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm5b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydevlogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosmb.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipylogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scr_bessel3dgistsmall.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FindPage (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/TitleIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/WordIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/HelpOnFormatting (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=login (from http://www.scipy.org); not a file
+    Skipping link http://enthought.com (from http://www.scipy.org); not a file
+    Skipping link http://docs.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Mailing_Lists (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Download (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Installing_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Topical_Software (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Developer_Zone (from http://www.scipy.org); not a file
+    Skipping link http://planet.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://conference.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=info (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=edit (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=diff (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=subscribe (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=fullsearch&amp;value=linkto%3A%22SciPy%22&amp;context=180 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.10.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sc11.supercomputing.org/ (from http://www.scipy.org); not a file
+    Skipping link http://www.dlr.de/sc/desktopdefault.aspx/tabid-1183/1638_read-31733/ (from http://www.scipy.org); not a file
+    Skipping link http://de.pycon.org/2011/home (from http://www.scipy.org); not a file
+    Skipping link http://www.euroscipy.org/conference/euroscipy2011 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.1/ (from http://www.scipy.org); unknown archive format: .1
+    Skipping link http://conference.scipy.org/scipy2011/ (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.9.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://www.scipy.org/Getting_Started (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/BugReport (from http://www.scipy.org); not a file
+    Skipping link http://numpy.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook/OptimizationDemo1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPyDotOrg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/more_about_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Projects (from http://www.scipy.org); not a file
+    Skipping link http://scikits.appspot.com/ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Documentation (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FAQ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/EnthoughtInc (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/RalfGommers (from http://www.scipy.org); not a file
+    Skipping link http://moinmoin.wikiwikiweb.de/ (from http://www.scipy.org); not a file
+    Skipping link http://www.python.org/ (from http://www.scipy.org); not a file
+    Skipping link http://validator.w3.org/check?uri=referer (from http://www.scipy.org); not a file
+  Analyzing links from page http://sourceforge.net/projects/scipy/files/OldFiles/
+    Skipping link http://a.fsdn.com/con/img/sftheme/favicon.ico (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .ico
+    Skipping link http://fonts.googleapis.com/css?family=Ubuntu:regular (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://a.fsdn.com/con/css/sf.css?1321644888 (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .css
+    Skipping link http://sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/directory/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/blog/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://jobs.sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/user/registration (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/events/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/account/login.php (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .php
+    Skipping link http://sourceforge.net/projects/scipy/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/edschofield (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/ericjones (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/jarrodmillman (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/teoliphant (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/tvaught (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/reviews/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/develop (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://www.scipy.org (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/news/?group_id=27747 (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/stats/traffic (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/downloads/scipy/stats_timeline (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download#SCP (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/latest/download?source=files (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/api/file/index/project-id/27747/mtime/desc/limit/20/rss (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://twitter.com/sfnet_ops (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/terms-of-use (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/privacy-statement (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/advertise/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/about (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%%20if%20%28this.type%20===%20%27f%27%29%20%7b%20%%3e%3c%=%20this.download_url%20%%3e%3c%%20%7d%20else%20%7b%20%%3e%3c%=%20this.url%20%%3e%3c%%20%7d%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .url%20%%3e%3c%%20%7d%20%%3e
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%=%20this.legacy_release_notes%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .legacy_release_notes%20%%3e
+  Analyzing links from page http://www.scipy.org
+    Skipping link http://www.scipy.org/images/favicon.ico (from http://www.scipy.org); unknown archive format: .ico
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/common.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/screen.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/print.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/projection.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/RecentChanges?action=rss_rc&amp;ddiffs=1&amp;unique=1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=raw (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=print (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=C1.jpg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=NumPyOptimizationSmallsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=bggrad.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon-100.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=pymagsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf-sm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2c.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2d.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2e.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm3b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm4b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm5b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydevlogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosmb.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipylogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scr_bessel3dgistsmall.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FindPage (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/TitleIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/WordIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/HelpOnFormatting (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=login (from http://www.scipy.org); not a file
+    Skipping link http://enthought.com (from http://www.scipy.org); not a file
+    Skipping link http://docs.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Mailing_Lists (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Download (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Installing_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Topical_Software (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Developer_Zone (from http://www.scipy.org); not a file
+    Skipping link http://planet.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://conference.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=info (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=edit (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=diff (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=subscribe (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=fullsearch&amp;value=linkto%3A%22SciPy%22&amp;context=180 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.10.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sc11.supercomputing.org/ (from http://www.scipy.org); not a file
+    Skipping link http://www.dlr.de/sc/desktopdefault.aspx/tabid-1183/1638_read-31733/ (from http://www.scipy.org); not a file
+    Skipping link http://de.pycon.org/2011/home (from http://www.scipy.org); not a file
+    Skipping link http://www.euroscipy.org/conference/euroscipy2011 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.1/ (from http://www.scipy.org); unknown archive format: .1
+    Skipping link http://conference.scipy.org/scipy2011/ (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.9.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://www.scipy.org/Getting_Started (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/BugReport (from http://www.scipy.org); not a file
+    Skipping link http://numpy.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook/OptimizationDemo1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPyDotOrg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/more_about_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Projects (from http://www.scipy.org); not a file
+    Skipping link http://scikits.appspot.com/ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Documentation (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FAQ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/EnthoughtInc (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/RalfGommers (from http://www.scipy.org); not a file
+    Skipping link http://moinmoin.wikiwikiweb.de/ (from http://www.scipy.org); not a file
+    Skipping link http://www.python.org/ (from http://www.scipy.org); not a file
+    Skipping link http://validator.w3.org/check?uri=referer (from http://www.scipy.org); not a file
+  Analyzing links from page http://sourceforge.net/projects/scipy/files/OldFiles/
+    Skipping link http://a.fsdn.com/con/img/sftheme/favicon.ico (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .ico
+    Skipping link http://fonts.googleapis.com/css?family=Ubuntu:regular (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://a.fsdn.com/con/css/sf.css?1321644888 (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .css
+    Skipping link http://sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/directory/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/blog/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://jobs.sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/user/registration (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/events/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/account/login.php (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .php
+    Skipping link http://sourceforge.net/projects/scipy/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/edschofield (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/ericjones (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/jarrodmillman (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/teoliphant (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/tvaught (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/reviews/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/develop (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://www.scipy.org (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/news/?group_id=27747 (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/stats/traffic (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/downloads/scipy/stats_timeline (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download#SCP (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/latest/download?source=files (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/api/file/index/project-id/27747/mtime/desc/limit/20/rss (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://twitter.com/sfnet_ops (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/terms-of-use (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/privacy-statement (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/advertise/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/about (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%%20if%20%28this.type%20===%20%27f%27%29%20%7b%20%%3e%3c%=%20this.download_url%20%%3e%3c%%20%7d%20else%20%7b%20%%3e%3c%=%20this.url%20%%3e%3c%%20%7d%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .url%20%%3e%3c%%20%7d%20%%3e
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%=%20this.legacy_release_notes%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .legacy_release_notes%20%%3e
+  Analyzing links from page http://www.scipy.org
+    Skipping link http://www.scipy.org/images/favicon.ico (from http://www.scipy.org); unknown archive format: .ico
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/common.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/screen.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/print.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/projection.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/RecentChanges?action=rss_rc&amp;ddiffs=1&amp;unique=1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=raw (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=print (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=C1.jpg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=NumPyOptimizationSmallsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=bggrad.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon-100.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=pymagsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf-sm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2c.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2d.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2e.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm3b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm4b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm5b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydevlogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosmb.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipylogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scr_bessel3dgistsmall.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FindPage (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/TitleIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/WordIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/HelpOnFormatting (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=login (from http://www.scipy.org); not a file
+    Skipping link http://enthought.com (from http://www.scipy.org); not a file
+    Skipping link http://docs.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Mailing_Lists (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Download (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Installing_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Topical_Software (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Developer_Zone (from http://www.scipy.org); not a file
+    Skipping link http://planet.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://conference.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=info (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=edit (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=diff (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=subscribe (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=fullsearch&amp;value=linkto%3A%22SciPy%22&amp;context=180 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.10.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sc11.supercomputing.org/ (from http://www.scipy.org); not a file
+    Skipping link http://www.dlr.de/sc/desktopdefault.aspx/tabid-1183/1638_read-31733/ (from http://www.scipy.org); not a file
+    Skipping link http://de.pycon.org/2011/home (from http://www.scipy.org); not a file
+    Skipping link http://www.euroscipy.org/conference/euroscipy2011 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.1/ (from http://www.scipy.org); unknown archive format: .1
+    Skipping link http://conference.scipy.org/scipy2011/ (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.9.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://www.scipy.org/Getting_Started (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/BugReport (from http://www.scipy.org); not a file
+    Skipping link http://numpy.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook/OptimizationDemo1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPyDotOrg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/more_about_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Projects (from http://www.scipy.org); not a file
+    Skipping link http://scikits.appspot.com/ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Documentation (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FAQ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/EnthoughtInc (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/RalfGommers (from http://www.scipy.org); not a file
+    Skipping link http://moinmoin.wikiwikiweb.de/ (from http://www.scipy.org); not a file
+    Skipping link http://www.python.org/ (from http://www.scipy.org); not a file
+    Skipping link http://validator.w3.org/check?uri=referer (from http://www.scipy.org); not a file
+  Analyzing links from page http://sourceforge.net/projects/scipy/files/OldFiles/
+    Skipping link http://a.fsdn.com/con/img/sftheme/favicon.ico (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .ico
+    Skipping link http://fonts.googleapis.com/css?family=Ubuntu:regular (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://a.fsdn.com/con/css/sf.css?1321644888 (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .css
+    Skipping link http://sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/directory/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/blog/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://jobs.sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/user/registration (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/events/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/account/login.php (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .php
+    Skipping link http://sourceforge.net/projects/scipy/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/edschofield (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/ericjones (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/jarrodmillman (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/teoliphant (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/tvaught (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/reviews/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/develop (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://www.scipy.org (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/news/?group_id=27747 (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/stats/traffic (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/downloads/scipy/stats_timeline (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download#SCP (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/latest/download?source=files (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/api/file/index/project-id/27747/mtime/desc/limit/20/rss (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://twitter.com/sfnet_ops (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/terms-of-use (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/privacy-statement (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/advertise/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/about (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%%20if%20%28this.type%20===%20%27f%27%29%20%7b%20%%3e%3c%=%20this.download_url%20%%3e%3c%%20%7d%20else%20%7b%20%%3e%3c%=%20this.url%20%%3e%3c%%20%7d%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .url%20%%3e%3c%%20%7d%20%%3e
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%=%20this.legacy_release_notes%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .legacy_release_notes%20%%3e
+  Analyzing links from page http://www.scipy.org
+    Skipping link http://www.scipy.org/images/favicon.ico (from http://www.scipy.org); unknown archive format: .ico
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/common.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/screen.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/print.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/projection.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/RecentChanges?action=rss_rc&amp;ddiffs=1&amp;unique=1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=raw (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=print (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=C1.jpg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=NumPyOptimizationSmallsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=bggrad.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon-100.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=pymagsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf-sm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2c.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2d.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2e.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm3b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm4b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm5b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydevlogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosmb.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipylogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scr_bessel3dgistsmall.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FindPage (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/TitleIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/WordIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/HelpOnFormatting (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=login (from http://www.scipy.org); not a file
+    Skipping link http://enthought.com (from http://www.scipy.org); not a file
+    Skipping link http://docs.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Mailing_Lists (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Download (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Installing_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Topical_Software (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Developer_Zone (from http://www.scipy.org); not a file
+    Skipping link http://planet.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://conference.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=info (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=edit (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=diff (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=subscribe (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=fullsearch&amp;value=linkto%3A%22SciPy%22&amp;context=180 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.10.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sc11.supercomputing.org/ (from http://www.scipy.org); not a file
+    Skipping link http://www.dlr.de/sc/desktopdefault.aspx/tabid-1183/1638_read-31733/ (from http://www.scipy.org); not a file
+    Skipping link http://de.pycon.org/2011/home (from http://www.scipy.org); not a file
+    Skipping link http://www.euroscipy.org/conference/euroscipy2011 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.1/ (from http://www.scipy.org); unknown archive format: .1
+    Skipping link http://conference.scipy.org/scipy2011/ (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.9.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://www.scipy.org/Getting_Started (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/BugReport (from http://www.scipy.org); not a file
+    Skipping link http://numpy.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook/OptimizationDemo1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPyDotOrg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/more_about_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Projects (from http://www.scipy.org); not a file
+    Skipping link http://scikits.appspot.com/ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Documentation (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FAQ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/EnthoughtInc (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/RalfGommers (from http://www.scipy.org); not a file
+    Skipping link http://moinmoin.wikiwikiweb.de/ (from http://www.scipy.org); not a file
+    Skipping link http://www.python.org/ (from http://www.scipy.org); not a file
+    Skipping link http://validator.w3.org/check?uri=referer (from http://www.scipy.org); not a file
+  Analyzing links from page http://sourceforge.net/projects/scipy/files/OldFiles/
+    Skipping link http://a.fsdn.com/con/img/sftheme/favicon.ico (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .ico
+    Skipping link http://fonts.googleapis.com/css?family=Ubuntu:regular (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://a.fsdn.com/con/css/sf.css?1321644888 (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .css
+    Skipping link http://sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/directory/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/blog/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://jobs.sourceforge.net/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/user/registration (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/events/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/account/login.php (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .php
+    Skipping link http://sourceforge.net/projects/scipy/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/edschofield (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/ericjones (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/jarrodmillman (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/teoliphant (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/users/tvaught (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/reviews/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/support (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/develop (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://www.scipy.org (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/news/?group_id=27747 (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/stats/traffic (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/downloads/scipy/stats_timeline (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download#SCP (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/latest/download?source=files (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/api/file/index/project-id/27747/mtime/desc/limit/20/rss (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://twitter.com/sfnet_ops (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/terms-of-use (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/privacy-statement (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net/advertise/ (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/about (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://geek.net (from http://sourceforge.net/projects/scipy/files/OldFiles/); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%%20if%20%28this.type%20===%20%27f%27%29%20%7b%20%%3e%3c%=%20this.download_url%20%%3e%3c%%20%7d%20else%20%7b%20%%3e%3c%=%20this.url%20%%3e%3c%%20%7d%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .url%20%%3e%3c%%20%7d%20%%3e
+    Skipping link http://sourceforge.net/projects/scipy/files/OldFiles/%3c%=%20this.legacy_release_notes%20%%3e (from http://sourceforge.net/projects/scipy/files/OldFiles/); unknown archive format: .legacy_release_notes%20%%3e
+  Analyzing links from page http://www.scipy.org
+    Skipping link http://www.scipy.org/images/favicon.ico (from http://www.scipy.org); unknown archive format: .ico
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/common.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/screen.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/print.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/projection.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/RecentChanges?action=rss_rc&amp;ddiffs=1&amp;unique=1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=raw (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=print (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=C1.jpg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=NumPyOptimizationSmallsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=bggrad.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon-100.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=pymagsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf-sm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2c.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2d.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2e.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm3b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm4b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm5b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydevlogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosmb.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipylogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scr_bessel3dgistsmall.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FindPage (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/TitleIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/WordIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/HelpOnFormatting (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=login (from http://www.scipy.org); not a file
+    Skipping link http://enthought.com (from http://www.scipy.org); not a file
+    Skipping link http://docs.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Mailing_Lists (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Download (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Installing_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Topical_Software (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Developer_Zone (from http://www.scipy.org); not a file
+    Skipping link http://planet.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://conference.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=info (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=edit (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=diff (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=subscribe (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=fullsearch&amp;value=linkto%3A%22SciPy%22&amp;context=180 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.10.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sc11.supercomputing.org/ (from http://www.scipy.org); not a file
+    Skipping link http://www.dlr.de/sc/desktopdefault.aspx/tabid-1183/1638_read-31733/ (from http://www.scipy.org); not a file
+    Skipping link http://de.pycon.org/2011/home (from http://www.scipy.org); not a file
+    Skipping link http://www.euroscipy.org/conference/euroscipy2011 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.1/ (from http://www.scipy.org); unknown archive format: .1
+    Skipping link http://conference.scipy.org/scipy2011/ (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.9.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://www.scipy.org/Getting_Started (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/BugReport (from http://www.scipy.org); not a file
+    Skipping link http://numpy.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook/OptimizationDemo1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPyDotOrg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/more_about_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Projects (from http://www.scipy.org); not a file
+    Skipping link http://scikits.appspot.com/ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Documentation (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FAQ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/EnthoughtInc (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/RalfGommers (from http://www.scipy.org); not a file
+    Skipping link http://moinmoin.wikiwikiweb.de/ (from http://www.scipy.org); not a file
+    Skipping link http://www.python.org/ (from http://www.scipy.org); not a file
+    Skipping link http://validator.w3.org/check?uri=referer (from http://www.scipy.org); not a file
+  Analyzing links from page http://www.scipy.org
+    Skipping link http://www.scipy.org/images/favicon.ico (from http://www.scipy.org); unknown archive format: .ico
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/common.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/screen.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/print.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/wiki//sinorca4moin/css/projection.css (from http://www.scipy.org); unknown archive format: .css
+    Skipping link http://www.scipy.org/RecentChanges?action=rss_rc&amp;ddiffs=1&amp;unique=1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=raw (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=print (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=C1.jpg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=NumPyOptimizationSmallsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=bggrad.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=chacoscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon-100.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=feed-icon.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshot.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=mplscreenshotsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=pymagsm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf-sm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipy2007conf2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2c.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2d.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm2e.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm3b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm4b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipybuglogosm5b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydevlogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydoclogosm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipydownloadlogosmb.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipygetstartedsm2b.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scipylogosm.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile&amp;do=view&amp;target=scr_bessel3dgistsmall.png (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FindPage (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/TitleIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/WordIndex (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/HelpOnFormatting (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=login (from http://www.scipy.org); not a file
+    Skipping link http://enthought.com (from http://www.scipy.org); not a file
+    Skipping link http://docs.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Mailing_Lists (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Download (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Installing_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Topical_Software (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Developer_Zone (from http://www.scipy.org); not a file
+    Skipping link http://planet.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://conference.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=info (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=AttachFile (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=edit (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=diff (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=subscribe (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPy?action=fullsearch&amp;value=linkto%3A%22SciPy%22&amp;context=180 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.10.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sc11.supercomputing.org/ (from http://www.scipy.org); not a file
+    Skipping link http://www.dlr.de/sc/desktopdefault.aspx/tabid-1183/1638_read-31733/ (from http://www.scipy.org); not a file
+    Skipping link http://de.pycon.org/2011/home (from http://www.scipy.org); not a file
+    Skipping link http://www.euroscipy.org/conference/euroscipy2011 (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.1/ (from http://www.scipy.org); unknown archive format: .1
+    Skipping link http://conference.scipy.org/scipy2011/ (from http://www.scipy.org); not a file
+    Skipping link http://sourceforge.net/projects/numpy/files/NumPy/1.6.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://sourceforge.net/projects/scipy/files/scipy/0.9.0/ (from http://www.scipy.org); unknown archive format: .0
+    Skipping link http://www.scipy.org/Getting_Started (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/BugReport (from http://www.scipy.org); not a file
+    Skipping link http://numpy.scipy.org (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Cookbook/OptimizationDemo1 (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/SciPyDotOrg (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/more_about_SciPy (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Projects (from http://www.scipy.org); not a file
+    Skipping link http://scikits.appspot.com/ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/Documentation (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/FAQ (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/EnthoughtInc (from http://www.scipy.org); not a file
+    Skipping link http://www.scipy.org/RalfGommers (from http://www.scipy.org); not a file
+    Skipping link http://moinmoin.wikiwikiweb.de/ (from http://www.scipy.org); not a file
+    Skipping link http://www.python.org/ (from http://www.scipy.org); not a file
+    Skipping link http://validator.w3.org/check?uri=referer (from http://www.scipy.org); not a file
+  Using version 0.10.0 (newest of versions: 0.10.0, 0.10.0, 0.9.0, 0.9.0, 0.8.0)
+  Downloading from URL http://pypi.python.org/packages/source/s/scipy/scipy-0.10.0.zip#md5=d1a4242266739433dcfe2096b0ab4007 (from http://pypi.python.org/simple/scipy/)
+  Running setup.py egg_info for package scipy
+    /home/ireland/eitwave/build/scipy/scipy/__init__.py:97: UserWarning: Numpy 1.5.0 or above is recommended for this version of scipy (detected version 1.3.0)
+      UserWarning)
+    Running from scipy source directory.
+    blas_opt_info:
+    blas_mkl_info:
+      libraries mkl,vml,guide not found in /usr/local/lib
+      libraries mkl,vml,guide not found in /usr/lib64
+      libraries mkl,vml,guide not found in /usr/lib
+      NOT AVAILABLE
+    
+    atlas_blas_threads_info:
+    Setting PTATLAS=ATLAS
+      libraries ptf77blas,ptcblas,atlas not found in /usr/local/lib
+      libraries ptf77blas,ptcblas,atlas not found in /usr/lib64/atlas
+      libraries ptf77blas,ptcblas,atlas not found in /usr/lib64
+      libraries ptf77blas,ptcblas,atlas not found in /usr/lib/atlas
+      libraries ptf77blas,ptcblas,atlas not found in /usr/lib
+      NOT AVAILABLE
+    
+    atlas_blas_info:
+      libraries f77blas,cblas,atlas not found in /usr/local/lib
+      libraries f77blas,cblas,atlas not found in /usr/lib64/atlas
+      FOUND:
+        libraries = ['f77blas', 'cblas', 'atlas']
+        library_dirs = ['/usr/lib64']
+        language = c
+        include_dirs = ['/usr/include']
+    
+    /usr/lib/python2.6/dist-packages/numpy/distutils/command/config.py:361: DeprecationWarning:
+    +++++++++++++++++++++++++++++++++++++++++++++++++
+    Usage of get_output is deprecated: please do not
+    use it anymore, and avoid configuration checks
+    involving running executable on the target machine.
+    +++++++++++++++++++++++++++++++++++++++++++++++++
+    
+      DeprecationWarning)
+    customize GnuFCompiler
+    Could not locate executable g77
+    Could not locate executable f77
+    customize IntelFCompiler
+    Could not locate executable ifort
+    Could not locate executable ifc
+    customize LaheyFCompiler
+    Could not locate executable lf95
+    customize PGroupFCompiler
+    Could not locate executable pgf90
+    Could not locate executable pgf77
+    customize AbsoftFCompiler
+    Could not locate executable f90
+    customize NAGFCompiler
+    Found executable /usr/bin/f95
+    customize VastFCompiler
+    customize GnuFCompiler
+    customize CompaqFCompiler
+    Could not locate executable fort
+    customize IntelItaniumFCompiler
+    Could not locate executable efort
+    Could not locate executable efc
+    customize IntelEM64TFCompiler
+    customize Gnu95FCompiler
+    Found executable /usr/bin/gfortran
+    customize Gnu95FCompiler
+    customize Gnu95FCompiler using config
+    compiling '_configtest.c':
+    
+    /* This file is generated from numpy/distutils/system_info.py */
+    void ATL_buildinfo(void);
+    int main(void) {
+      ATL_buildinfo();
+      return 0;
+    }
+    C compiler: gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC
+    
+    compile options: '-c'
+    gcc: _configtest.c
+    gcc -pthread _configtest.o -lf77blas -lcblas -latlas -o _configtest
+    ATLAS version 3.6.0 built by root on Thu Jun  3 21:13:07 UTC 2004:
+       UNAME    : Linux ravel 2.6.5 #3 SMP Tue Apr 13 13:41:54 UTC 2004 x86_64 GNU/Linux
+       INSTFLG  :
+       MMDEF    : /home/camm/atlas3-3.6.0/CONFIG/ARCHS/HAMMER64SSE2/gcc/gemm
+       ARCHDEF  : /home/camm/atlas3-3.6.0/CONFIG/ARCHS/HAMMER64SSE2/gcc/misc
+       F2CDEFS  : -DAdd__ -DStringSunStyle
+       CACHEEDGE: 720896
+       F77      : /home/camm/usr/bin/g77, version GNU Fortran (GCC) 3.3.3 (Debian 20040422)
+       F77FLAGS : -fomit-frame-pointer -O -m64
+       CC       : /usr/bin/gcc, version gcc (GCC) 3.3.3 (Debian 20040422)
+       CC FLAGS : -fomit-frame-pointer -O -mfpmath=387 -m64
+       MCC      : /usr/bin/gcc, version gcc (GCC) 3.3.3 (Debian 20040422)
+       MCCFLAGS : -fomit-frame-pointer -O -mfpmath=387 -m64
+    success!
+    removing: _configtest.c _configtest.o _configtest
+      FOUND:
+        libraries = ['f77blas', 'cblas', 'atlas']
+        library_dirs = ['/usr/lib64']
+        language = c
+        define_macros = [('ATLAS_INFO', '"\\"3.6.0\\""')]
+        include_dirs = ['/usr/include']
+    
+    non-existing path in 'scipy/io': 'docs'
+    ATLAS version: 3.6.0
+    lapack_opt_info:
+    lapack_mkl_info:
+    mkl_info:
+      libraries mkl,vml,guide not found in /usr/local/lib
+      libraries mkl,vml,guide not found in /usr/lib64
+      libraries mkl,vml,guide not found in /usr/lib
+      NOT AVAILABLE
+    
+      NOT AVAILABLE
+    
+    atlas_threads_info:
+    Setting PTATLAS=ATLAS
+      libraries ptf77blas,ptcblas,atlas not found in /usr/local/lib
+      libraries lapack_atlas not found in /usr/local/lib
+      libraries ptf77blas,ptcblas,atlas not found in /usr/lib64/atlas
+      libraries lapack_atlas not found in /usr/lib64/atlas
+      libraries ptf77blas,ptcblas,atlas not found in /usr/lib64
+      libraries ptf77blas,ptcblas,atlas not found in /usr/lib/atlas
+      libraries lapack_atlas not found in /usr/lib/atlas
+      libraries ptf77blas,ptcblas,atlas not found in /usr/lib
+    numpy.distutils.system_info.atlas_threads_info
+      NOT AVAILABLE
+    
+    atlas_info:
+      libraries f77blas,cblas,atlas not found in /usr/local/lib
+      libraries lapack_atlas not found in /usr/local/lib
+      libraries f77blas,cblas,atlas not found in /usr/lib64/atlas
+      libraries lapack_atlas not found in /usr/lib64/atlas
+    numpy.distutils.system_info.atlas_info
+      FOUND:
+        libraries = ['lapack', 'f77blas', 'cblas', 'atlas']
+        library_dirs = ['/usr/lib64']
+        language = f77
+        include_dirs = ['/usr/include']
+    
+    customize GnuFCompiler
+    customize IntelFCompiler
+    customize LaheyFCompiler
+    customize PGroupFCompiler
+    customize AbsoftFCompiler
+    customize NAGFCompiler
+    customize VastFCompiler
+    customize GnuFCompiler
+    customize CompaqFCompiler
+    customize IntelItaniumFCompiler
+    customize IntelEM64TFCompiler
+    customize Gnu95FCompiler
+    customize Gnu95FCompiler
+    customize Gnu95FCompiler using config
+    compiling '_configtest.c':
+    
+    /* This file is generated from numpy/distutils/system_info.py */
+    void ATL_buildinfo(void);
+    int main(void) {
+      ATL_buildinfo();
+      return 0;
+    }
+    C compiler: gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC
+    
+    compile options: '-c'
+    gcc: _configtest.c
+    gcc -pthread _configtest.o -llapack -lf77blas -lcblas -latlas -o _configtest
+    ATLAS version 3.6.0 built by root on Thu Jun  3 21:13:07 UTC 2004:
+       UNAME    : Linux ravel 2.6.5 #3 SMP Tue Apr 13 13:41:54 UTC 2004 x86_64 GNU/Linux
+       INSTFLG  :
+       MMDEF    : /home/camm/atlas3-3.6.0/CONFIG/ARCHS/HAMMER64SSE2/gcc/gemm
+       ARCHDEF  : /home/camm/atlas3-3.6.0/CONFIG/ARCHS/HAMMER64SSE2/gcc/misc
+       F2CDEFS  : -DAdd__ -DStringSunStyle
+       CACHEEDGE: 720896
+       F77      : /home/camm/usr/bin/g77, version GNU Fortran (GCC) 3.3.3 (Debian 20040422)
+       F77FLAGS : -fomit-frame-pointer -O -m64
+       CC       : /usr/bin/gcc, version gcc (GCC) 3.3.3 (Debian 20040422)
+       CC FLAGS : -fomit-frame-pointer -O -mfpmath=387 -m64
+       MCC      : /usr/bin/gcc, version gcc (GCC) 3.3.3 (Debian 20040422)
+       MCCFLAGS : -fomit-frame-pointer -O -mfpmath=387 -m64
+    success!
+    removing: _configtest.c _configtest.o _configtest
+      FOUND:
+        libraries = ['lapack', 'f77blas', 'cblas', 'atlas']
+        library_dirs = ['/usr/lib64']
+        language = f77
+        define_macros = [('ATLAS_INFO', '"\\"3.6.0\\""')]
+        include_dirs = ['/usr/include']
+    
+    ATLAS version: 3.6.0
+    ATLAS version: 3.6.0
+    umfpack_info:
+      libraries umfpack not found in /usr/local/lib
+    amd_info:
+      libraries amd not found in /usr/local/lib
+      FOUND:
+        libraries = ['amd']
+        library_dirs = ['/usr/lib64']
+        swig_opts = ['-I/usr/include/suitesparse']
+        define_macros = [('SCIPY_AMD_H', None)]
+        include_dirs = ['/usr/include/suitesparse']
+    
+      FOUND:
+        libraries = ['umfpack', 'amd']
+        library_dirs = ['/usr/lib64']
+        swig_opts = ['-I/usr/include/suitesparse', '-I/usr/include/suitesparse']
+        define_macros = [('SCIPY_UMFPACK_H', None), ('SCIPY_AMD_H', None)]
+        include_dirs = ['/usr/include/suitesparse']
+    
+    Traceback (most recent call last):
+      File "<string>", line 13, in <module>
+      File "/home/ireland/eitwave/build/scipy/setup.py", line 196, in <module>
+        setup_package()
+      File "/home/ireland/eitwave/build/scipy/setup.py", line 187, in setup_package
+        configuration=configuration )
+      File "/usr/lib/python2.6/dist-packages/numpy/distutils/core.py", line 150, in setup
+        config = configuration()
+      File "/home/ireland/eitwave/build/scipy/setup.py", line 138, in configuration
+        config.add_subpackage('scipy')
+      File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 852, in add_subpackage
+        caller_level = 2)
+      File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 835, in get_subpackage
+        caller_level = caller_level + 1)
+      File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 782, in _get_configuration_from_setup_py
+        config = setup_module.configuration(*args)
+      File "scipy/setup.py", line 20, in configuration
+        config.add_subpackage('special')
+      File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 852, in add_subpackage
+        caller_level = 2)
+      File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 835, in get_subpackage
+        caller_level = caller_level + 1)
+      File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 767, in _get_configuration_from_setup_py
+        ('.py', 'U', 1))
+      File "scipy/special/setup.py", line 14, in <module>
+        (numpy.__version__, numpy.__file__))
+    ValueError: numpy >= 1.4 is required (detected 1.3.0 from /usr/lib/python2.6/dist-packages/numpy/__init__.pyc)
+    Complete output from command python setup.py egg_info:
+    /home/ireland/eitwave/build/scipy/scipy/__init__.py:97: UserWarning: Numpy 1.5.0 or above is recommended for this version of scipy (detected version 1.3.0)
+
+  UserWarning)
+
+Running from scipy source directory.
+
+blas_opt_info:
+
+blas_mkl_info:
+
+  libraries mkl,vml,guide not found in /usr/local/lib
+
+  libraries mkl,vml,guide not found in /usr/lib64
+
+  libraries mkl,vml,guide not found in /usr/lib
+
+  NOT AVAILABLE
+
+
+
+atlas_blas_threads_info:
+
+Setting PTATLAS=ATLAS
+
+  libraries ptf77blas,ptcblas,atlas not found in /usr/local/lib
+
+  libraries ptf77blas,ptcblas,atlas not found in /usr/lib64/atlas
+
+  libraries ptf77blas,ptcblas,atlas not found in /usr/lib64
+
+  libraries ptf77blas,ptcblas,atlas not found in /usr/lib/atlas
+
+  libraries ptf77blas,ptcblas,atlas not found in /usr/lib
+
+  NOT AVAILABLE
+
+
+
+atlas_blas_info:
+
+  libraries f77blas,cblas,atlas not found in /usr/local/lib
+
+  libraries f77blas,cblas,atlas not found in /usr/lib64/atlas
+
+  FOUND:
+
+    libraries = ['f77blas', 'cblas', 'atlas']
+
+    library_dirs = ['/usr/lib64']
+
+    language = c
+
+    include_dirs = ['/usr/include']
+
+
+
+/usr/lib/python2.6/dist-packages/numpy/distutils/command/config.py:361: DeprecationWarning:
+
++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Usage of get_output is deprecated: please do not
+
+use it anymore, and avoid configuration checks
+
+involving running executable on the target machine.
+
++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+  DeprecationWarning)
+
+customize GnuFCompiler
+
+Could not locate executable g77
+
+Could not locate executable f77
+
+customize IntelFCompiler
+
+Could not locate executable ifort
+
+Could not locate executable ifc
+
+customize LaheyFCompiler
+
+Could not locate executable lf95
+
+customize PGroupFCompiler
+
+Could not locate executable pgf90
+
+Could not locate executable pgf77
+
+customize AbsoftFCompiler
+
+Could not locate executable f90
+
+customize NAGFCompiler
+
+Found executable /usr/bin/f95
+
+customize VastFCompiler
+
+customize GnuFCompiler
+
+customize CompaqFCompiler
+
+Could not locate executable fort
+
+customize IntelItaniumFCompiler
+
+Could not locate executable efort
+
+Could not locate executable efc
+
+customize IntelEM64TFCompiler
+
+customize Gnu95FCompiler
+
+Found executable /usr/bin/gfortran
+
+customize Gnu95FCompiler
+
+customize Gnu95FCompiler using config
+
+compiling '_configtest.c':
+
+
+
+/* This file is generated from numpy/distutils/system_info.py */
+
+void ATL_buildinfo(void);
+
+int main(void) {
+
+  ATL_buildinfo();
+
+  return 0;
+
+}
+
+C compiler: gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC
+
+
+
+compile options: '-c'
+
+gcc: _configtest.c
+
+gcc -pthread _configtest.o -lf77blas -lcblas -latlas -o _configtest
+
+ATLAS version 3.6.0 built by root on Thu Jun  3 21:13:07 UTC 2004:
+
+   UNAME    : Linux ravel 2.6.5 #3 SMP Tue Apr 13 13:41:54 UTC 2004 x86_64 GNU/Linux
+
+   INSTFLG  :
+
+   MMDEF    : /home/camm/atlas3-3.6.0/CONFIG/ARCHS/HAMMER64SSE2/gcc/gemm
+
+   ARCHDEF  : /home/camm/atlas3-3.6.0/CONFIG/ARCHS/HAMMER64SSE2/gcc/misc
+
+   F2CDEFS  : -DAdd__ -DStringSunStyle
+
+   CACHEEDGE: 720896
+
+   F77      : /home/camm/usr/bin/g77, version GNU Fortran (GCC) 3.3.3 (Debian 20040422)
+
+   F77FLAGS : -fomit-frame-pointer -O -m64
+
+   CC       : /usr/bin/gcc, version gcc (GCC) 3.3.3 (Debian 20040422)
+
+   CC FLAGS : -fomit-frame-pointer -O -mfpmath=387 -m64
+
+   MCC      : /usr/bin/gcc, version gcc (GCC) 3.3.3 (Debian 20040422)
+
+   MCCFLAGS : -fomit-frame-pointer -O -mfpmath=387 -m64
+
+success!
+
+removing: _configtest.c _configtest.o _configtest
+
+  FOUND:
+
+    libraries = ['f77blas', 'cblas', 'atlas']
+
+    library_dirs = ['/usr/lib64']
+
+    language = c
+
+    define_macros = [('ATLAS_INFO', '"\\"3.6.0\\""')]
+
+    include_dirs = ['/usr/include']
+
+
+
+non-existing path in 'scipy/io': 'docs'
+
+ATLAS version: 3.6.0
+
+lapack_opt_info:
+
+lapack_mkl_info:
+
+mkl_info:
+
+  libraries mkl,vml,guide not found in /usr/local/lib
+
+  libraries mkl,vml,guide not found in /usr/lib64
+
+  libraries mkl,vml,guide not found in /usr/lib
+
+  NOT AVAILABLE
+
+
+
+  NOT AVAILABLE
+
+
+
+atlas_threads_info:
+
+Setting PTATLAS=ATLAS
+
+  libraries ptf77blas,ptcblas,atlas not found in /usr/local/lib
+
+  libraries lapack_atlas not found in /usr/local/lib
+
+  libraries ptf77blas,ptcblas,atlas not found in /usr/lib64/atlas
+
+  libraries lapack_atlas not found in /usr/lib64/atlas
+
+  libraries ptf77blas,ptcblas,atlas not found in /usr/lib64
+
+  libraries ptf77blas,ptcblas,atlas not found in /usr/lib/atlas
+
+  libraries lapack_atlas not found in /usr/lib/atlas
+
+  libraries ptf77blas,ptcblas,atlas not found in /usr/lib
+
+numpy.distutils.system_info.atlas_threads_info
+
+  NOT AVAILABLE
+
+
+
+atlas_info:
+
+  libraries f77blas,cblas,atlas not found in /usr/local/lib
+
+  libraries lapack_atlas not found in /usr/local/lib
+
+  libraries f77blas,cblas,atlas not found in /usr/lib64/atlas
+
+  libraries lapack_atlas not found in /usr/lib64/atlas
+
+numpy.distutils.system_info.atlas_info
+
+  FOUND:
+
+    libraries = ['lapack', 'f77blas', 'cblas', 'atlas']
+
+    library_dirs = ['/usr/lib64']
+
+    language = f77
+
+    include_dirs = ['/usr/include']
+
+
+
+customize GnuFCompiler
+
+customize IntelFCompiler
+
+customize LaheyFCompiler
+
+customize PGroupFCompiler
+
+customize AbsoftFCompiler
+
+customize NAGFCompiler
+
+customize VastFCompiler
+
+customize GnuFCompiler
+
+customize CompaqFCompiler
+
+customize IntelItaniumFCompiler
+
+customize IntelEM64TFCompiler
+
+customize Gnu95FCompiler
+
+customize Gnu95FCompiler
+
+customize Gnu95FCompiler using config
+
+compiling '_configtest.c':
+
+
+
+/* This file is generated from numpy/distutils/system_info.py */
+
+void ATL_buildinfo(void);
+
+int main(void) {
+
+  ATL_buildinfo();
+
+  return 0;
+
+}
+
+C compiler: gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC
+
+
+
+compile options: '-c'
+
+gcc: _configtest.c
+
+gcc -pthread _configtest.o -llapack -lf77blas -lcblas -latlas -o _configtest
+
+ATLAS version 3.6.0 built by root on Thu Jun  3 21:13:07 UTC 2004:
+
+   UNAME    : Linux ravel 2.6.5 #3 SMP Tue Apr 13 13:41:54 UTC 2004 x86_64 GNU/Linux
+
+   INSTFLG  :
+
+   MMDEF    : /home/camm/atlas3-3.6.0/CONFIG/ARCHS/HAMMER64SSE2/gcc/gemm
+
+   ARCHDEF  : /home/camm/atlas3-3.6.0/CONFIG/ARCHS/HAMMER64SSE2/gcc/misc
+
+   F2CDEFS  : -DAdd__ -DStringSunStyle
+
+   CACHEEDGE: 720896
+
+   F77      : /home/camm/usr/bin/g77, version GNU Fortran (GCC) 3.3.3 (Debian 20040422)
+
+   F77FLAGS : -fomit-frame-pointer -O -m64
+
+   CC       : /usr/bin/gcc, version gcc (GCC) 3.3.3 (Debian 20040422)
+
+   CC FLAGS : -fomit-frame-pointer -O -mfpmath=387 -m64
+
+   MCC      : /usr/bin/gcc, version gcc (GCC) 3.3.3 (Debian 20040422)
+
+   MCCFLAGS : -fomit-frame-pointer -O -mfpmath=387 -m64
+
+success!
+
+removing: _configtest.c _configtest.o _configtest
+
+  FOUND:
+
+    libraries = ['lapack', 'f77blas', 'cblas', 'atlas']
+
+    library_dirs = ['/usr/lib64']
+
+    language = f77
+
+    define_macros = [('ATLAS_INFO', '"\\"3.6.0\\""')]
+
+    include_dirs = ['/usr/include']
+
+
+
+ATLAS version: 3.6.0
+
+ATLAS version: 3.6.0
+
+umfpack_info:
+
+  libraries umfpack not found in /usr/local/lib
+
+amd_info:
+
+  libraries amd not found in /usr/local/lib
+
+  FOUND:
+
+    libraries = ['amd']
+
+    library_dirs = ['/usr/lib64']
+
+    swig_opts = ['-I/usr/include/suitesparse']
+
+    define_macros = [('SCIPY_AMD_H', None)]
+
+    include_dirs = ['/usr/include/suitesparse']
+
+
+
+  FOUND:
+
+    libraries = ['umfpack', 'amd']
+
+    library_dirs = ['/usr/lib64']
+
+    swig_opts = ['-I/usr/include/suitesparse', '-I/usr/include/suitesparse']
+
+    define_macros = [('SCIPY_UMFPACK_H', None), ('SCIPY_AMD_H', None)]
+
+    include_dirs = ['/usr/include/suitesparse']
+
+
+
+Traceback (most recent call last):
+
+  File "<string>", line 13, in <module>
+
+  File "/home/ireland/eitwave/build/scipy/setup.py", line 196, in <module>
+
+    setup_package()
+
+  File "/home/ireland/eitwave/build/scipy/setup.py", line 187, in setup_package
+
+    configuration=configuration )
+
+  File "/usr/lib/python2.6/dist-packages/numpy/distutils/core.py", line 150, in setup
+
+    config = configuration()
+
+  File "/home/ireland/eitwave/build/scipy/setup.py", line 138, in configuration
+
+    config.add_subpackage('scipy')
+
+  File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 852, in add_subpackage
+
+    caller_level = 2)
+
+  File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 835, in get_subpackage
+
+    caller_level = caller_level + 1)
+
+  File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 782, in _get_configuration_from_setup_py
+
+    config = setup_module.configuration(*args)
+
+  File "scipy/setup.py", line 20, in configuration
+
+    config.add_subpackage('special')
+
+  File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 852, in add_subpackage
+
+    caller_level = 2)
+
+  File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 835, in get_subpackage
+
+    caller_level = caller_level + 1)
+
+  File "/usr/lib/python2.6/dist-packages/numpy/distutils/misc_util.py", line 767, in _get_configuration_from_setup_py
+
+    ('.py', 'U', 1))
+
+  File "scipy/special/setup.py", line 14, in <module>
+
+    (numpy.__version__, numpy.__file__))
+
+ValueError: numpy >= 1.4 is required (detected 1.3.0 from /usr/lib/python2.6/dist-packages/numpy/__init__.pyc)
+
+----------------------------------------
+Command python setup.py egg_info failed with error code 1
+Exception information:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1775, in install_files
+    req_to_install.run_egg_info()
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1346, in run_egg_info
+    command_desc='python setup.py egg_info')
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 3543, in call_subprocess
+    % (command_desc, proc.returncode))
+InstallationError: Command python setup.py egg_info failed with error code 1
+------------------------------------------------------------
+/usr/bin/pip run on Mon May 21 09:47:33 2012
+Downloading/unpacking sunpy
+  Getting page http://pypi.python.org/simple/sunpy
+  URLs to search for versions for sunpy:
+  * http://pypi.python.org/simple/sunpy
+  Getting page http://www.sunpy.org/
+  Getting page http://www.sunpy.org/download/
+  Analyzing links from page http://pypi.python.org/simple/sunpy/
+    Found link http://pypi.python.org/packages/source/s/sunpy/sunpy-0.1.tar.gz#md5=e0506b27c16b642e4f9c50c54ad0b3f2 (from http://pypi.python.org/simple/sunpy/), version: 0.1
+    Skipping link http://www.sunpy.org/ (from http://pypi.python.org/simple/sunpy/); not a file
+    Skipping link http://www.sunpy.org/download/ (from http://pypi.python.org/simple/sunpy/); not a file
+  Analyzing links from page http://www.sunpy.org/
+    Skipping link http://gmpg.org/xfn/11 (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/themes/twentyten/style.css (from http://www.sunpy.org/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php (from http://www.sunpy.org/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/feed/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/comments/feed/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/plugins/media-element-html5-video-and-audio-player/mediaelement/mediaelementplayer.css?ver=3.3.1 (from http://www.sunpy.org/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php?rsd (from http://www.sunpy.org/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/v1/wp-includes/wlwmanifest.xml (from http://www.sunpy.org/); unknown archive format: .xml
+    Skipping link http://www.sunpy.org/blog/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/ (from http://www.sunpy.org/); not a file
+    Skipping link http://wp.me/P1sIdM-21 (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/#content (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/doc/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/download/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.python.org/ (from http://www.sunpy.org/); not a file
+    Skipping link https://groups.google.com/forum/#%21forum/sunpy (from http://www.sunpy.org/); not a file
+    Skipping link http://wordpress.org/ (from http://www.sunpy.org/); not a file
+  Analyzing links from page http://www.sunpy.org/download/
+    Skipping link http://gmpg.org/xfn/11 (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/themes/twentyten/style.css (from http://www.sunpy.org/download/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php (from http://www.sunpy.org/download/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/feed/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/comments/feed/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/plugins/media-element-html5-video-and-audio-player/mediaelement/mediaelementplayer.css?ver=3.3.1 (from http://www.sunpy.org/download/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php?rsd (from http://www.sunpy.org/download/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/v1/wp-includes/wlwmanifest.xml (from http://www.sunpy.org/download/); unknown archive format: .xml
+    Skipping link http://www.sunpy.org/doc/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/download/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://wp.me/P1sIdM-b (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/download/#content (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/blog/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.python.org/download/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://numpy.scipy.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://matplotlib.sourceforge.net/index.html (from http://www.sunpy.org/download/); unknown archive format: .html
+    Skipping link http://www.stsci.edu/resources/software_hardware/pyfits/Download (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.riverbankcomputing.co.uk/software/pyqt/download (from http://www.sunpy.org/download/); not a file
+    Skipping link https://fedorahosted.org/suds/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://pandas.pydata.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://sunpy.org/doc/guide/installation/index.html (from http://www.sunpy.org/download/); unknown archive format: .html
+    Skipping link https://github.com/sunpy/sunpy/tarball/master (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/sunpy/sunpy/zipball/master (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/sunpy/sunpy (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/signup/free (from http://www.sunpy.org/download/); not a file
+    Skipping link http://git-scm.com/documentation (from http://www.sunpy.org/download/); not a file
+    Skipping link http://help.github.com/fork-a-repo/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://wordpress.org/ (from http://www.sunpy.org/download/); not a file
+  Analyzing links from page http://www.sunpy.org/
+    Skipping link http://gmpg.org/xfn/11 (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/themes/twentyten/style.css (from http://www.sunpy.org/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php (from http://www.sunpy.org/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/feed/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/comments/feed/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/plugins/media-element-html5-video-and-audio-player/mediaelement/mediaelementplayer.css?ver=3.3.1 (from http://www.sunpy.org/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php?rsd (from http://www.sunpy.org/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/v1/wp-includes/wlwmanifest.xml (from http://www.sunpy.org/); unknown archive format: .xml
+    Skipping link http://www.sunpy.org/blog/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/ (from http://www.sunpy.org/); not a file
+    Skipping link http://wp.me/P1sIdM-21 (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/#content (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/doc/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.sunpy.org/download/ (from http://www.sunpy.org/); not a file
+    Skipping link http://www.python.org/ (from http://www.sunpy.org/); not a file
+    Skipping link https://groups.google.com/forum/#%21forum/sunpy (from http://www.sunpy.org/); not a file
+    Skipping link http://wordpress.org/ (from http://www.sunpy.org/); not a file
+  Analyzing links from page http://www.sunpy.org/download/
+    Skipping link http://gmpg.org/xfn/11 (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/themes/twentyten/style.css (from http://www.sunpy.org/download/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php (from http://www.sunpy.org/download/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/feed/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/comments/feed/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/v1/wp-content/plugins/media-element-html5-video-and-audio-player/mediaelement/mediaelementplayer.css?ver=3.3.1 (from http://www.sunpy.org/download/); unknown archive format: .css
+    Skipping link http://www.sunpy.org/v1/xmlrpc.php?rsd (from http://www.sunpy.org/download/); unknown archive format: .php
+    Skipping link http://www.sunpy.org/v1/wp-includes/wlwmanifest.xml (from http://www.sunpy.org/download/); unknown archive format: .xml
+    Skipping link http://www.sunpy.org/doc/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/download/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://wp.me/P1sIdM-b (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/download/#content (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.sunpy.org/blog/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.python.org/download/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://numpy.scipy.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://matplotlib.sourceforge.net/index.html (from http://www.sunpy.org/download/); unknown archive format: .html
+    Skipping link http://www.stsci.edu/resources/software_hardware/pyfits/Download (from http://www.sunpy.org/download/); not a file
+    Skipping link http://www.riverbankcomputing.co.uk/software/pyqt/download (from http://www.sunpy.org/download/); not a file
+    Skipping link https://fedorahosted.org/suds/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://pandas.pydata.org/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://sunpy.org/doc/guide/installation/index.html (from http://www.sunpy.org/download/); unknown archive format: .html
+    Skipping link https://github.com/sunpy/sunpy/tarball/master (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/sunpy/sunpy/zipball/master (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/sunpy/sunpy (from http://www.sunpy.org/download/); not a file
+    Skipping link https://github.com/signup/free (from http://www.sunpy.org/download/); not a file
+    Skipping link http://git-scm.com/documentation (from http://www.sunpy.org/download/); not a file
+    Skipping link http://help.github.com/fork-a-repo/ (from http://www.sunpy.org/download/); not a file
+    Skipping link http://wordpress.org/ (from http://www.sunpy.org/download/); not a file
+  Downloading from URL http://pypi.python.org/packages/source/s/sunpy/sunpy-0.1.tar.gz#md5=e0506b27c16b642e4f9c50c54ad0b3f2 (from http://pypi.python.org/simple/sunpy/)
+  Running setup.py egg_info for package sunpy
+    The required version of distribute (>=0.6.24) is not available,
+    and can't be installed while this script is running. Please
+    install a more recent version first, using
+    'easy_install -U distribute'.
+    
+    (Currently using distribute 0.6.10 (/usr/lib/python2.6/dist-packages))
+    Complete output from command python setup.py egg_info:
+    The required version of distribute (>=0.6.24) is not available,
+
+and can't be installed while this script is running. Please
+
+install a more recent version first, using
+
+'easy_install -U distribute'.
+
+
+
+(Currently using distribute 0.6.10 (/usr/lib/python2.6/dist-packages))
+
+----------------------------------------
+Command python setup.py egg_info failed with error code 2
+Exception information:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1775, in install_files
+    req_to_install.run_egg_info()
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1346, in run_egg_info
+    command_desc='python setup.py egg_info')
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 3543, in call_subprocess
+    % (command_desc, proc.returncode))
+InstallationError: Command python setup.py egg_info failed with error code 2

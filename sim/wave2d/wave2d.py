@@ -257,13 +257,13 @@ def transform(params, wave_maps, verbose = False):
     #Origin grid, HG'
     #lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].header)
     # Changed call to keep up to date with updated wcs library
-    print('Calling unpy.wcs.convert_pixel_to_data')
-    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].shape[0],
-                                                         wave_maps[0].shape[1],
+    print('Calling sunpy.wcs.convert_pixel_to_data')
+    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(wave_maps[0].shape[1],
+                                                         wave_maps[0].shape[0],
                                                          wave_maps[0].scale['x'], 
                                                          wave_maps[0].scale['y'],
-                                                         wave_maps[0].center['x'],
-                                                         wave_maps[0].center['y'],   
+                                                         wave_maps[0].reference_pixel['x'],
+                                                         wave_maps[0].reference_pixel['y'],   
                                                          wave_maps[0].reference_coordinate['x'],
                                                          wave_maps[0].reference_coordinate['y'],
                                                          wave_maps[0].coordinate_system['x'])         
@@ -273,7 +273,7 @@ def transform(params, wave_maps, verbose = False):
     #x, y, z = sunpy.wcs.convert_hg_hcc_xyz(wave_maps[0].header,
     #                                       lon_grid, lat_grid)
     print('Calling sunpy.wcs.convert_hg_hcc_xyz')
-    x, y, z = sunpy.wcs.convert_hg_hcc_xyz(wave_maps[0].rsun_arcseconds,
+    x, y, z = sunpy.wcs.convert_hg_hcc_xyz(wave_maps[0].rsun_meters,
                                            wave_maps[0].heliographic_latitude,
                                            wave_maps[0].carrington_longitude,
                                            lon_grid, lat_grid)
@@ -311,7 +311,7 @@ def transform(params, wave_maps, verbose = False):
         #Origin grid, HCC to HPC (arcsec)
         #xx, yy = sunpy.wcs.convert_hcc_hpc(current_wave_map.header, xpp, ypp)
         print(' calling sunpy.wcs.convert_hcc_hpc')
-        xx, yy = sunpy.wcs.convert_hcc_hpc(current_wave_map.rsun_arcseconds,
+        xx, yy = sunpy.wcs.convert_hcc_hpc(current_wave_map.rsun_meters,
                                            current_wave_map.dsun,
                                            xpp,
                                            ypp)
@@ -433,7 +433,7 @@ def clean(params, wave_maps, verbose = False):
         if params.get("clean_nans"):
             data[np.isnan(data)] = 0.
                 
-        cleaned_wave_map = sunpy.map.BaseMap(data, current_wave_map.header)
+        cleaned_wave_map = sunpy.make_map(data, current_wave_map._original_header)
         cleaned_wave_map.name = current_wave_map.name
         cleaned_wave_map.date = current_wave_map.date
         wave_maps_clean += [cleaned_wave_map]

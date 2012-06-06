@@ -63,8 +63,8 @@ def htLine(distance,angle,img):
             y = gradient*x + constant
             if y <= ny-1 and y >= 0:
                 img[y,x] = 255
-            else:
-                img[:,distance] = 255
+    else:
+        img[:,distance] = 255
 
     return img
 
@@ -72,8 +72,8 @@ def main():
 
     m2deg = 360./(2*3.1415926*6.96e8)
     params = {
-              "epi_lat": 30., #degrees, HG latitude of wave epicenter
-              "epi_lon": 45., #degrees, HG longitude of wave epicenter
+              "epi_lat": 40., #degrees, HG latitude of wave epicenter
+              "epi_lon": -20., #degrees, HG longitude of wave epicenter
               #HG grid, probably would only want to change the bin sizes
               "lat_min": -90.,
               "lat_max": 90.,
@@ -158,7 +158,9 @@ def main():
     # number of files to consider
     #nfiles = len(lll)
     
-    nfiles = 10
+    flare_start = 75
+    
+    nfiles = 30
     
     # storage for all the maps
     maps = []
@@ -169,7 +171,7 @@ def main():
         i = 0
         print('\n Starting new accumulation:')
         while i < naccum:
-            filename = os.path.join(directory,lll[j+i])
+            filename = os.path.join(directory,lll[flare_start+j+i])
             print('  File %(#)i out of %(nfiles)i' % {'#':i+j, 'nfiles':nfiles})
             print('  Reading in file '+filename)
             map1 = (sunpy.make_map(filename)).superpixel((nsuper,nsuper))
@@ -181,8 +183,14 @@ def main():
         j = j + naccum
         maps.append(m)
 
-    z = wave2d.transform(params,maps)
+    import util
+    new_maps =[]
     
+    for wave in maps:
+        print("Unraveling map at "+str(wave.date))
+        new_maps += [util.map_hpc_to_hg_rotate(wave, epi_lon = params.get('epi_lon'), epi_lat = params.get('epi_lat'), xbin = 5, ybin = 0.2)]
+
+
     # number of running differences
     ndiff = len(maps)-1
     
@@ -190,13 +198,13 @@ def main():
     maxval = 255 * nsuper * nsuper * naccum
     
     # difference threshold as a function of the maximum value
-    diffthresh = 0.01 * maxval #300
+    diffthresh = 0.001 * maxval #300
     
     # Hough transform voting threshold
-    votethresh = 5000
+    votethresh = 500
     
     # shape of the data
-    imgShape = maps[0].shape
+    imgShape = new_maps[0].shape
     
     # storage for the detection
     detection = []
@@ -206,14 +214,16 @@ def main():
     for i in range(0,ndiff):
         
         # take the difference
-        diffmap = ( maps[i+1] -maps[i] )  > diffthresh
+        diffmap = abs( 1.0*new_maps[i+1] - 1.0*new_maps[i] )  > diffthresh
     
         # keep
         diffs.append(diffmap)
     
+    for i in range(0,ndiff):
         # extract the image from the storage array
-        img = diffmap
-    
+        img = diffs[i]
+
+
         # Perform the hough transform on each of the difference maps
         transform,theta,d = hough(img)
     
@@ -227,7 +237,7 @@ def main():
     
         # Perform the inverse transform to get a series of rectangular
         # images that show where the wavefront is.
-        invTransform = sunpy.make_map(maps[i+1])
+        invTransform = sunpy.make_map(np.zeros(imgShape), diffs[i]._original_header)
         invTransform.data = np.zeros(imgShape)
         for i in range(0,n):
             nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )

@@ -8,12 +8,29 @@ import numpy as np
 __authors__ = ["Steven Christe"]
 __email__ = "steven.d.christe@nasa.gov"
 
-def map_hpc_to_hg(map, xbin = 1, ybin = 1):
+def map_hpc_to_hg(smap, xbin = 1, ybin = 1):
     """Take a map (like an AIA map) and convert it from HPC to HG."""
 
-    x,y = wcs.convert_pixel_to_data(map.header)
-    lon_map, lat_map = wcs.convert_hpc_hg(map.header, x, y)
-
+    #x,y = wcs.convert_pixel_to_data(map.header)
+    x,y = wcs.convert_pixel_to_data(smap.shape[1],
+                                    smap.shape[0],
+                                    smap.scale['x'], 
+                                    smap.scale['y'],
+                                    smap.center['x'],
+                                    smap.center['y'],   
+                                    smap.reference_coordinate['x'],
+                                    smap.reference_coordinate['y'],
+                                    smap.coordinate_system['x'])
+    
+    #lon_map, lat_map = wcs.convert_hpc_hg(map.header, x, y)
+    lon_map, lat_map = wcs.convert_hpc_hg(smap.rsun_meters,
+                                          smap.dsun,
+                                          smap.scale['x'],
+                                          smap.scale['y'],
+                                          smap.heliographic_latitude,
+                                          smap.carrington_longitude,
+                                          x, y)
+    
     lon_bin = xbin
     lat_bin = ybin 
     lon_range = (np.nanmin(lon_map), np.nanmax(lon_map))
@@ -25,7 +42,7 @@ def map_hpc_to_hg(map, xbin = 1, ybin = 1):
 
     # newgrid = wcs.convert_hg_hpc(map.header, lon_grid, lat_grid, units = 'arcsec')
     points = np.vstack((lon_map.ravel(), lat_map.ravel())).T
-    values = np.array(map).ravel()
+    values = np.array(smap).ravel()
 
     # get rid of all of the bad (nan) indices (i.e. those off of the sun)
     index = np.isfinite(points[:,0]) * np.isfinite(points[:,1])
@@ -35,7 +52,7 @@ def map_hpc_to_hg(map, xbin = 1, ybin = 1):
     
     newdata = griddata(points, values, newgrid, method="linear")
 
-    header = map.header.copy()
+    header = smap.header.copy()
     header['CDELT1'] = lon_bin
     header['NAXIS1'] = len(lon)
     header['CRVAL1'] = lon.min()
@@ -60,12 +77,12 @@ def map_hpc_to_hg(map, xbin = 1, ybin = 1):
 
     return transformed_map
 
-def map_hg_to_hpc(map, xbin = 10, ybin = 10):
+def map_hg_to_hpc(smap, xbin = 10, ybin = 10):
     """Take a map in heliographic coordinates (HG) and convert it to 
     helioprojective cartesian coordinates (HPC)."""
 
-    lon,lat = wcs.convert_pixel_to_data(map.header)
-    x_map, y_map = wcs.convert_hg_hpc(map.header, lon, lat, units ='arcsec')
+    lon,lat = wcs.convert_pixel_to_data(smap.header)
+    x_map, y_map = wcs.convert_hg_hpc(smap.header, lon, lat, units ='arcsec')
     
     x_range = (np.nanmin(x_map), np.nanmax(x_map))
     y_range = (np.nanmin(y_map), np.nanmax(y_map))
@@ -77,11 +94,11 @@ def map_hg_to_hpc(map, xbin = 10, ybin = 10):
     # newgrid = wcs.convert_hpc_hg(map.header, xgrid/(3600), ygrid/(3600))
     
     points = np.vstack((x_map.ravel(), y_map.ravel())).T
-    values = np.array(map).ravel()
+    values = np.array(smap).ravel()
     newdata = griddata(points, values, newgrid, method="linear")
     
     # now grab the original map header and update it
-    header = map.header.copy()
+    header = smap.header.copy()
     header["CDELT1"] = xbin
     header["NAXIS1"] = len(x)
     header["CRVAL1"] = x.min()
@@ -97,9 +114,9 @@ def map_hg_to_hpc(map, xbin = 10, ybin = 10):
     
     transformed_map = sunpy.map.BaseMap(newdata, header)
     
-    transformed_map.cmap = map.cmap
-    transformed_map.name = map.name
-    transformed_map.date = map.date
+    transformed_map.cmap = smap.cmap
+    transformed_map.name = smap.name
+    transformed_map.date = smap.date
 
     transformed_map.center = {
         "x": wcs.get_center(header, axis='x'),
@@ -107,7 +124,7 @@ def map_hg_to_hpc(map, xbin = 10, ybin = 10):
 
     return transformed_map
 
-def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
+def map_hpc_to_hg_rotate(smap, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     """Take a map (like an AIA map) and convert it from HPC to HG."""
 
     #import sunpy
@@ -127,15 +144,34 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     
     #map = aia
     
-    x, y = wcs.convert_pixel_to_data(map.header)
+    #x, y = wcs.convert_pixel_to_data(map.header)
+    x, y = wcs.convert_pixel_to_data(smap.shape[1],
+                                     smap.shape[0],
+                                     smap.scale['x'], 
+                                     smap.scale['y'],
+                                     smap.reference_pixel['x'],
+                                     smap.reference_pixel['y'],   
+                                     smap.reference_coordinate['x'],
+                                     smap.reference_coordinate['y'],
+                                     smap.coordinate_system['x'])
     
-    hccx, hccy, hccz = wcs.convert_hpc_hcc_xyz(map.header, x, y)
+    #hccx, hccy, hccz = wcs.convert_hpc_hcc_xyz(map.header, x, y)
+    hccx, hccy, hccz = wcs.convert_hpc_hcc_xyz(smap.rsun_meters,
+                                               smap.dsun,
+                                               smap.units['x'],
+                                               smap.units['y'],
+                                               x,
+                                               y)
     
     # rot_hccz, rot_hccy, rot_hccx = euler_zyz((hccz, hccx, hccy), (epi_lon, 90.-epi_lat, 0.))
     rot_hccz, rot_hccx, rot_hccy = euler_zyz((hccz, hccx, hccy), (0., epi_lat-90., -epi_lon))
     # zpp, xpp, ypp = euler_zyz(zxy_p, (0., hglt_obs, total_seconds*rotation))
 
-    lon_map, lat_map = wcs.convert_hcc_hg(map.header, rot_hccx, rot_hccy, z = rot_hccz)
+    #lon_map, lat_map = wcs.convert_hcc_hg(map.header, rot_hccx, rot_hccy, z = rot_hccz)
+    lon_map, lat_map = wcs.convert_hcc_hg(smap.rsun_meters,
+                                          smap.heliographic_latitude,
+                                          smap.carrington_longitude,
+                                          rot_hccx, rot_hccy, z = rot_hccz)
     
     lon_bin = xbin
     lat_bin = ybin 
@@ -148,13 +184,18 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     
     #This extra conversion and rotation back are needed to determine where to
     #mask out points that can't have corresponding data
-    ng_xyz = wcs.convert_hg_hcc_xyz(map.header, newgrid[0], newgrid[1])
+    #ng_xyz = wcs.convert_hg_hcc_xyz(map.header, newgrid[0], newgrid[1])
+    ng_xyz = wcs.convert_hg_hcc_xyz(smap.rsun_meters,
+                                    smap.heliographic_latitude,
+                                    smap.carrington_longitude,
+                                    newgrid[0], newgrid[1])
+    
     ng_zp, ng_xp, ng_yp = euler_zyz((ng_xyz[2], ng_xyz[0], ng_xyz[1]),
                                     (epi_lon, 90.-epi_lat, 0.))
     
     
     points = np.vstack((lon_map.ravel(), lat_map.ravel())).T
-    values = np.array(map).ravel()
+    values = np.array(smap).ravel()
         
     # get rid of all of the bad (nan) indices (i.e. those off of the sun)
     index = np.isfinite(points[:,0]) * np.isfinite(points[:,1])
@@ -164,8 +205,8 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     
     newdata = griddata(points, values, newgrid, method="cubic")
     newdata[ng_zp < 0] = np.nan
-    
-    header = map.header.copy()
+
+    header = smap._original_header.copy()
     header['CDELT1'] = lon_bin
     header['NAXIS1'] = len(lon)
     header['CRVAL1'] = lon.min()
@@ -181,13 +222,12 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 0, xbin = 1, ybin = 1):
     
     transformed_map = sunpy.map.BaseMap(newdata, header)
     
-    transformed_map.cmap = map.cmap
-    transformed_map.name = map.name
-    transformed_map.date = map.date
-    transformed_map.center = {
-        "x": wcs.get_center(header, axis='x'),
-        "y": wcs.get_center(header, axis='y')}
+    transformed_map.cmap = smap.cmap
+    transformed_map.name = smap.name
+    transformed_map.date = smap.date
+    transformed_map.center['x'] = wcs.get_center(smap.shape[1], smap.scale['x'], smap.reference_coordinate['x'],smap.reference_pixel['x'])
+    transformed_map.center['y'] = wcs.get_center(smap.shape[0], smap.scale['y'], smap.reference_coordinate['y'],smap.reference_pixel['y'])
     
-    #transformed_map.show(norm = colors.Normalize(0,1000))
+    #transformed_map.show()
     
     return transformed_map

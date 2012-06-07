@@ -183,12 +183,14 @@ def main():
         j = j + naccum
         maps.append(m)
 
-    import util
+    import util2
     new_maps =[]
     
     for wave in maps:
         print("Unraveling map at "+str(wave.date))
-        new_maps += [util.map_hpc_to_hg_rotate(wave, epi_lon = params.get('epi_lon'), epi_lat = params.get('epi_lat'), xbin = 5, ybin = 0.2)]
+        z = util2.map_hpc_to_hg_rotate(wave, epi_lon = params.get('epi_lon'), epi_lat = params.get('epi_lat'), xbin = 5, ybin = 0.2)
+        z[np.isnan(z)]=0.0
+        new_maps += [z]
 
 
     # number of running differences
@@ -198,10 +200,10 @@ def main():
     maxval = 255 * nsuper * nsuper * naccum
     
     # difference threshold as a function of the maximum value
-    diffthresh = 0.001 * maxval #300
+    diffthresh = 100 #300
     
     # Hough transform voting threshold
-    votethresh = 500
+    votethresh = 50
     
     # shape of the data
     imgShape = new_maps[0].shape
@@ -214,7 +216,7 @@ def main():
     for i in range(0,ndiff):
         
         # take the difference
-        diffmap = abs( 1.0*new_maps[i+1] - 1.0*new_maps[i] )  > diffthresh
+        diffmap = abs(new_maps[i+1] - new_maps[i])>diffthresh
     
         # keep
         diffs.append(diffmap)

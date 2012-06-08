@@ -2,6 +2,7 @@
 from visualize import visualize
 from sim import wave2d
 from skimage.transform import hough
+import scipy
 import numpy as np
 import sunpy
 import os
@@ -49,6 +50,46 @@ def conevals(center,orientation,r1,openangle1,r2,openangle2):
 
     return (ax,ay), (bx,by), (cx,cy), (dx,dy)
 
+    
+def map_diff(z,ndiff,diffthresh):
+    # calculate running difference images
+    diffs = []
+    for i in range(0,ndiff):
+        
+        # take the difference
+        diffmap = abs(z[i+1] - z[i])>diffthresh
+    
+        # keep
+        diffs.append(diffmap)
+    
+    return diffs
+    
+def map_diff2(z,ndiff):
+    # calculate running difference images
+    diffs = []
+    for i in range(0,ndiff):
+        
+        # take the difference
+        diffmap = z[i+1] - z[i]
+    
+        # keep
+        diffs.append(diffmap)
+    
+    return diffs
+
+
+def map_unravel(z,params):
+    import util2
+    new_maps =[]
+    
+    for wave in z:
+        print("Unraveling map at "+str(wave.date))
+        z = util2.map_hpc_to_hg_rotate(wave, epi_lon = params.get('epi_lon'), epi_lat = params.get('epi_lat'), xbin = 5, ybin = 0.2)
+        z[np.isnan(z)]=0.0
+        new_maps += [z]
+        
+    return new_maps
+
 
 def htLine(distance,angle,img):
     shape = img.shape
@@ -62,9 +103,9 @@ def htLine(distance,angle,img):
         for x in range(0,nx):
             y = gradient*x + constant
             if y <= ny-1 and y >= 0:
-                img[y,x] = 255
+                img[y,x] = 1
     else:
-        img[:,distance] = 255
+        img[:,distance] = 1
 
     return img
 
@@ -183,48 +224,40 @@ def main():
         j = j + naccum
         maps.append(m)
 
-    import util2
-    new_maps =[]
-    
-    for wave in maps:
-        print("Unraveling map at "+str(wave.date))
-        z = util2.map_hpc_to_hg_rotate(wave, epi_lon = params.get('epi_lon'), epi_lat = params.get('epi_lat'), xbin = 5, ybin = 0.2)
-        z[np.isnan(z)]=0.0
-        new_maps += [z]
+    # Unravel the maps
+    new_maps = map_unravel(maps, params)
 
 
     # number of running differences
     ndiff = len(maps)-1
-    
-    # Each JP2 file has a maximum of 255
-    maxval = 255 * nsuper * nsuper * naccum
-    
+
+    # plain difference        
+    dmap = map_diff2(maps,ndiff)
+   
     # difference threshold as a function of the maximum value
     diffthresh = 100 #300
     
     # Hough transform voting threshold
-    votethresh = 50
+    votethresh = 12
     
     # shape of the data
     imgShape = new_maps[0].shape
     
     # storage for the detection
     detection = []
-    diffs = []
-     
-    # calculate running difference images
-    for i in range(0,ndiff):
-        
-        # take the difference
-        diffmap = abs(new_maps[i+1] - new_maps[i])>diffthresh
     
-        # keep
-        diffs.append(diffmap)
+    # calculate the differences
+    diffs = map_diff(new_maps, ndiff, diffthresh)
+    
+    diffs_plain = map_diff2(new_maps, ndiff)
+    
+    invThresh = 8
+    sizeThresh = 50
     
     for i in range(0,ndiff):
+
         # extract the image from the storage array
         img = diffs[i]
-
 
         # Perform the hough transform on each of the difference maps
         transform,theta,d = hough(img)
@@ -245,11 +278,21 @@ def main():
             nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )
             invTransform = invTransform + nextLine
     
+        invTransform[(invTransform<invThresh).nonzero()] = 0.0
+        #invTransform[(invTransform>=invThresh).nonzero()] = 1.0
+        labeled_array, num_features = scipy.ndimage.measurements.label(invTransform )
+        for j in range(1,num_features):
+            region = (labeled_array == j).nonzero()
+            print np.size(region)
+            if np.size( region ) <= sizeThresh:
+                invTransform[region] = 0
+                
         # Dump the inverse transform back into a series of maps
         detection.append(invTransform)
     
     
     visualize(detection)
+    return maps, diffs, detection, dmap, diffs_plain
 
 if __name__ == '__main__':
     main()

@@ -141,7 +141,7 @@ def main():
     # Lots of big images.  Need to be smart about how to handle the data
     
     # load in the data with a single EIT wave
-    directory = "/home/ireland/eitwave_data/jp2/20110601_02_04/"
+    directory = os.path.expanduser("~/Data/eitwave_data/jp2/20110601_02_04/")
     extension = ".jp2"
     # get the file list
     lst = []

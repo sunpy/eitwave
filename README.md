@@ -1,4 +1,4 @@
-SunPy - AGU 2011
+SunPy - AGU 2011 and SPD 2012
 
 Observational Characteristics
 -----------------------------
@@ -17,8 +17,12 @@ from [Long et al. 2011](http://adsabs.harvard.edu/abs/2011SPD....42.0505L)
 
  * "Significant pulse broadening was also measured using both STEREO ( 55 km/s) andSDO ( 65 km/s) observations."
 
-Download test data from:
+Download AGU 2011 test data from:
   [http://www.sunpy.org/research/agu-2011/testdata1.zip](http://www.sunpy.org/research/agu-2011/testdata1.zip)
+
+Download SPD 2012 test data from:
+  [http://umbra.nascom.nasa.gov/people/ireland/Data/eitwave/jp2/20110601_02_04.tar.gz](http://umbra.nascom.nasa.gov/people/ireland/Data/eitwave/jp2/20110601_02_04.tar.gz)
+
 
 References
 ----------

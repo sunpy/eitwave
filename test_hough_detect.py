@@ -1,7 +1,8 @@
 from sim import wave2d
 from visualize import visualize
-from scikits.image.transform import hough
-from scikits.image.morphology import greyscale_dilate
+from skimage.transform import hough
+from skimage.transform import probabilistic_hough
+from skimage.morphology import greyscale_dilate
 import numpy as np
 import pylab as plt
 import sunpy
@@ -23,10 +24,11 @@ def htLine(distance,angle,img):
         img[:,distance] = 255
 
     return img
+        
 
 m2deg = 360./(2*3.1415926*6.96e8)
 
-max_steps = 20
+max_steps = 35
 
 params = {
     # "cadence": 12., #seconds
@@ -139,24 +141,31 @@ imgShape = input_maps[0].shape
 detection = []
 diffs = []
 
-temp = 255*(abs(input_maps[14] - input_maps[13]) > diffthresh)
+#temp = 255*(abs(input_maps[14] - input_maps[13]) > diffthresh)
 
 for i in range(0,ndiff):
-    # difference map
-    diffmap = 255*(abs(input_maps[i+1] - input_maps[i]) > diffthresh)
-
+    # difference map - create separate maps for +ve and -ve differences
+    diffmap_plus = 255*((input_maps[i+1] - input_maps[i]) > diffthresh)
+    diffmap_minus = 255*((input_maps[i] - input_maps[i+1]) > diffthresh)
     # keep
-    diffs.append(diffmap)
+    diffs.append(diffmap_plus)
 
     # extract the image
-    img = diffmap
+    img = diffmap_plus
+    img2 = diffmap_minus
 
-    # Perform the hough transform on each of the difference maps
+    # Perform the hough transform on the positive and negative difference maps separately
     transform,theta,d = hough(img)
-
+    transform2,theta2,d2 = hough(img2)
+    
     # Filter the hough transform results and find the best lines
     # in the data
-    indices =  (transform >votethresh).nonzero()
+    #indices =  (transform >votethresh).nonzero()
+    #indices = (transform == transform.max()).nonzero()
+    #instead of getting all lines above some threshold, just get the *strongest* line only
+    #from the positive diffmap and the negative diffmap. May get more than 2 lines due to ties
+    #in the accumulator
+    indices=((transform == transform.max()) + (transform2 == transform2.max())).nonzero()
     distances = d[indices[0]]
     theta = theta[indices[1]]
     n =len(indices[1])
@@ -164,8 +173,8 @@ for i in range(0,ndiff):
 
     # Perform the inverse transform to get a series of rectangular
     # images that show where the wavefront is.
-    invTransform = sunpy.map.BaseMap(input_maps[i+1])
-    invTransform.data = np.zeros(imgShape)
+    invTransform = sunpy.make_map(np.zeros(imgShape),input_maps[i+1]._original_header)
+    # invTransform.data = np.zeros(imgShape)
     for i in range(0,n):
         nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )
         invTransform = invTransform + nextLine
@@ -180,14 +189,15 @@ visualize(detection)
 from matplotlib import cm
 from matplotlib import colors
 
-wmap = sunpy.make_map(wave_maps[max_steps/2], wave_maps[0], type = "composite")
+wmap = sunpy.make_map([wave_maps[max_steps/2], wave_maps[0]], type = "composite")
 wmap.set_colors(1, cm.Reds)
 wmap.set_alpha(1,0.1)
 #wmap.set_norm(1, colors.Normalize(0.1,1))
 wmap.show()
 
-pmap = sunpy.make_map(detection[max_steps/2],input_maps[max_steps/2], type ="composite")
+pmap = sunpy.make_map([detection[max_steps/2],input_maps[max_steps/2]], type ="composite")
 pmap.set_alpha(1,0.6)
 pmap.set_colors(0, cm.Blues)
 pmap.set_colors(1, cm.Reds)
 pmap.show()
+

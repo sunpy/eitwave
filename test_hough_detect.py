@@ -1,7 +1,7 @@
 from sim import wave2d
 from visualize import visualize
-from scikits.image.transform import hough
-from scikits.image.morphology import greyscale_dilate
+from skimage.transform import hough
+from skimage.morphology import greyscale_dilate
 import numpy as np
 import pylab as plt
 import sunpy
@@ -164,8 +164,7 @@ for i in range(0,ndiff):
 
     # Perform the inverse transform to get a series of rectangular
     # images that show where the wavefront is.
-    invTransform = sunpy.map.BaseMap(input_maps[i+1])
-    invTransform.data = np.zeros(imgShape)
+    invTransform = sunpy.make_map(np.zeros(imgShape),input_maps[i+1]._original_header)
     for i in range(0,n):
         nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )
         invTransform = invTransform + nextLine
@@ -180,13 +179,13 @@ visualize(detection)
 from matplotlib import cm
 from matplotlib import colors
 
-wmap = sunpy.make_map(wave_maps[max_steps/2], wave_maps[0], type = "composite")
+wmap = sunpy.make_map([wave_maps[max_steps/2], wave_maps[0]], type = "composite")
 wmap.set_colors(1, cm.Reds)
 wmap.set_alpha(1,0.1)
 #wmap.set_norm(1, colors.Normalize(0.1,1))
 wmap.show()
 
-pmap = sunpy.make_map(detection[max_steps/2],input_maps[max_steps/2], type ="composite")
+pmap = sunpy.make_map([detection[max_steps/2],input_maps[max_steps/2]], type ="composite")
 pmap.set_alpha(1,0.6)
 pmap.set_colors(0, cm.Blues)
 pmap.set_colors(1, cm.Reds)

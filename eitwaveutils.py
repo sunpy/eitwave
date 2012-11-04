@@ -4,6 +4,7 @@
 from visualize import visualize
 from sim import wave2d
 from skimage.transform import hough
+from skimage.transform import probabilistic_hough
 import scipy
 import numpy as np
 import sunpy
@@ -32,10 +33,10 @@ def accumulate(filelist, accum=2, super=4, verbose=False):
     while j+accum <= nfiles:
         i = 0
         while i < accum:
-            filename = filelist[i]
+            filename = filelist[i+j]
             if verbose:
-                print('  File %(#)i out of %(nfiles)i' % {'#':i+j, 'nfiles':nfiles})
-                print('  Reading in file '+filename)
+                print('File %(#)i out of %(nfiles)i' % {'#':i+j, 'nfiles':nfiles})
+                print('Reading in file '+filename)
             map1 = (sunpy.make_map(filename)).superpixel((super,super))
             if i == 0:
                 m = map1
@@ -44,14 +45,16 @@ def accumulate(filelist, accum=2, super=4, verbose=False):
             i = i + 1
         j = j + accum
         maps.append(m)
+        if verbose:
+            print('Accumulated map List has length %(#)i' % {'#':len(maps)} )
     return maps
 
 def map_unravel(maps, params, verbose=False):
     """ Unravel the maps into a rectangular image. """
     new_maps =[]
-    for m in maps:
+    for index, m in enumerate(maps):
         if verbose:
-            print("Unraveling map at "+str(m.date))
+            print("Unraveling map %(#)i of %(n)i " % {'#':index+1, 'n':len(maps)})
         unraveled = util2.map_hpc_to_hg_rotate(m,
                                                epi_lon=params.get('epi_lon'),
                                                epi_lat=params.get('epi_lat'),
@@ -83,43 +86,60 @@ def hough_detect(diffs, vote_thresh=12):
     With enough lines, you can fill in the wave front."""
     detection=[]
     
-    for i in range(0,len(diffs)):
-
-        # extract the image from the storage array
-        img = diffs[i]
+    for img in diffs:
 
         # Perform the hough transform on each of the difference maps
         transform, theta, d = hough(img)
     
-        # Filter the hough transform results and find the best lines
-        # in the data
+        # Filter the hough transform results and find the best lines in the
+        # data.  Keep detections that exceed the Hough vote threshold.
         indices =  (transform>vote_thresh).nonzero()
         distances = d[indices[0]]
         theta = theta[indices[1]]
-        n = len(indices[1])
     
         # Perform the inverse transform to get a series of rectangular
         # images that show where the wavefront is.
-        invTransform = sunpy.make_map(np.zeros(img.shape),
-                                      diffs[i]._original_header)
+        # Create a map which is the same as the 
+        invTransform = sunpy.make_map(np.zeros(img.shape), img._original_header)
         invTransform.data = np.zeros(img.shape)
         
-        # Add in all the detected lines
-        for i in range(0,n):
+        # Add up all the detected lines over each other.  The idea behind
+        # adding up all the lines on top of each other is that pixels that
+        # have larger number of detections are more likely to be in the
+        # wavefront.  Note that we are using th Hough transform - which is used
+        # to detect lines - to detect and fill in a region.  You might see this
+        # as an abuse of the Hough transform!
+        for i in range(0,len(indices[1])):
             nextLine = htLine(distances[i], theta[i], np.zeros(shape=img.shape))
             invTransform = invTransform + nextLine
-            
+
         detection.append(invTransform)
 
     return detection
 
+def prob_hough_detect(diffs, **ph_kwargs):
+    """Use the probabilistic hough transform to detect regions in the data
+    that we will flag as being part of the EIT wave front."""
+    detection=[]
+    for img in diffs:
+        lines = probabilistic_hough(img, ph_kwargs)
+        if lines is not None:
+            for line in lines:
+                pass
+    return detection
+
+
 def cleanup(detection, size_thresh=50, inv_thresh=8):
-    """Clean up the detection"""
+    """Clean up the detection.  The original detection is liable to be quite
+    noisy.  There are many different ways of cleaning it up."""
     cleaned=[]
     
     for d in detection:
+        # Remove points from the detections that have less than 'inv_thresh'
+        # detections
         d[(d<inv_thresh).nonzero()] = 0.0
-        #invTransform[(invTransform>=invThresh).nonzero()] = 1.0
+        
+        #
         labeled_array, num_features = scipy.ndimage.measurements.label(d)
         for j in range(1,num_features):
             region = (labeled_array == j).nonzero()

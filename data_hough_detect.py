@@ -87,32 +87,28 @@ def main():
                                      '.jp2')
 
     # read in files and accumulate them
-    maps = eitwaveutils.accumulate(filelist, accum=2, super=4)
+    maps = eitwaveutils.accumulate(filelist[0:10], accum=2, super=4, verbose=True)
 
     # Unravel the maps
-    new_maps = eitwaveutils.map_unravel(maps, params)
+    new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
     
     # calculate the differences
     diffs = eitwaveutils.map_diff(new_maps, diff_thresh=100)
     
-    detection = eitwaveutils.hough_detect(diffs,
-                                          vote_thresh=12,
-                                          inv_thresh=8)
+    # detection based on the hough transform
+    #detection = eitwaveutils.hough_detect(diffs, vote_thresh=12)
+    
+    # detection based on the probabilistic hough transform.  Takes the
+    # keywords of the probabilistic hough transform - see the documentation
+    # of skimage.transform.probabilistic_hough (scikit-image.org) 
+    detection = eitwaveutils.prob_hough_detect(diffs)
+    
     
     detection = eitwaveutils.cleanup(detection,
-                                     size_thresh=50)
+                                     size_thresh=50,
+                                     inv_thresh=8)
     
 
-    # shape of the data
-    imgShape = new_maps[0].shape
-    
-    # storage for the detection
-    detection = []
-    
-    invThresh = 8
-    
-    # areas that have a size lower than threshold are exclused
-    sizeThresh = 50
     
     
     visualize(detection)

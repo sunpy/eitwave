@@ -23,12 +23,12 @@ def htLine(distance,angle,img):
     else:
         img[:,distance] = 255
 
-    return img
+    return img,y
         
 
 m2deg = 360./(2*3.1415926*6.96e8)
 
-max_steps = 35
+max_steps = 20
 
 params = {
     # "cadence": 12., #seconds

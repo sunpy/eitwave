@@ -175,6 +175,7 @@ for i in range(0,ndiff):
     # images that show where the wavefront is.
     invTransform = sunpy.make_map(np.zeros(imgShape),input_maps[i+1]._original_header)
     # invTransform.data = np.zeros(imgShape)
+    
     for i in range(0,n):
         nextLine = htLine( distances[i],theta[i], np.zeros(shape=imgShape) )
         invTransform = invTransform + nextLine

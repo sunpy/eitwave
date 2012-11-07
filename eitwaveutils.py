@@ -9,8 +9,7 @@ import scipy
 import numpy as np
 import sunpy
 import os
-import util2
-
+import util
 
 def loaddata(directory, extension):
     """ get the file list and sort it.  For well behaved file names the file
@@ -55,7 +54,7 @@ def map_unravel(maps, params, verbose=False):
     for index, m in enumerate(maps):
         if verbose:
             print("Unraveling map %(#)i of %(n)i " % {'#':index+1, 'n':len(maps)})
-        unraveled = util2.map_hpc_to_hg_rotate(m,
+        unraveled = util.map_hpc_to_hg_rotate(m,
                                                epi_lon=params.get('epi_lon'),
                                                epi_lat=params.get('epi_lat'),
                                                xbin=5,
@@ -71,15 +70,31 @@ def linesampleindex(a, b, np=1000):
     yi = y.astype(np.int)
     return xi, yi
 
-def map_diff(maps, diff_thresh=100):
+def map_diff(maps):
     """ calculate running difference images """
     diffs = []
     for i in range(0,len(maps)-1):
         # take the difference
-        diffmap = abs(maps[i+1] - maps[i])>diff_thresh
+        diffmap = (maps[i+1] - maps[i])
         # keep
         diffs.append(diffmap)
     return diffs
+
+def map_threshold(maps, factor):
+    threshold_maps = []
+    for i in range(1,len(maps)):
+        sqrt_map = np.sqrt(maps[i]) * factor
+        threshold_maps.append(sqrt_map)
+    return threshold_maps
+
+def map_binary(diffs, threshold_maps):
+    """turn difference maps into binary images"""
+    binary_maps = []
+    for i in range(0,len(diffs)):
+        #for values > threshold_map in the diffmap, return True, otherwise False
+        filtered_map = diffs[i] > threshold_maps[i]
+        binary_maps.append(filtered_map)
+    return binary_maps
 
 def hough_detect(diffs, vote_thresh=12):
     """ Use the Hough detection method to detect lines in the data.
@@ -122,10 +137,14 @@ def prob_hough_detect(diffs, **ph_kwargs):
     that we will flag as being part of the EIT wave front."""
     detection=[]
     for img in diffs:
+        invTransform = sunpy.make_map(np.zeros(img.shape), img._original_header)
         lines = probabilistic_hough(img, ph_kwargs)
         if lines is not None:
             for line in lines:
-                pass
+                pos1=line[0]
+                pos2=line[1]
+                fillLine(pos1,pos2,invTransform)
+        detection.append(invTransform)
     return detection
 
 
@@ -151,6 +170,23 @@ def cleanup(detection, size_thresh=50, inv_thresh=8):
  
     return cleaned
 
+def fillLine(pos1,pos2,img):
+    shape=img.shape
+    ny = shape[0]
+    nx = shape[1]
+    if pos2[0] == pos1[0]:
+        m = 9999
+    else:
+        m = (pos2[1] - pos1[1]) / (pos2[0] - pos1[0])
+        
+    constant = (pos2[1] - m*pos2[0])
+    
+    for x in range(pos1[0],pos2[0]):
+        y = m*x + constant
+        if y <= ny-1 and y>= 0:
+            img[y,x] = 255
+
+    return img
 
 def htLine(distance,angle,img):
     shape = img.shape

@@ -13,8 +13,8 @@ def main():
 
     m2deg = 360./(2*3.1415926*6.96e8)
     params = {
-              "epi_lat": 40., #degrees, HG latitude of wave epicenter
-              "epi_lon": -20., #degrees, HG longitude of wave epicenter
+              "epi_lat": -30., #degrees, HG latitude of wave epicenter
+              "epi_lon": 30., #degrees, HG longitude of wave epicenter
               #HG grid, probably would only want to change the bin sizes
               "lat_min": -90.,
               "lat_max": 90.,
@@ -82,36 +82,42 @@ def main():
     # Lots of big images.  Need to be smart about how to handle the data
     
     # load in the data with a single EIT wave
-    filelist = eitwaveutils.loaddata("~/Data/eitwave_data/jp2/20110601_02_04/",
-                                     '.jp2')
+    filelist = eitwaveutils.loaddata("/Users/ainglis/physics/eitwave_data/",
+                                     '.fits')
 
     # read in files and accumulate them
-    maps = eitwaveutils.accumulate(filelist[0:10], accum=2, super=4, verbose=True)
+    maps = eitwaveutils.accumulate(filelist[0:20], accum=2, super=4, verbose=True)
 
     # Unravel the maps
     new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
     
     # calculate the differences
-    diffs = eitwaveutils.map_diff(new_maps, diff_thresh=100)
+    diffs = eitwaveutils.map_diff(new_maps)
+
+    #determine the threshold to apply to the difference maps.
+    #diffs > diff_thresh will be True, otherwise False.
+    threshold_maps = eitwaveutils.map_threshold(new_maps,factor=1) 
+
+    # transform difference maps into binary maps
+    binary_maps = eitwaveutils.map_binary(diffs, threshold_maps)
     
     # detection based on the hough transform
-    #detection = eitwaveutils.hough_detect(diffs, vote_thresh=12)
+    detection = eitwaveutils.hough_detect(binary_maps, vote_thresh=12)
     
     # detection based on the probabilistic hough transform.  Takes the
     # keywords of the probabilistic hough transform - see the documentation
     # of skimage.transform.probabilistic_hough (scikit-image.org) 
-    detection = eitwaveutils.prob_hough_detect(diffs)
+    #detection = eitwaveutils.prob_hough_detect(binary_maps,threshold=10)
     
     
     detection = eitwaveutils.cleanup(detection,
                                      size_thresh=50,
                                      inv_thresh=8)
     
-
     
     
     visualize(detection)
-    return maps, diffs, detection
+    return maps, new_maps, diffs, threshold_maps, binary_maps, detection
 
 if __name__ == '__main__':
     main()

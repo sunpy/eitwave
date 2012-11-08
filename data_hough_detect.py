@@ -118,10 +118,14 @@ def main():
     #If there is anything left in 'detection', fit a function to the original
     #diffmaps in the region defined by 'detection'. Simplest case: fit a Gaussian
     #in the y-direction for some x or range of x.
-    #indices=diffs < 0
-    #posdiffs=diffs
-    #posdiffs[indices] = 0
-    wavefront = eitwaveutils.fit_wavefront(diffs, detection)
+    #eitwaveutils.fit_wavefront should probably take the arguments of fitfunc.
+    #use 'detection' to guess starting fit parameters?
+    posdiffs=diffs
+    for i in range(0,len(diffs)):
+        temp= diffs[i] < 0
+        posdiffs[i][temp] = 0
+
+    wavefront = eitwaveutils.fit_wavefront(posdiffs, detection)
 
     
     visualize(detection)

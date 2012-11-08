@@ -176,18 +176,22 @@ def fit_wavefront(diffs, detection):
     dims=diffs[0].shape
     answers=[]
     for i in range (0, len(diffs)):
-        img = diffs[i]
-        print("Analysing wavefront in image " + str(i))
-        column_fits=[]
-        #for each column in image, fit along the y-direction a function to find wave parameters
-        for n in range (0,dims[1]):
-            y=img[:,n]
-            y=y.flatten()
-            x=(np.linspace(0,dims[0],num=dims[0])*img.scale['y']) + img.yrange[0]
-            #call Albert's fitting function
-            result = util.fitfunc(x,y,'Gaussian',[1,1,1])
-            column_fits.append(result)
-        answers.append(column_fits)
+        if (detection[i].max() == 0.0):
+            print("Nothing detected in image " + str(i) + ". Skipping.")
+            answers.append([])
+        else:
+            img = diffs[i]
+            print("Analysing wavefront in image " + str(i))
+            column_fits=[]
+            #for each column in image, fit along the y-direction a function to find wave parameters
+            for n in range (0,dims[1]):
+                y=img[:,n]
+                y=y.flatten()
+                x=(np.linspace(0,dims[0],num=dims[0])*img.scale['y']) + img.yrange[0]
+                #call Albert's fitting function
+                result = util.fitfunc(x,y,'Gaussian',[1,1,1])
+                column_fits.append(result)
+            answers.append(column_fits)
     return answers
 
 def fillLine(pos1,pos2,img):

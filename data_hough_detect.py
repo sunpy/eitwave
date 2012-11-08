@@ -4,13 +4,44 @@ from sim import wave2d
 from skimage.transform import hough
 import scipy
 import numpy as np
-import sunpy
+from sunpy.net import hek
+from sunpy.net import helioviewer
+from sunpy.time import TimeRange
+from sunpy.time import parse_time
 import os
 import eitwaveutils
-
-
+from datetime import timedelta
 
 def main():
+
+    # Time range we are interested in
+    time_range = TimeRange('2011/06/01','2011/06/02')
+    # Query the HEK for flare information we need
+    client = hek.HEKClient()
+    hek_result = client.query(hek.attrs.Time('2011/06/01','2011/06/02'),
+                              hek.attrs.EventType('FL'),
+                              hek.attrs.FRM.Name=='SEC standard')
+    
+    #vals = eitwaveutils.goescls2number( [hek['fl_goescls'] for hek in hek_result] )
+    #flare_strength_index = sorted(range(len(vals)), key=vals.__getitem__)
+
+    # Download all the JP2 files for the duration of the event
+    hv = helioviewer.HelioviewerClient()
+    for flare in hek_result:
+        start_time = parse_time(flare['event_starttime'])
+        end_time = parse_time(flare['event_endtime'])
+        jp2_list = []
+        this_time = start_time
+        while this_time <= end_time:
+            jp2 = hv.download_jp2(this_time, observatory='SDO', 
+                                  instrument='AIA', detector='AIA',
+                                  measurement='193',
+                                  directory = '~')
+            if not(jp2 in jp2_list):
+                jp2_list.append(jp2)
+                
+            this_time = this_time + timedelta(seconds = 6)
+
 
     m2deg = 360./(2*3.1415926*6.96e8)
     params = {

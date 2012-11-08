@@ -7,14 +7,15 @@ import numpy as np
 import sunpy
 import os
 import eitwaveutils
+import util
 
 
 def main():
 
     m2deg = 360./(2*3.1415926*6.96e8)
     params = {
-              "epi_lat": -30., #degrees, HG latitude of wave epicenter
-              "epi_lon": 30., #degrees, HG longitude of wave epicenter
+              "epi_lat": 30., #degrees, HG latitude of wave epicenter
+              "epi_lon": 45., #degrees, HG longitude of wave epicenter
               #HG grid, probably would only want to change the bin sizes
               "lat_min": -90.,
               "lat_max": 90.,
@@ -82,11 +83,11 @@ def main():
     # Lots of big images.  Need to be smart about how to handle the data
     
     # load in the data with a single EIT wave
-    filelist = eitwaveutils.loaddata("/Users/ainglis/physics/eitwave_data/",
+    filelist = eitwaveutils.loaddata("/Users/ainglis/physics/eitwave_data/test_data/",
                                      '.fits')
 
     # read in files and accumulate them
-    maps = eitwaveutils.accumulate(filelist[0:20], accum=2, super=4, verbose=True)
+    maps = eitwaveutils.accumulate(filelist[0:20], accum=1, super=4, verbose=True)
 
     # Unravel the maps
     new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
@@ -113,11 +114,18 @@ def main():
     detection = eitwaveutils.cleanup(detection,
                                      size_thresh=50,
                                      inv_thresh=8)
-    
-    
+
+    #If there is anything left in 'detection', fit a function to the original
+    #diffmaps in the region defined by 'detection'. Simplest case: fit a Gaussian
+    #in the y-direction for some x or range of x.
+    #indices=diffs < 0
+    #posdiffs=diffs
+    #posdiffs[indices] = 0
+    wavefront = eitwaveutils.fit_wavefront(diffs, detection)
+
     
     visualize(detection)
-    return maps, new_maps, diffs, threshold_maps, binary_maps, detection
+    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront
 
 if __name__ == '__main__':
     main()

@@ -170,6 +170,26 @@ def cleanup(detection, size_thresh=50, inv_thresh=8):
  
     return cleaned
 
+def fit_wavefront(diffs, detection):
+    """Fit the wavefront that has been detected by the hough transform.
+    Simplest case is to fit along the y-direction for some x or range of x."""
+    dims=diffs[0].shape
+    answers=[]
+    for i in range (0, len(diffs)):
+        img = diffs[i]
+        print("Analysing wavefront in image " + str(i))
+        column_fits=[]
+        #for each column in image, fit along the y-direction a function to find wave parameters
+        for n in range (0,dims[1]):
+            y=img[:,n]
+            y=y.flatten()
+            x=(np.linspace(0,dims[0],num=dims[0])*img.scale['y']) + img.yrange[0]
+            #call Albert's fitting function
+            result = util.fitfunc(x,y,'Gaussian',[1,1,1])
+            column_fits.append(result)
+        answers.append(column_fits)
+    return answers
+
 def fillLine(pos1,pos2,img):
     shape=img.shape
     ny = shape[0]

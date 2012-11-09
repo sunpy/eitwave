@@ -100,9 +100,8 @@ def hough_detect(diffs, vote_thresh=12):
     """ Use the Hough detection method to detect lines in the data.
     With enough lines, you can fill in the wave front."""
     detection=[]
-    
+    print("Performing hough transform on binary maps...")
     for img in diffs:
-
         # Perform the hough transform on each of the difference maps
         transform, theta, d = hough(img)
     
@@ -192,15 +191,17 @@ def fit_wavefront(diffs, detection):
             x=(np.linspace(0,dims[0],num=dims[0])*img.scale['y']) + img.yrange[0]
             
             #use 'detection' to guess the centroid of the Gaussian fit function
-            guess_position=detection[i].argmax()
-            guess_position=np.unravel_index(guess_position,detection[i].shape)
-
-            guess_params=[1,x[guess_position[0]],5]
+            guess_index=detection[i].argmax()
+            guess_index=np.unravel_index(guess_index,detection[i].shape)
+            guess_position=x[guess_index[0]]
             
             print("Analysing wavefront in image " + str(i))
             column_fits=[]
             #for each column in image, fit along the y-direction a function to find wave parameters
             for n in range (0,dims[1]):
+                #guess the amplitude of the Gaussian fit from the difference image
+                guess_amp=np.float(img[guess_index[0],n])
+                guess_params=[guess_amp,guess_position,5]
                 y=img[:,n]
                 y=y.flatten()                
                 #call Albert's fitting function
@@ -216,8 +217,18 @@ def fit_wavefront(diffs, detection):
             answers.append(column_fits)
             wavefront_maps.append(fit_map)
 
-    
-    return wavefront_maps
+    #now get the mean values of the fitted wavefront, averaged over all x
+    average_fits=[]
+    for ans in answers:
+        g=[]
+        for k in range(0,len(ans)):
+            #ans[:,1] contains a pass/fail integer. Keep successes (==1), discard the rest
+            if ans[k][1] == 1:
+                tmp=ans[k][0]
+                g.append(tmp)
+        #get the mean of each fit parameter for this image and store it
+        average_fits.append(np.mean(g,axis=0))
+    return average_fits, wavefront_maps
 
 
     

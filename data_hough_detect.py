@@ -97,7 +97,7 @@ def main():
 
     #determine the threshold to apply to the difference maps.
     #diffs > diff_thresh will be True, otherwise False.
-    threshold_maps = eitwaveutils.map_threshold(new_maps,factor=1) 
+    threshold_maps = eitwaveutils.map_threshold(new_maps,factor=0.7) 
 
     # transform difference maps into binary maps
     binary_maps = eitwaveutils.map_binary(diffs, threshold_maps)
@@ -126,7 +126,6 @@ def main():
         posdiffs[i][temp] = 0
 
     wavefront = eitwaveutils.fit_wavefront(posdiffs, detection)
-
     
     visualize(detection)
     return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront

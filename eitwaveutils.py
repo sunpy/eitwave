@@ -175,24 +175,52 @@ def fit_wavefront(diffs, detection):
     Simplest case is to fit along the y-direction for some x or range of x."""
     dims=diffs[0].shape
     answers=[]
+    wavefront_maps=[]
     for i in range (0, len(diffs)):
         if (detection[i].max() == 0.0):
+             #if the 'detection' array is empty then skip this image
+            fit_map=sunpy.make_map(np.zeros(dims),diffs[0]._original_header)
             print("Nothing detected in image " + str(i) + ". Skipping.")
             answers.append([])
+            wavefront_maps.append(fit_map)
         else:
+            #if the 'detection' array is not empty, then fit the wavefront in the image
             img = diffs[i]
+            fit_map=np.zeros(dims)
+
+            #get the independent variable for the columns in the image
+            x=(np.linspace(0,dims[0],num=dims[0])*img.scale['y']) + img.yrange[0]
+            
+            #use 'detection' to guess the centroid of the Gaussian fit function
+            guess_position=detection[i].argmax()
+            guess_position=np.unravel_index(guess_position,detection[i].shape)
+
+            guess_params=[1,x[guess_position[0]],5]
+            
             print("Analysing wavefront in image " + str(i))
             column_fits=[]
             #for each column in image, fit along the y-direction a function to find wave parameters
             for n in range (0,dims[1]):
                 y=img[:,n]
-                y=y.flatten()
-                x=(np.linspace(0,dims[0],num=dims[0])*img.scale['y']) + img.yrange[0]
+                y=y.flatten()                
                 #call Albert's fitting function
-                result = util.fitfunc(x,y,'Gaussian',[1,1,1])
+                result = util.fitfunc(x,y,'Gaussian',guess_params)
                 column_fits.append(result)
+
+                #draw the Gaussian fit for the current column and save it in fit_map
+                gaussian = lambda p,x: p[0]/np.sqrt(2.*np.pi)/p[2]*np.exp(-((x-p[1])/p[2])**2/2.)
+                fit_column = gaussian(result[0],x)
+                fit_map[:,n] = fit_column
+            #save the fit parameters for the image in 'answers' and the drawn map in 'wavefront_maps'
+            fit_map=sunpy.make_map(fit_map,diffs[0]._original_header)
             answers.append(column_fits)
-    return answers
+            wavefront_maps.append(fit_map)
+
+    
+    return wavefront_maps
+
+
+    
 
 def fillLine(pos1,pos2,img):
     shape=img.shape

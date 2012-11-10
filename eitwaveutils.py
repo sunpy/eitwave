@@ -9,8 +9,7 @@ import scipy
 import numpy as np
 import sunpy
 import os
-import util2
-import types
+import util
 
 from sunpy.net import hek
 from sunpy.time import parse_time
@@ -180,19 +179,4 @@ def htLine(distance,angle,img):
         img[:,distance] = 1
 
     return img
-
-def goescls2number(gcls):
-    """Convert GOES classes into number to aid size comparison"""
-    def calc(gcls):
-        powers_of_ten = {'A':1, 'B':10, 'C':100, 'M':1000, 'X':10000}
-        power = gcls[0].upper()
-        if power in powers_of_ten:
-            return powers_of_ten[power] * float(gcls[1:])
-        else:
-            return None
-
-    if isinstance(gcls, types.StringType):
-        return calc(gcls)
-    if isinstance(gcls, types.ListType):
-        return [calc(x) for x in gcls]
 

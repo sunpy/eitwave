@@ -201,16 +201,36 @@ def fit_wavefront(diffs, detection):
             for n in range (0,dims[1]):
                 #guess the amplitude of the Gaussian fit from the difference image
                 guess_amp=np.float(img[guess_index[0],n])
+                
+                #put the guess input parameters into a vector
                 guess_params=[guess_amp,guess_position,5]
+
+                #get the current image column
                 y=img[:,n]
                 y=y.flatten()                
                 #call Albert's fitting function
                 result = util.fitfunc(x,y,'Gaussian',guess_params)
-                column_fits.append(result)
 
-                #draw the Gaussian fit for the current column and save it in fit_map
+                #define a Gaussian function. Messy - clean this up later
                 gaussian = lambda p,x: p[0]/np.sqrt(2.*np.pi)/p[2]*np.exp(-((x-p[1])/p[2])**2/2.)
-                fit_column = gaussian(result[0],x)
+                
+                #Draw the Gaussian fit for the current column and save it in fit_map
+                #save the best-fit parameters in column_fits
+                #only want to store the successful fits, discard the others.
+                #result contains a pass/fail integer. Keep successes ( ==1).
+                if result[1] == 1:
+                    column_fits.append(result)
+                    fit_column = gaussian(result[0],x)
+                else:
+                    #if the fit failed then save as zeros/null values
+                    result=[]
+                    column_fits.append(result)
+                    fit_column = np.zeros(len(x))
+                
+                #draw the Gaussian fit for the current column and save it in fit_map
+                #gaussian = lambda p,x: p[0]/np.sqrt(2.*np.pi)/p[2]*np.exp(-((x-p[1])/p[2])**2/2.)
+                    
+                #save the drawn column in fit_map
                 fit_map[:,n] = fit_column
             #save the fit parameters for the image in 'answers' and the drawn map in 'wavefront_maps'
             fit_map=sunpy.make_map(fit_map,diffs[0]._original_header)
@@ -218,20 +238,43 @@ def fit_wavefront(diffs, detection):
             wavefront_maps.append(fit_map)
 
     #now get the mean values of the fitted wavefront, averaged over all x
-    average_fits=[]
-    for ans in answers:
-        g=[]
-        for k in range(0,len(ans)):
-            #ans[:,1] contains a pass/fail integer. Keep successes (==1), discard the rest
-            if ans[k][1] == 1:
-                tmp=ans[k][0]
-                g.append(tmp)
-        #get the mean of each fit parameter for this image and store it
-        average_fits.append(np.mean(g,axis=0))
-    return average_fits, wavefront_maps
+    #average_fits=[]
+    #for ans in answers:
+    #   cleaned_answers=[]
+    #  for k in range(0,len(ans)):
+    #      #ans[:,1] contains a pass/fail integer. Keep successes (==1), discard the rest
+    #      if ans[k][1] == 1:
+    #          tmp=ans[k][0]
+    #          cleaned_answers.append(tmp)
+    #      else:
+    #          cleaned_answers.append([])
+    #  #get the mean of each fit parameter for this image and store it
+    #  #average_fits.append(np.mean(g,axis=0))
+        
+    return answers, wavefront_maps
 
-
-    
+def wavefront_velocity(answers):
+    """calculate wavefront velocity based on fit parameters for each column of an image or set of images"""
+    velocity=[]
+    for i in range(0,len(answers)):
+        v=[]
+        if i==0:
+            velocity.append([])
+        else:
+            #skip blank entries of answers
+            if answers[i] == [] or answers[i-1] == []:
+                velocity.append([])
+            else:
+                for j in range(0,len(answers[i])):
+                    #want to ignore null values for wave position
+                    if answers[i][j] == [] or answers[i-1][j] == []:
+                        vel=[]
+                    else:             
+                        vel=answers[i][j][0][1] - answers[i-1][j][0][1]
+                    v.append(vel)
+                    velocity.append(v)
+    return velocity
+            
 
 def fillLine(pos1,pos2,img):
     shape=img.shape

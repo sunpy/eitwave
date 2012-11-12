@@ -126,9 +126,11 @@ def main():
         posdiffs[i][temp] = 0
 
     wavefront = eitwaveutils.fit_wavefront(posdiffs, detection)
+
+    velocity = eitwaveutils.wavefront_velocity(wavefront[0])
     
     visualize(detection)
-    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront
+    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity
 
 if __name__ == '__main__':
     main()

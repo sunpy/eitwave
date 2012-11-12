@@ -272,7 +272,7 @@ def wavefront_velocity(answers):
                     else:             
                         vel=answers[i][j][0][1] - answers[i-1][j][0][1]
                     v.append(vel)
-                    velocity.append(v)
+                velocity.append(v)
     return velocity
             
 

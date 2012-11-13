@@ -29,14 +29,14 @@ def main():
     hv = helioviewer.HelioviewerClient()
     for flare in hek_result:
         start_time = parse_time(flare['event_starttime'])
-        end_time = parse_time(flare['event_endtime'])
+        end_time = start_time + timedelta(minutes=60)
         jp2_list = []
         this_time = start_time
         while this_time <= end_time:
             jp2 = hv.download_jp2(this_time, observatory='SDO', 
                                   instrument='AIA', detector='AIA',
                                   measurement='193',
-                                  directory = '~')
+                                  directory = '~/Data/eitwave/jp2/AGU/')
             if not(jp2 in jp2_list):
                 jp2_list.append(jp2)
                 

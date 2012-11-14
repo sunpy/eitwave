@@ -1,6 +1,7 @@
 import sunpy
 from sunpy import wcs
 from scipy.interpolate import griddata
+from scipy import optimize
 import numpy as np
 #from sim.wave2d.wave2d import euler_zyz
 #from matplotlib import colors
@@ -209,3 +210,24 @@ def euler_zyz(xyz, angles):
     y = (+c1*s3+c2*c3*s1)*xyz[0]+(c1*c3-c2*s1*s3)*xyz[1]+(s1*s2)*xyz[2]
     z = (-c3*s2)*xyz[0]+(s2*s3)*xyz[1]+(c2)*xyz[2]
     return x, y, z
+
+def str2func(function):
+    if isinstance(function, str):
+        if function.lower() == 'gaussian':
+            # p[0] is normalization
+            # p[1] is mean (first raw moment)
+            # p[2] is sigma (square root of second central moment)
+            f = lambda p, x: p[0]/np.sqrt(2.*np.pi)/p[2]*np.exp(-((x-p[1])/p[2])**2/2.)
+        else:
+            raise ValueError
+    return f
+
+def fitfunc(x, y, function, initial, free=None, yerr=None, **kwargs):
+    """Wrapper to scipy.optimize.leastsq to fit data to an arbitrary function."""
+    f = str2func(function) if isinstance(function, str) else function
+    if free is None: free = np.ones(np.shape(initial))
+    if yerr is None: yerr = np.ones(np.shape(y))
+
+    errfunc = lambda p, xp, yp, yerrp: (yp-f(p*free+initial*np.logical_not(free), xp))/yerrp
+
+    return optimize.leastsq(errfunc, initial, args=(x, y, yerr), **kwargs)

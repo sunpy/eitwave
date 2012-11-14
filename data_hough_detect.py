@@ -120,7 +120,8 @@ def main():
     #in the y-direction for some x or range of x.
     #eitwaveutils.fit_wavefront should probably take the arguments of fitfunc.
     #use 'detection' to guess starting fit parameters?
-    posdiffs=diffs
+    
+    posdiffs=copy.deepcopy(diffs)
     for i in range(0,len(diffs)):
         temp= diffs[i] < 0
         posdiffs[i][temp] = 0

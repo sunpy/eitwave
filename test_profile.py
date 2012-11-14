@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 from sim import wave2d
 from visualize import visualize
@@ -11,12 +12,13 @@ params = {
     "cadence": 12., #seconds
     
     "hglt_obs": 0., #degrees
-    "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
+#    "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
+    "rotation": 0., #degrees/s, rigid solar rotation
     
     #Wave parameters that are initial conditions
     "direction": 25., #degrees, measured CCW from HG +latitude
-    "epi_lat": 30., #degrees, HG latitude of wave epicenter
-    "epi_lon": 45., #degrees, HG longitude of wave epicenter
+    "epi_lat": 0., #degrees, HG latitude of wave epicenter
+    "epi_lon": 0., #degrees, HG longitude of wave epicenter
     
     #Wave parameters that can evolve over time
     #The first element is constant in time
@@ -75,7 +77,10 @@ new_wave_maps = []
 
 for wave in wave_maps:
     print("Unraveling map at "+str(wave.date))
-    new_wave_maps += [util.map_hpc_to_hg_rotate(wave, epi_lon = 45., epi_lat = 30., xbin = 5, ybin = 0.2)]
+    new_wave_maps += [util.map_hpc_to_hg_rotate(wave,
+                                                epi_lon = params["epi_lon"],
+                                                epi_lat = params["epi_lat"],
+                                                xbin = 5, ybin = 0.2)]
 
 lat_min = params["lat_min"]
 cadence = params["cadence"]
@@ -127,19 +132,20 @@ for wave in new_wave_maps:
     m2 += [p[1]]
     s2 += [p[2]]
 
-"""
+plt.figure()
 plt.plot(n0)
 plt.plot(n1,'+')
 plt.plot(n2,'x')
 
+plt.figure()
 plt.plot(m0)
 plt.plot(m1,'+')
 plt.plot(m2,'x')
 
+plt.figure()
 plt.plot(s0)
 plt.plot(s1,'+')
 plt.plot(s2,'x')
-"""
 
 xx0 = np.linspace(params["lat_min"],params["lat_max"],num=10000,endpoint=True)
 
@@ -154,7 +160,8 @@ data2[np.isnan(data2)] = 0.
 yy2 = np.sum(data2, axis=1)
 xx2 = np.linspace(wave.yrange[0],wave.yrange[1],wave.shape[0])+wave.scale['y']/2.
 
-"""
+
+plt.figure()
 plt.plot(xx0,util.str2func('gaussian')([n0[3],m0[3],s0[3]],xx0))
 plt.plot(xx1,yy1,'+')
 plt.plot(xx2,yy2,'x')

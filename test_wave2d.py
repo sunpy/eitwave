@@ -31,7 +31,7 @@ params = {
     "noise_sdev": 1.,
     
     #Structured noise parameters
-    "struct_type": None, #can be None, "Arcs", or "Random"
+    "struct_type": "None", #can be None, "Arcs", or "Random"
     "struct_scale": 5.,
     "struct_num": 10,
     "struct_seed": 13092,

@@ -121,18 +121,24 @@ def main():
     #in the y-direction for some x or range of x.
     #eitwaveutils.fit_wavefront should probably take the arguments of fitfunc.
     #use 'detection' to guess starting fit parameters?
-    
+
+    #get just the positive elements of the difference map. Perform fitting on these positive diffmaps.
     posdiffs=copy.deepcopy(diffs)
     for i in range(0,len(diffs)):
         temp= diffs[i] < 0
         posdiffs[i][temp] = 0
 
+    #fit a function to the difference maps in the cases where there has been a detection
     wavefront = eitwaveutils.fit_wavefront(posdiffs, detection)
-
+    
+    #strip out the velocity information from the wavefront fitting
     velocity = eitwaveutils.wavefront_velocity(wavefront[0])
+
+    #strip out the position and width information from the wavefront fitting
+    pos_width = eitwaveutils.wavefront_position_and_width(wavefront[0])
     
     visualize(detection)
-    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity
+    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity, pos_width
 
 if __name__ == '__main__':
     main()

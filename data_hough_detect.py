@@ -36,7 +36,8 @@ def main():
             jp2 = hv.download_jp2(this_time, observatory='SDO', 
                                   instrument='AIA', detector='AIA',
                                   measurement='193',
-                                  directory = '~/Data/eitwave/jp2/AGU/')
+                                  directory = '~/Data/eitwave/jp2/AGU/',
+                                  overwrite = True)
             if not(jp2 in jp2_list):
                 jp2_list.append(jp2)
                 

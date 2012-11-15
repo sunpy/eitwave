@@ -274,7 +274,31 @@ def wavefront_velocity(answers):
                     v.append(vel)
                 velocity.append(v)
     return velocity
-            
+
+def wavefront_position_and_width(answers):
+    """get wavefront position and width based on fit parameters for each column of an image or set of images"""
+    position=[]
+    width=[]
+    for i in range(0,len(answers)):
+        p=[]
+        w=[]
+        if answers[i] == []:
+            position.append([])
+            width.append([])
+        else:
+            for j in range(0,len(answers[i])):
+                #want to ignore null values for wave position
+                if answers[i][j] == []:
+                    pos=[]
+                    wid=[]
+                else:
+                    pos=answers[i][j][0][1]
+                    wid=answers[i][j][0][2]
+                p.append(pos)
+                w.append(wid)
+            position.append(p)
+            width.append(w)
+    return position,width
 
 def fillLine(pos1,pos2,img):
     shape=img.shape

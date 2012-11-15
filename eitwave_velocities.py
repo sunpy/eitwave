@@ -16,6 +16,21 @@ def velocity_histogram(velocity):
         else:
             print('No velocity data for frame ' + str(i) + '. Skipping.')
 
+def width_histogram(width):
+    for i in range(0,len(width)):
+        if width[i] != []:
+            print('Plotting width histogram for frame ' + str(i))
+            wid=filter(None,width[i])
+            plt.hist(wid,range=[0,20],bins=60)
+            plt.title('Width Histogram for frame ' + str(i))
+            plt.xlabel('Width (deg)')
+            plt.ylabel('N')
+            plt.show()
+            plt.pause(0.5)
+        else:
+            print('No width data for frame ' + str(i) + '. Skipping')
+    
+
 def velocity_polyfit(position, column):
     #wrong! Want to input positions, not velocities.
     pos=[]

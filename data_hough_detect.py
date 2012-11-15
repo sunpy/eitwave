@@ -8,6 +8,7 @@ import sunpy
 import os
 import eitwaveutils
 import util
+import copy
 
 
 def main():

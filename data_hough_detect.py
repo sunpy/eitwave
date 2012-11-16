@@ -14,13 +14,17 @@ from datetime import timedelta
 
 def main():
 
+    # type of data we want to use
     data_type = '.jp2'
+
+    # where to store those data
     data_storage = "/Users/ainglis/physics/eitwave_data/test_data/"
+
+    # time range we want
     time_range = TimeRange('2011/06/01','2011/06/02')
 
-    eitwaveutils.acquire_data(data_storage, data_type, time_range)
-
-
+    # acquire the data
+    hek_results, filelist = eitwaveutils.acquire_data(data_storage, data_type, time_range)
 
 
     m2deg = 360./(2*3.1415926*6.96e8)
@@ -94,7 +98,7 @@ def main():
     # Lots of big images.  Need to be smart about how to handle the data
     
     # load in the data with a single EIT wave
-    filelist = eitwaveutils.loaddata(data_storage, data_type)
+    #filelist = eitwaveutils.loaddata(data_storage, data_type)
 
     # read in files and accumulate them
     maps = eitwaveutils.accumulate(filelist[0:20], accum=1, super=4, verbose=True)

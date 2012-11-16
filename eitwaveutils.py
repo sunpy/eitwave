@@ -16,8 +16,8 @@ from sunpy.time import TimeRange
 from sunpy.time import parse_time
 from datetime import timedelta
 
-def acquire(directory, extension, time_range):
-
+def acquire(directory, extension, time_range, duration=60):
+    """Acquire the HEK flare data and the image data for the EIT wave detection"""
     # Query the HEK for flare information we need
     client = hek.HEKClient()
     hek_result = client.query(hek.attrs.Time(time_range.t1, time_range.t2),
@@ -27,36 +27,48 @@ def acquire(directory, extension, time_range):
     #vals = eitwaveutils.goescls2number( [hek['fl_goescls'] for hek in hek_result] )
     #flare_strength_index = sorted(range(len(vals)), key=vals.__getitem__)
 
-    # Download all the JP2 files for the duration of the event
-    hv = helioviewer.HelioviewerClient()
+    # 
+    data_list = []
     for flare in hek_result:
-        start_time = parse_time(flare['event_starttime'])
-        end_time = start_time + timedelta(minutes=60)
-        jp2_list = []
-        this_time = start_time
-        while this_time <= end_time:
-            jp2 = hv.download_jp2(this_time, observatory='SDO', 
-                                  instrument='AIA', detector='AIA',
-                                  measurement='193',
-                                  directory = '~/Data/eitwave/jp2/AGU/',
-                                  overwrite = True)
-            if not(jp2 in jp2_list):
-                jp2_list.append(jp2)
-                
-            this_time = this_time + timedelta(seconds = 6)
-    
+        data_range = TimeRange(parse_time(flare['event_starttime']),
+                               parse_time(flare['event_starttime']) + 
+                               timedelta(minutes=duration))
+        if extension == '.jp2':
+            data = acquire_jp2(directory, data_range)
+        if extension == '.fits':
+            data = []
+        data_list.append(data)
+    # Return the flare list from the HEK and a list of files for each flare in
+    # the HEK flare list
+    return hek_result, data_list
+
+def acquire_jp2(directory, time_range):
+    """Acquire Helioviewer JPEG2000 files between the two specified times"""
+    hv = helioviewer.HelioviewerClient()
+    jp2_list = []
+    this_time = time_range.t1
+    while this_time <= time_range.t2:
+        jp2 = hv.download_jp2(this_time, observatory='SDO',
+                              instrument='AIA', detector='AIA',
+                              measurement='193',
+                              directory=directory,
+                              overwrite=True)
+        if not(jp2 in jp2_list):
+            jp2_list.append(jp2)
+        this_time = this_time + timedelta(seconds = 6)
+    return jp2_list
 
 def loaddata(directory, extension):
     """ get the file list and sort it.  For well behaved file names the file
     name list is returned ordered by time"""
     lst = []
-    dir = os.path.expanduser(directory)
-    for f in os.listdir(dir):
+    loc = os.path.expanduser(directory)
+    for f in os.listdir(loc):
         if f.endswith(extension):
-            lst.append(os.path.join(dir,f))
+            lst.append(os.path.join(loc,f))
     return sorted(lst)
 
-def accumulate(filelist, accum=2, super=4, verbose=False):
+def accumulate(filelist, accum=2, nsuper=4, verbose=False):
     """Add up data in time and space. Accumulate 'accum' files in time, and 
     then form the images into super by super superpixels."""
     # counter for number of files.
@@ -71,7 +83,7 @@ def accumulate(filelist, accum=2, super=4, verbose=False):
             if verbose:
                 print('File %(#)i out of %(nfiles)i' % {'#':i+j, 'nfiles':nfiles})
                 print('Reading in file '+filename)
-            map1 = (sunpy.make_map(filename)).superpixel((super,super))
+            map1 = (sunpy.make_map(filename)).superpixel((nsuper, nsuper))
             if i == 0:
                 m = map1
             else:

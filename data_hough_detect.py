@@ -24,7 +24,7 @@ def main():
     time_range = TimeRange('2011/06/01','2011/06/02')
 
     # acquire the data
-    hek_results, filelist = eitwaveutils.acquire_data(data_storage, data_type, time_range)
+    hek_result, filelist = eitwaveutils.acquire_data(data_storage, data_type, time_range)
 
 
     m2deg = 360./(2*3.1415926*6.96e8)

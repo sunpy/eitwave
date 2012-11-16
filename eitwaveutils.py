@@ -16,7 +16,7 @@ from sunpy.time import TimeRange
 from sunpy.time import parse_time
 from datetime import timedelta
 
-def acquire(directory, extension, time_range, duration=60):
+def acquire_data(directory, extension, time_range, duration=60, verbose=True):
     """Acquire the HEK flare data and the image data for the EIT wave detection"""
     # Query the HEK for flare information we need
     client = hek.HEKClient()
@@ -26,18 +26,23 @@ def acquire(directory, extension, time_range, duration=60):
     
     #vals = eitwaveutils.goescls2number( [hek['fl_goescls'] for hek in hek_result] )
     #flare_strength_index = sorted(range(len(vals)), key=vals.__getitem__)
+    if verbose:
+        print('Number of flares found = '+str(len(hek_result)))
 
-    # 
+    # Get the data for each flare.
     data_list = []
-    for flare in hek_result:
-        data_range = TimeRange(parse_time(flare['event_starttime']),
-                               parse_time(flare['event_starttime']) + 
-                               timedelta(minutes=duration))
-        if extension == '.jp2':
-            data = acquire_jp2(directory, data_range)
-        if extension == '.fits':
-            data = []
-        data_list.append(data)
+    if len(hek_result) > 0:
+        for index, flare in enumerate(hek_result):
+            if verbose:
+                print('Acquiring data for flare number '+str(index))
+            data_range = TimeRange(parse_time(flare['event_starttime']),
+                                   parse_time(flare['event_starttime']) + 
+                                   timedelta(minutes=duration))
+            if extension.lower() == '.jp2':
+                data = acquire_jp2(directory, data_range)
+            if extension.lower() in ('.fits', '.fts'):
+                data = []
+            data_list.append(data)
     # Return the flare list from the HEK and a list of files for each flare in
     # the HEK flare list
     return hek_result, data_list

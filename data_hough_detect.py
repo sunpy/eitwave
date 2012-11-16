@@ -18,19 +18,21 @@ def main():
     data_type = '.jp2'
 
     # where to store those data
-    data_storage = "/Users/ainglis/physics/eitwave_data/test_data/"
+    data_storage = "~/Data/eitwave/jp2/AGU/"
 
     # time range we want
     time_range = TimeRange('2011/06/01','2011/06/02')
 
+
+    m2deg = 360./(2*3.1415926*6.96e8)
+    
     # acquire the data
     hek_result, filelist = eitwaveutils.acquire_data(data_storage, data_type, time_range)
 
-
-    m2deg = 360./(2*3.1415926*6.96e8)
-    params = {
-              "epi_lat": 30., #degrees, HG latitude of wave epicenter
-              "epi_lon": 45., #degrees, HG longitude of wave epicenter
+    for hek in hek_result:
+        
+        params = {"epi_lat": hek['event_coord1'], #30., #degrees, HG latitude of wave epicenter
+              "epi_lon": hek['event_coord2'], #45., #degrees, HG longitude of wave epicenter
               #HG grid, probably would only want to change the bin sizes
               "lat_min": -90.,
               "lat_max": 90.,

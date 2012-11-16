@@ -198,7 +198,7 @@ def simulate_raw(params, verbose = False):
         #Could be accomplished with np.dot() without casting as matrices?
         wave = np.mat(wave_1d).T*np.mat(wave_lon)
         
-        wave_maps += [sunpy.map.BaseMap(wave, header)]
+        wave_maps += [sunpy.map.make_map(wave, header)]
         wave_maps[istep].name = "Simulation"
         wave_maps[istep].date = parse_time("2011-11-11")+datetime.timedelta(0, istep*cadence)
     

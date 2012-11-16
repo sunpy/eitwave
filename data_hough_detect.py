@@ -4,50 +4,29 @@ from sim import wave2d
 from skimage.transform import hough
 import scipy
 import numpy as np
-from sunpy.net import hek
-from sunpy.net import helioviewer
 from sunpy.time import TimeRange
 from sunpy.time import parse_time
 import os
 import eitwaveutils
+import util
+import copy
 from datetime import timedelta
 
 def main():
 
-    # Time range we are interested in
+    data_type = '.jp2'
+    data_storage = "/Users/ainglis/physics/eitwave_data/test_data/"
     time_range = TimeRange('2011/06/01','2011/06/02')
-    # Query the HEK for flare information we need
-    client = hek.HEKClient()
-    hek_result = client.query(hek.attrs.Time('2011/06/01','2011/06/02'),
-                              hek.attrs.EventType('FL'),
-                              hek.attrs.FRM.Name=='SEC standard')
-    
-    #vals = eitwaveutils.goescls2number( [hek['fl_goescls'] for hek in hek_result] )
-    #flare_strength_index = sorted(range(len(vals)), key=vals.__getitem__)
 
-    # Download all the JP2 files for the duration of the event
-    hv = helioviewer.HelioviewerClient()
-    for flare in hek_result:
-        start_time = parse_time(flare['event_starttime'])
-        end_time = start_time + timedelta(minutes=60)
-        jp2_list = []
-        this_time = start_time
-        while this_time <= end_time:
-            jp2 = hv.download_jp2(this_time, observatory='SDO', 
-                                  instrument='AIA', detector='AIA',
-                                  measurement='193',
-                                  directory = '~/Data/eitwave/jp2/AGU/',
-                                  overwrite = True)
-            if not(jp2 in jp2_list):
-                jp2_list.append(jp2)
-                
-            this_time = this_time + timedelta(seconds = 6)
+    eitwaveutils.acquire_data(data_storage, data_type, time_range)
+
+
 
 
     m2deg = 360./(2*3.1415926*6.96e8)
     params = {
-              "epi_lat": 40., #degrees, HG latitude of wave epicenter
-              "epi_lon": -20., #degrees, HG longitude of wave epicenter
+              "epi_lat": 30., #degrees, HG latitude of wave epicenter
+              "epi_lon": 45., #degrees, HG longitude of wave epicenter
               #HG grid, probably would only want to change the bin sizes
               "lat_min": -90.,
               "lat_max": 90.,
@@ -115,36 +94,60 @@ def main():
     # Lots of big images.  Need to be smart about how to handle the data
     
     # load in the data with a single EIT wave
-    filelist = eitwaveutils.loaddata("~/Data/eitwave_data/jp2/20110601_02_04/",
-                                     '.jp2')
+    filelist = eitwaveutils.loaddata(data_storage, data_type)
 
     # read in files and accumulate them
-    maps = eitwaveutils.accumulate(filelist[0:10], accum=2, super=4, verbose=True)
+    maps = eitwaveutils.accumulate(filelist[0:20], accum=1, super=4, verbose=True)
 
     # Unravel the maps
     new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
     
     # calculate the differences
-    diffs = eitwaveutils.map_diff(new_maps, diff_thresh=100)
+    diffs = eitwaveutils.map_diff(new_maps)
+
+    #determine the threshold to apply to the difference maps.
+    #diffs > diff_thresh will be True, otherwise False.
+    threshold_maps = eitwaveutils.map_threshold(new_maps,factor=0.7) 
+
+    # transform difference maps into binary maps
+    binary_maps = eitwaveutils.map_binary(diffs, threshold_maps)
     
     # detection based on the hough transform
-    #detection = eitwaveutils.hough_detect(diffs, vote_thresh=12)
+    detection = eitwaveutils.hough_detect(binary_maps, vote_thresh=12)
     
     # detection based on the probabilistic hough transform.  Takes the
     # keywords of the probabilistic hough transform - see the documentation
     # of skimage.transform.probabilistic_hough (scikit-image.org) 
-    detection = eitwaveutils.prob_hough_detect(diffs)
+    #detection = eitwaveutils.prob_hough_detect(binary_maps,threshold=10)
     
     
     detection = eitwaveutils.cleanup(detection,
                                      size_thresh=50,
                                      inv_thresh=8)
-    
 
+    #If there is anything left in 'detection', fit a function to the original
+    #diffmaps in the region defined by 'detection'. Simplest case: fit a Gaussian
+    #in the y-direction for some x or range of x.
+    #eitwaveutils.fit_wavefront should probably take the arguments of fitfunc.
+    #use 'detection' to guess starting fit parameters?
+
+    #get just the positive elements of the difference map. Perform fitting on these positive diffmaps.
+    posdiffs=copy.deepcopy(diffs)
+    for i in range(0,len(diffs)):
+        temp= diffs[i] < 0
+        posdiffs[i][temp] = 0
+
+    #fit a function to the difference maps in the cases where there has been a detection
+    wavefront = eitwaveutils.fit_wavefront(posdiffs, detection)
     
+    #strip out the velocity information from the wavefront fitting
+    velocity = eitwaveutils.wavefront_velocity(wavefront[0])
+
+    #strip out the position and width information from the wavefront fitting
+    pos_width = eitwaveutils.wavefront_position_and_width(wavefront[0])
     
     visualize(detection)
-    return maps, diffs, detection
+    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity, pos_width
 
 if __name__ == '__main__':
     main()

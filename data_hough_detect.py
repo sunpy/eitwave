@@ -29,75 +29,11 @@ def main():
     # acquire the data
     hek_result, filelist = eitwaveutils.acquire_data(data_storage, data_type, time_range)
 
-    for hek in hek_result:
+    for flare in hek_result:
         
-        params = {"epi_lat": hek['event_coord1'], #30., #degrees, HG latitude of wave epicenter
-              "epi_lon": hek['event_coord2'], #45., #degrees, HG longitude of wave epicenter
-              #HG grid, probably would only want to change the bin sizes
-              "lat_min": -90.,
-              "lat_max": 90.,
-              "lat_bin": 0.2,
-              "lon_min": -180.,
-              "lon_max": 180.,
-              "lon_bin": 5.,
-              #    #HPC grid, probably would only want to change the bin sizes
-              "hpcx_min": -1025.,
-              "hpcx_max": 1023.,
-              "hpcx_bin": 2.,
-              "hpcy_min": -1025.,
-              "hpcy_max": 1023.,
-              "hpcy_bin": 2.,
-              "hglt_obs": 0,
-              "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
-              }
-    
-    #params = {
-    #    "cadence": 12., #seconds
-    #    
-    #    "hglt_obs": 0., #degrees
-    #    "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
-    #   
-    #    #Wave parameters that are initial conditions
-    #    "direction": 25., #degrees, measured CCW from HG +latitude
-    #    "epi_lat": 30., #degrees, HG latitude of wave epicenter
-    #    "epi_lon": 45., #degrees, HG longitude of wave epicenter
-    #    
-    #    #Wave parameters that can evolve over time
-    #    #The first element is constant in time
-    #    #The second element (if present) is linear in time
-    #    #The third element (if present) is quadratic in time
-    #    #Be very careful of non-physical behavior
-    #    "width": [90., 1.5], #degrees, full angle in azimuth, centered at 'direction'
-    #    "wave_thickness": [6.0e6*m2deg,6.0e4*m2deg], #degrees, sigma of Gaussian profile in longitudinal direction
-    #    "wave_normalization": [1.], #integrated value of the 1D Gaussian profile
-    #    "speed": [9.33e5*m2deg, -1.495e3*m2deg], #degrees/s, make sure that wave propagates all the way to lat_min for polynomial speed
-    #    
-    #    #Noise parameters
-    #    "noise_type": "Poisson", #can be None, "Normal", or "Poisson"
-    #    "noise_scale": 0.3,
-    #    "noise_mean": 1.,
-    #    "noise_sdev": 1.,
-    #    
-    #    "max_steps": 20,
-    #    
-    #    #HG grid, probably would only want to change the bin sizes
-    #    "lat_min": -90.,
-    #    "lat_max": 90.,
-    #    "lat_bin": 0.2,
-    #    "lon_min": -180.,
-    #    "lon_max": 180.,
-    #    "lon_bin": 5.,
-    #    
-    #    #HPC grid, probably would only want to change the bin sizes
-    #    "hpcx_min": -1025.,
-    #    "hpcx_max": 1023.,
-    #    "hpcx_bin": 2.,
-    #    "hpcy_min": -1025.,
-    #    "hpcy_max": 1023.,
-    #    "hpcy_bin": 2.
-    #}
-    
-    # Lots of big images.  Need to be smart about how to handle the data
+        # Define the transform parameters
+        params = eitwaveutils.params(flare)
+        
     
     # load in the data with a single EIT wave
     #filelist = eitwaveutils.loaddata(data_storage, data_type)

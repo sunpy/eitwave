@@ -1,40 +1,28 @@
 
 from visualize import visualize
-from sim import wave2d
-from skimage.transform import hough
-import scipy
-import numpy as np
-from sunpy.time import TimeRange
-from sunpy.time import parse_time
-import os
 import eitwaveutils
-import util
 import copy
-from datetime import timedelta
+from test_wave2d import test_wave2d
 
-def main():
+def main(source_data='test', time_range=None, algorithm='hough'):
 
-    # type of data we want to use
-    data_type = '.jp2'
+    if source_data == 'test':
+        # where to store those data
+        maps = test_wave2d()
 
-    # where to store those data
-    data_storage = "~/Data/eitwave/jp2/AGU/"
+    if source_data == '.jp2':
+        # where to store those data
+        data_storage = "~/Data/eitwave/jp2/AGU/"
 
-    # time range we want
-    time_range = TimeRange('2011/06/01','2011/06/02')
-
-
-    m2deg = 360./(2*3.1415926*6.96e8)
-    
     # acquire the data
-    hek_result, filelist = eitwaveutils.acquire_data(data_storage, data_type, time_range)
+    hek_result, filelist = eitwaveutils.acquire_data(data_storage, source_data, time_range)
 
-    for flare in hek_result:
-        
+    if hek_result is not None:
         # Define the transform parameters
-        params = eitwaveutils.params(flare)
-        
-    
+        params = eitwaveutils.params(flare = hek_result[0])
+    else:
+        params = eitwaveutils.params(flare = 'test')
+
     # load in the data with a single EIT wave
     #filelist = eitwaveutils.loaddata(data_storage, data_type)
 
@@ -54,15 +42,17 @@ def main():
     # transform difference maps into binary maps
     binary_maps = eitwaveutils.map_binary(diffs, threshold_maps)
     
-    # detection based on the hough transform
-    detection = eitwaveutils.hough_detect(binary_maps, vote_thresh=12)
     
-    # detection based on the probabilistic hough transform.  Takes the
-    # keywords of the probabilistic hough transform - see the documentation
-    # of skimage.transform.probabilistic_hough (scikit-image.org) 
-    #detection = eitwaveutils.prob_hough_detect(binary_maps,threshold=10)
-    
-    
+    if algorithm == 'hough':
+        # detection based on the hough transform
+        detection = eitwaveutils.hough_detect(binary_maps, vote_thresh=12)
+    elif algorithm == 'prob_hough':
+        # detection based on the probabilistic hough transform.  Takes the
+        # keywords of the probabilistic hough transform - see the documentation
+        # of skimage.transform.probabilistic_hough (scikit-image.org) 
+        detection = eitwaveutils.prob_hough_detect(binary_maps, threshold=10)
+
+    # Remove areas that are too small or that don't have enough detections
     detection = eitwaveutils.cleanup(detection,
                                      size_thresh=50,
                                      inv_thresh=8)

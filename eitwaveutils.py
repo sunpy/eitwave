@@ -17,6 +17,9 @@ from sunpy.time import parse_time
 from datetime import timedelta
 
 def params(flare,**kwargs):
+    
+    m2deg = 360./(2*3.1415926*6.96e8)
+
     """ Define the parameters we will use for the unraveling of the maps"""
     params = {"epi_lat": flare['event_coord1'], #30., #degrees, HG latitude of wave epicenter
               "epi_lon": flare['event_coord2'], #45., #degrees, HG longitude of wave epicenter

@@ -15,8 +15,8 @@ def main():
 
     m2deg = 360./(2*3.1415926*6.96e8)
     params = {
-              "epi_lat": 30., #degrees, HG latitude of wave epicenter
-              "epi_lon": 45., #degrees, HG longitude of wave epicenter
+              "epi_lat": -20., #degrees, HG latitude of wave epicenter
+              "epi_lon": -30., #degrees, HG longitude of wave epicenter
               #HG grid, probably would only want to change the bin sizes
               "lat_min": -90.,
               "lat_max": 90.,
@@ -84,15 +84,19 @@ def main():
     # Lots of big images.  Need to be smart about how to handle the data
     
     # load in the data with a single EIT wave
-    filelist = eitwaveutils.loaddata("/Users/ainglis/physics/eitwave_data/test_data/",
-                                     '.fits')
+    filelist = eitwaveutils.loaddata("/Users/ainglis/physics/eitwave_data/20110601_02_04/",
+                                     '.jp2')
 
     # read in files and accumulate them
     maps = eitwaveutils.accumulate(filelist[0:20], accum=1, super=4, verbose=True)
 
     # Unravel the maps
     new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
-    
+
+    #sometimes unravelling maps leads to slight variations in the unraveeled image dimensions.
+    #check dimensions of maps and resample to dimensions of first image in sequence if need be.
+    new_maps = eitwaveutils.check_dims(new_maps)
+        
     # calculate the differences
     diffs = eitwaveutils.map_diff(new_maps)
 

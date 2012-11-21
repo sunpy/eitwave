@@ -63,6 +63,24 @@ def map_unravel(maps, params, verbose=False):
         new_maps += [unraveled]
     return new_maps
 
+def check_dims(new_maps):
+    """ Check the dimensions of unravelled maps for any inconsistencies. Perform a resampling
+    if necessary to maintain consistent dimensions."""
+    #sometimes unravelling maps leads to slight variations in the unraveeled image dimensions.
+    #check dimensions of maps and resample to dimensions of first image in sequence if need be.
+    #note that maps.shape lists the dimensions as (y,x) but maps.resample takes the arguments
+    #as (x,y).
+    ref_dim=new_maps[0].shape[::-1]
+    resampled_maps=[]
+    for i in range(1,len(new_maps)):
+        if new_maps[i].shape[::-1] != ref_dim:
+            tmp=new_maps[i].resample(ref_dim,method='linear')
+            print('Notice: resampling performed on frame ' +str(i) + ' to maintain consistent dimensions.')
+            resampled_maps.append(tmp)
+        else:
+            resampled_maps.append(new_maps[i])
+    return resampled_maps
+
 def linesampleindex(a, b, np=1000):
     """ Get the indices in an array along a line"""
     x, y = np.linspace(a[0],b[0],np), np.linspace(a[1],b[1],np)

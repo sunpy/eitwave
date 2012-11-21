@@ -46,7 +46,6 @@ def velocity_polyfit(position, column):
                 pos.append(position[i][column])
 
     x=np.linspace(1,19,19)
-
     #ignore NaN values
     u=np.isnan(pos)
     u=np.invert(u)
@@ -61,13 +60,21 @@ def velocity_polyfit(position, column):
     w=np.polyfit(x,pos,1)
     #designate p as the polynomial function
     p=np.poly1d(w)
+    print w
+    print p
 
+    #work out the velocity in sensible units
+    vel=w[0]
+    #in km/s
+    vel=(vel*1.21e4 / 12.0)
+    vel=round(vel,2)
     #plot the polynomial fit over the original position data
     plt.title('Velocity linear fit')
     plt.xlabel('Frame')
     plt.ylabel('Position (deg)')
     plt.plot(x,pos,'g.')
     plt.plot(x,p(x),'r-')
+    plt.annotate('Velocity = '+ str(vel) + ' km/s',[10,86])
     plt.show()
 
     

@@ -1,6 +1,7 @@
-import scipy
+from scipy import stats
 import numpy as np
 import matplotlib.pyplot as plt
+import copy
 
 def velocity_histogram(velocity):
     """Plot a histogram of the wavefront velocity values for each eit wave image frame"""
@@ -57,14 +58,19 @@ def velocity_polyfit(position, column):
 
     #perform a polynomial fit to the data (pos). x is the independent variable,
     #and the third parameter is the order of the polynomial.
-    w=np.polyfit(x,pos,1)
+    w=np.polyfit(x,pos,1,full=True)
+    #print w
     #designate p as the polynomial function
-    p=np.poly1d(w)
-    print w
-    print p
+    p=np.poly1d(w[0])
 
+    #try linear regression routine from scipy.stats
+    #slope, intercept, r_value, p_value, std_err = stats.linregress(x,pos)
+    #line = slope*x + intercept
+
+    #print slope, intercept, std_err
     #work out the velocity in sensible units
-    vel=w[0]
+    vel=w[0][0]
+    #vel=copy.copy(slope)
     #in km/s
     vel=(vel*1.21e4 / 12.0)
     vel=round(vel,2)
@@ -74,6 +80,7 @@ def velocity_polyfit(position, column):
     plt.ylabel('Position (deg)')
     plt.plot(x,pos,'g.')
     plt.plot(x,p(x),'r-')
+    #plt.plot(x,line,'r-')
     plt.annotate('Velocity = '+ str(vel) + ' km/s',[10,86])
     plt.show()
 

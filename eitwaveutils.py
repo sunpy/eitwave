@@ -187,6 +187,19 @@ def cleanup(detection, size_thresh=50, inv_thresh=8):
  
     return cleaned
 
+def check_fit(result):
+    """Remove bad fit results that are not caught by the fitting flag. Returns
+    a blank list if the fit is deemed to be bad, otherwise returns the input unchanged."""
+    #check that the location of the wave lies within +90 and -90 degrees
+    if result[0][1] > 90.0 or result[0][1] < -90.0:
+        result=[]
+        return result
+    #check that the width of the wave is not too large (> 15)
+    if result[0][2] > 15.0:
+        result=[]
+        return result
+    return result
+
 def fit_wavefront(diffs, detection):
     """Fit the wavefront that has been detected by the hough transform.
     Simplest case is to fit along the y-direction for some x or range of x."""
@@ -237,8 +250,13 @@ def fit_wavefront(diffs, detection):
                 #only want to store the successful fits, discard the others.
                 #result contains a pass/fail integer. Keep successes ( ==1).
                 if result[1] == 1:
+                    #if we got a pass integer, perform some other checks to eliminate unphysical values
+                    result=check_fit(result)    
                     column_fits.append(result)
-                    fit_column = gaussian(result[0],x)
+                    if result != []:
+                        fit_column = gaussian(result[0],x)
+                    else:
+                        fit_column = np.zeros(len(x))
                 else:
                     #if the fit failed then save as zeros/null values
                     result=[]

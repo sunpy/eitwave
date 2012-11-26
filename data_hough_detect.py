@@ -92,7 +92,11 @@ def main():
 
     # Unravel the maps
     new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
-    
+
+    #sometimes unravelling maps leads to slight variations in the unraveeled image dimensions.
+    #check dimensions of maps and resample to dimensions of first image in sequence if need be.
+    new_maps = eitwaveutils.check_dims(new_maps)
+        
     # calculate the differences
     diffs = eitwaveutils.map_diff(new_maps)
 

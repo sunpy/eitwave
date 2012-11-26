@@ -63,6 +63,24 @@ def map_unravel(maps, params, verbose=False):
         new_maps += [unraveled]
     return new_maps
 
+def check_dims(new_maps):
+    """ Check the dimensions of unravelled maps for any inconsistencies. Perform a resampling
+    if necessary to maintain consistent dimensions."""
+    #sometimes unravelling maps leads to slight variations in the unraveeled image dimensions.
+    #check dimensions of maps and resample to dimensions of first image in sequence if need be.
+    #note that maps.shape lists the dimensions as (y,x) but maps.resample takes the arguments
+    #as (x,y).
+    ref_dim=new_maps[0].shape[::-1]
+    resampled_maps=[]
+    for i in range(1,len(new_maps)):
+        if new_maps[i].shape[::-1] != ref_dim:
+            tmp=new_maps[i].resample(ref_dim,method='linear')
+            print('Notice: resampling performed on frame ' +str(i) + ' to maintain consistent dimensions.')
+            resampled_maps.append(tmp)
+        else:
+            resampled_maps.append(new_maps[i])
+    return resampled_maps
+
 def linesampleindex(a, b, np=1000):
     """ Get the indices in an array along a line"""
     x, y = np.linspace(a[0],b[0],np), np.linspace(a[1],b[1],np)
@@ -169,6 +187,19 @@ def cleanup(detection, size_thresh=50, inv_thresh=8):
  
     return cleaned
 
+def check_fit(result):
+    """Remove bad fit results that are not caught by the fitting flag. Returns
+    a blank list if the fit is deemed to be bad, otherwise returns the input unchanged."""
+    #check that the location of the wave lies within +90 and -90 degrees
+    if result[0][1] > 90.0 or result[0][1] < -90.0:
+        result=[]
+        return result
+    #check that the width of the wave is not too large (> 15)
+    if result[0][2] > 15.0:
+        result=[]
+        return result
+    return result
+
 def fit_wavefront(diffs, detection):
     """Fit the wavefront that has been detected by the hough transform.
     Simplest case is to fit along the y-direction for some x or range of x."""
@@ -219,8 +250,13 @@ def fit_wavefront(diffs, detection):
                 #only want to store the successful fits, discard the others.
                 #result contains a pass/fail integer. Keep successes ( ==1).
                 if result[1] == 1:
+                    #if we got a pass integer, perform some other checks to eliminate unphysical values
+                    result=check_fit(result)    
                     column_fits.append(result)
-                    fit_column = gaussian(result[0],x)
+                    if result != []:
+                        fit_column = gaussian(result[0],x)
+                    else:
+                        fit_column = np.zeros(len(x))
                 else:
                     #if the fit failed then save as zeros/null values
                     result=[]

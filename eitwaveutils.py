@@ -10,6 +10,7 @@ import numpy as np
 import sunpy
 import os
 import util
+import copy
 
 def loaddata(directory, extension):
     """ get the file list and sort it.  For well behaved file names the file
@@ -71,8 +72,9 @@ def check_dims(new_maps):
     #note that maps.shape lists the dimensions as (y,x) but maps.resample takes the arguments
     #as (x,y).
     ref_dim=new_maps[0].shape[::-1]
+    ref_dim=[ref_dim[0],ref_dim[1]-1]
     resampled_maps=[]
-    for i in range(1,len(new_maps)):
+    for i in range(0,len(new_maps)):
         if new_maps[i].shape[::-1] != ref_dim:
             tmp=new_maps[i].resample(ref_dim,method='linear')
             print('Notice: resampling performed on frame ' +str(i) + ' to maintain consistent dimensions.')
@@ -102,15 +104,28 @@ def map_threshold(maps, factor):
     threshold_maps = []
     for i in range(1,len(maps)):
         sqrt_map = np.sqrt(maps[i]) * factor
-        threshold_maps.append(sqrt_map)
+        #threshold_maps.append(sqrt_map)
+        threshold_maps.append(0.05 * maps[0])
     return threshold_maps
 
+def map_persistence(maps):
+    persistence_maps = []
+    persistence_maps.append(maps[0])
+    for i in range(1,len(maps)):
+        tmp = maps[i] > persistence_maps[i-1]
+        invtemp=maps[i] < persistence_maps[i-1]
+        per=copy.copy(persistence_maps[i-1])
+        per[tmp] = maps[i][tmp]
+        persistence_maps.append(per)
+    return persistence_maps
+        
 def map_binary(diffs, threshold_maps):
     """turn difference maps into binary images"""
     binary_maps = []
     for i in range(0,len(diffs)):
         #for values > threshold_map in the diffmap, return True, otherwise False
         filtered_map = diffs[i] > threshold_maps[i]
+        
         binary_maps.append(filtered_map)
     return binary_maps
 

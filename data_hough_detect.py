@@ -15,8 +15,8 @@ def main():
 
     m2deg = 360./(2*3.1415926*6.96e8)
     params = {
-              "epi_lat": 30., #degrees, HG latitude of wave epicenter
-              "epi_lon": 45., #degrees, HG longitude of wave epicenter
+              "epi_lat": 0., #degrees, HG latitude of wave epicenter
+              "epi_lon": 5., #degrees, HG longitude of wave epicenter
               #HG grid, probably would only want to change the bin sizes
               "lat_min": -90.,
               "lat_max": 90.,
@@ -84,11 +84,11 @@ def main():
     # Lots of big images.  Need to be smart about how to handle the data
     
     # load in the data with a single EIT wave
-    filelist = eitwaveutils.loaddata("/Users/ainglis/physics/eitwave_data/test_data/",
-                                     '.fits')
+    filelist = eitwaveutils.loaddata("/Users/ainglis/physics/eitwave_data/20111001/",
+                                     '.jp2')
 
     # read in files and accumulate them
-    maps = eitwaveutils.accumulate(filelist[0:20], accum=1, super=4, verbose=True)
+    maps = eitwaveutils.accumulate(filelist[10:35], accum=1, super=4, verbose=True)
 
     # Unravel the maps
     new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
@@ -102,7 +102,7 @@ def main():
 
     #determine the threshold to apply to the difference maps.
     #diffs > diff_thresh will be True, otherwise False.
-    threshold_maps = eitwaveutils.map_threshold(new_maps,factor=0.7) 
+    threshold_maps = eitwaveutils.map_threshold(new_maps,factor=1.2) 
 
     # transform difference maps into binary maps
     binary_maps = eitwaveutils.map_binary(diffs, threshold_maps)

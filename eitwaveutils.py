@@ -10,11 +10,10 @@ import numpy as np
 import sunpy
 import os
 import util
-from sunpy.net import hek
 from sunpy.net import helioviewer
 from sunpy.time import TimeRange
 from sunpy.time import parse_time
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 def params(flare,**kwargs):
     
@@ -89,52 +88,77 @@ def params(flare,**kwargs):
 
     return params
 
-def acquire_data(directory, extension, time_range, duration=60, verbose=True):
-    """Acquire the HEK flare data and the image data for the EIT wave detection"""
-    # Query the HEK for flare information we need
-    client = hek.HEKClient()
-    hek_result = client.query(hek.attrs.Time(time_range.t1, time_range.t2),
-                              hek.attrs.EventType('FL'),
-                              hek.attrs.FRM.Name=='SEC standard')
-    
-    #vals = eitwaveutils.goescls2number( [hek['fl_goescls'] for hek in hek_result] )
-    #flare_strength_index = sorted(range(len(vals)), key=vals.__getitem__)
-    if verbose:
-        print('Number of flares found = '+str(len(hek_result)))
 
+def acquire_data(directory, extension, flare, duration=60, verbose=True):
+
+    # vals = eitwaveutils.goescls2number( [hek['fl_goescls'] for hek in
+    # hek_result] )
+    # flare_strength_index = sorted(range(len(vals)), key=vals.__getitem__)
     # Get the data for each flare.
-    data_list = []
-    if len(hek_result) > 0:
-        for index, flare in enumerate(hek_result):
-            if verbose:
-                print('Acquiring data for flare number '+str(index))
-            data_range = TimeRange(parse_time(flare['event_starttime']),
-                                   parse_time(flare['event_starttime']) + 
-                                   timedelta(minutes=duration))
-            if extension.lower() == '.jp2':
-                data = acquire_jp2(directory, data_range)
-            if extension.lower() in ('.fits', '.fts'):
-                data = []
-            data_list.append(data)
+    if verbose:
+        print('Event start time: ' + flare['event_starttime'])
+        print('GOES Class: ' + flare['fl_goescls'])
+    data_range = TimeRange(parse_time(flare['event_starttime']),
+                           parse_time(flare['event_starttime']) +
+                           timedelta(minutes=duration))
+    if extension.lower() == '.jp2':
+        data = acquire_jp2(directory, data_range)
+    if extension.lower() in ('.fits', '.fts'):
+        data = []
     # Return the flare list from the HEK and a list of files for each flare in
     # the HEK flare list
-    return hek_result, data_list
+    return data
 
-def acquire_jp2(directory, time_range):
+def listdir_fullpath(d):
+    return [os.path.join(d, f) for f in os.listdir(d)]
+
+def acquire_jp2(directory, time_range, observatory='SDO', instrument='AIA',
+                detector='AIA', measurement='193', verbose=True):
     """Acquire Helioviewer JPEG2000 files between the two specified times"""
+    # Get a list of date-times of files already in the directory
+
+    directory_listing = {}
+    l = os.listdir(os.path.expanduser(directory))
+    for f in l:
+        try:
+            ymd = f.split('__')[0]
+            hmsbit = f.split('__')[1]
+            hms = hmsbit.split('_')[0] + '_' + hmsbit.split('_')[1] + '_' + hmsbit.split('_')[2]
+            dt = datetime.strptime(ymd + '__' + hms, '%Y_%m_%d__%H_%M_%S')
+            directory_listing[dt] = os.path.join(os.path.expanduser(directory), f)
+        except:
+            print("Non Helioviewer-timestamp formatted file present.")
+
+    # Create a Helioviewer Client
     hv = helioviewer.HelioviewerClient()
+
+    # Start the search
     jp2_list = []
     this_time = time_range.t1
     while this_time <= time_range.t2:
-        jp2 = hv.download_jp2(this_time, observatory='SDO',
-                              instrument='AIA', detector='AIA',
-                              measurement='193',
-                              directory=directory,
-                              overwrite=True)
+        response = hv.get_closest_image(this_time, observatory=observatory,
+                              instrument=instrument, detector=detector,
+                              measurement=measurement)
+        # if this date is not already present, download it
+        if not(response["date"] in directory_listing):
+            if verbose:
+                print('Downloading new file:')
+            jp2 = hv.download_jp2(this_time, observatory=observatory,
+                              instrument=instrument, detector=detector,
+                              measurement=measurement, directory=directory)
+        else:
+            # Otherwise, get its location
+            jp2 = directory_listing[response["date"]]
+        # Only one instance of this file should exist
         if not(jp2 in jp2_list):
             jp2_list.append(jp2)
-        this_time = this_time + timedelta(seconds = 6)
+            if verbose:
+                print('Found file ' + jp2 + '. Total found: ' + str(len(jp2_list)))
+
+        # advance the time
+        this_time = this_time + timedelta(seconds=6)
     return jp2_list
+
 
 def loaddata(directory, extension):
     """ get the file list and sort it.  For well behaved file names the file
@@ -143,23 +167,24 @@ def loaddata(directory, extension):
     loc = os.path.expanduser(directory)
     for f in os.listdir(loc):
         if f.endswith(extension):
-            lst.append(os.path.join(loc,f))
+            lst.append(os.path.join(loc, f))
     return sorted(lst)
 
+
 def accumulate(filelist, accum=2, nsuper=4, verbose=False):
-    """Add up data in time and space. Accumulate 'accum' files in time, and 
+    """Add up data in time and space. Accumulate 'accum' files in time, and
     then form the images into super by super superpixels."""
     # counter for number of files.
     j = 0
     # storage for the returned maps
     maps = []
     nfiles = len(filelist)
-    while j+accum <= nfiles:
+    while j + accum <= nfiles:
         i = 0
         while i < accum:
-            filename = filelist[i+j]
+            filename = filelist[i + j]
             if verbose:
-                print('File %(#)i out of %(nfiles)i' % {'#':i+j, 'nfiles':nfiles})
+                print('File %(#)i out of %(nfiles)i' % {'#': i+j, 'nfiles':nfiles})
                 print('Reading in file '+filename)
             map1 = (sunpy.make_map(filename)).superpixel((nsuper, nsuper))
             if i == 0:

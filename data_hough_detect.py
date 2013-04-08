@@ -100,6 +100,9 @@ def main():
     # calculate the differences
     diffs = eitwaveutils.map_diff(new_maps)
 
+    #generate persistence maps
+    persistence_maps = eitwaveutils.map_persistence(diffs)
+
     #determine the threshold to apply to the difference maps.
     #diffs > diff_thresh will be True, otherwise False.
     threshold_maps = eitwaveutils.map_threshold(new_maps,factor=1.2) 
@@ -142,7 +145,7 @@ def main():
     pos_width = eitwaveutils.wavefront_position_and_width(wavefront[0])
     
     visualize(detection)
-    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity, pos_width
+    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity, pos_width, persistence_maps
 
 if __name__ == '__main__':
     main()

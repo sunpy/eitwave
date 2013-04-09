@@ -6,15 +6,30 @@ from test_wave2d import test_wave2d
 from sunpy.time import TimeRange
 from sunpy.net import hek
 
+
 def main(source_data='.jp2',
-         time_range=TimeRange('2011/06/01 00:00:00', '2011/06/01 23:59:59'),
-         algorithm='hough'):
+         time_range=TimeRange('2011/10/01 09:00:00', '2011/10/01 10:15:59'),
+         algorithm='hough', feed_directory='~/Data/eitwave/test_jp2/'):
+    '''
+    source_data { jp2 | fits | test }
+    look for helioviewer JP2 files, FITS files, or load the test data
+    respectively
+
+    time_range : a TimeRange object
+    time range that is searched for EUV waves
+
+    feed_directory
+    If set to a string, look in this directory for the jp2 files.  Assumes that
+    all the JP2 files are relevant to the flare detection.
+
+    algorithm: { 'hough' : 'phough' }
+    algorithm used to find the wave
+    '''
 
     if source_data == 'test':
         # where to store those data
         maps = test_wave2d()
-
-    if source_data == '.jp2':
+    elif source_data == '.jp2':
         # where to store those data
         data_storage = "~/Data/eitwave/jp2/AGU/"
 
@@ -29,9 +44,15 @@ def main(source_data='.jp2',
 
     # Flares!
     print('Number of flares found = ' + str(len(hek_result)))
+
     for flare in hek_result:
-        print('Acquiring data for flare')
-        files = eitwaveutils.acquire_data(data_storage, source_data, flare)
+
+        if feed_directory is None:
+            print('Acquiring data for flare')
+            files = eitwaveutils.acquire_data(data_storage, source_data, flare)
+        else:
+            # Assumes that the necessary files are already present
+            files = eitwaveutils.listdir_fullpath(feed_directory)
 
         # Define the transform parameters
         # params = eitwaveutils.params(flare='test')

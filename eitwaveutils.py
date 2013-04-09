@@ -109,14 +109,13 @@ def acquire_data(directory, extension, flare, duration=60, verbose=True):
     # the HEK flare list
     return data
 
+
 def listdir_fullpath(d):
-    return [os.path.join(d, f) for f in os.listdir(d)]
+    dd = os.path.expanduser(d)
+    return [os.path.join(dd, f) for f in os.listdir(dd)]
 
-def acquire_jp2(directory, time_range, observatory='SDO', instrument='AIA',
-                detector='AIA', measurement='193', verbose=True):
-    """Acquire Helioviewer JPEG2000 files between the two specified times"""
-    # Get a list of date-times of files already in the directory
 
+def get_jp2_dict(directory):
     directory_listing = {}
     l = os.listdir(os.path.expanduser(directory))
     for f in l:
@@ -128,6 +127,12 @@ def acquire_jp2(directory, time_range, observatory='SDO', instrument='AIA',
             directory_listing[dt] = os.path.join(os.path.expanduser(directory), f)
         except:
             print("Non Helioviewer-timestamp formatted file present.")
+    return directory_listing
+
+
+def acquire_jp2(directory, time_range, observatory='SDO', instrument='AIA',
+                detector='AIA', measurement='193', verbose=True):
+    """Acquire Helioviewer JPEG2000 files between the two specified times"""
 
     # Create a Helioviewer Client
     hv = helioviewer.HelioviewerClient()
@@ -136,19 +141,25 @@ def acquire_jp2(directory, time_range, observatory='SDO', instrument='AIA',
     jp2_list = []
     this_time = time_range.t1
     while this_time <= time_range.t2:
+        # update the directory dictionary with the latest contents
+        directory_dict = get_jp2_dict(directory)
+
+        # find what the closest image to the requested time is
         response = hv.get_closest_image(this_time, observatory=observatory,
                               instrument=instrument, detector=detector,
                               measurement=measurement)
+
         # if this date is not already present, download it
-        if not(response["date"] in directory_listing):
+        if not(response["date"] in directory_dict):
             if verbose:
                 print('Downloading new file:')
             jp2 = hv.download_jp2(this_time, observatory=observatory,
                               instrument=instrument, detector=detector,
-                              measurement=measurement, directory=directory)
+                              measurement=measurement, directory=directory,
+                              overwrite=True)
         else:
             # Otherwise, get its location
-            jp2 = directory_listing[response["date"]]
+            jp2 = directory_dict[response["date"]]
         # Only one instance of this file should exist
         if not(jp2 in jp2_list):
             jp2_list.append(jp2)
@@ -213,6 +224,7 @@ def map_unravel(maps, params, verbose=False):
         new_maps += [unraveled]
     return new_maps
 
+
 def check_dims(new_maps):
     """ Check the dimensions of unravelled maps for any inconsistencies. Perform a resampling
     if necessary to maintain consistent dimensions."""
@@ -220,23 +232,26 @@ def check_dims(new_maps):
     #check dimensions of maps and resample to dimensions of first image in sequence if need be.
     #note that maps.shape lists the dimensions as (y,x) but maps.resample takes the arguments
     #as (x,y).
-    ref_dim=new_maps[0].shape[::-1]
-    resampled_maps=[]
-    for i in range(1,len(new_maps)):
-        if new_maps[i].shape[::-1] != ref_dim:
-            tmp=new_maps[i].resample(ref_dim,method='linear')
-            print('Notice: resampling performed on frame ' +str(i) + ' to maintain consistent dimensions.')
+    ref_dim = new_maps[0].shape[::-1]
+    resampled_maps = []
+    for i, Map in enumerate(new_maps):
+        if Map.shape[::-1] != ref_dim:
+            tmp = Map.resample(ref_dim, method='nearest')
+            print('Notice: resampling performed on frame ' + str(i) +
+                  ' to maintain consistent dimensions.')
             resampled_maps.append(tmp)
         else:
-            resampled_maps.append(new_maps[i])
+            resampled_maps.append(Map)
     return resampled_maps
+
 
 def linesampleindex(a, b, np=1000):
     """ Get the indices in an array along a line"""
-    x, y = np.linspace(a[0],b[0],np), np.linspace(a[1],b[1],np)
+    x, y = np.linspace(a[0], b[0], np), np.linspace(a[1], b[1], np)
     xi = x.astype(np.int)
     yi = y.astype(np.int)
     return xi, yi
+
 
 def map_diff(maps):
     """ calculate running difference images """
@@ -264,6 +279,18 @@ def map_binary(diffs, threshold_maps):
         binary_maps.append(filtered_map)
     return binary_maps
 
+
+'''Ideas
+
+extract a submap that is where we expect the wave to be and just concentrate on
+that region
+ - will speed up processing
+
+ adaptive thresholding; as time increases the threshold decreases, anticipating
+ the decreasing amplitude of the wave.
+
+'''
+
 def hough_detect(diffs, vote_thresh=12):
     """ Use the Hough detection method to detect lines in the data.
     With enough lines, you can fill in the wave front."""
@@ -272,13 +299,13 @@ def hough_detect(diffs, vote_thresh=12):
     for img in diffs:
         # Perform the hough transform on each of the difference maps
         transform, theta, d = hough(img)
-    
+
         # Filter the hough transform results and find the best lines in the
         # data.  Keep detections that exceed the Hough vote threshold.
-        indices =  (transform>vote_thresh).nonzero()
+        indices = (transform>vote_thresh).nonzero()
         distances = d[indices[0]]
         theta = theta[indices[1]]
-    
+
         # Perform the inverse transform to get a series of rectangular
         # images that show where the wavefront is.
         # Create a map which is the same as the 

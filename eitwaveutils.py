@@ -236,7 +236,7 @@ def check_dims(new_maps):
     resampled_maps = []
     for i, Map in enumerate(new_maps):
         if Map.shape[::-1] != ref_dim:
-            tmp = Map.resample(ref_dim, method='nearest')
+            tmp = Map.resample(ref_dim, method='linear', minusone=True)
             print('Notice: resampling performed on frame ' + str(i) +
                   ' to maintain consistent dimensions.')
             resampled_maps.append(tmp)
@@ -308,7 +308,7 @@ def hough_detect(diffs, vote_thresh=12):
 
         # Perform the inverse transform to get a series of rectangular
         # images that show where the wavefront is.
-        # Create a map which is the same as the 
+        # Create a map which is the same as the
         invTransform = sunpy.make_map(np.zeros(img.shape), img._original_header)
         invTransform.data = np.zeros(img.shape)
         

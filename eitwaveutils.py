@@ -195,8 +195,8 @@ def accumulate(filelist, accum=2, nsuper=4, verbose=False):
         while i < accum:
             filename = filelist[i + j]
             if verbose:
-                print('File %(#)i out of %(nfiles)i' % {'#': i+j, 'nfiles':nfiles})
-                print('Reading in file '+filename)
+                print('File %(#)i out of %(nfiles)i' % {'#': i + j, 'nfiles':nfiles})
+                print('Reading in file ' + filename)
             map1 = (sunpy.make_map(filename)).superpixel((nsuper, nsuper))
             if i == 0:
                 m = map1
@@ -206,12 +206,13 @@ def accumulate(filelist, accum=2, nsuper=4, verbose=False):
         j = j + accum
         maps.append(m)
         if verbose:
-            print('Accumulated map List has length %(#)i' % {'#':len(maps)} )
+            print('Accumulated map List has length %(#)i' % {'#': len(maps)})
     return maps
+
 
 def map_unravel(maps, params, verbose=False):
     """ Unravel the maps into a rectangular image. """
-    new_maps =[]
+    new_maps = []
     for index, m in enumerate(maps):
         if verbose:
             print("Unraveling map %(#)i of %(n)i " % {'#':index+1, 'n':len(maps)})
@@ -220,7 +221,7 @@ def map_unravel(maps, params, verbose=False):
                                                epi_lat=params.get('epi_lat'),
                                                xbin=5,
                                                ybin=0.2)
-        unraveled[np.isnan(unraveled)]=0.0
+        unraveled[np.isnan(unraveled)] = 0.0
         new_maps += [unraveled]
     return new_maps
 
@@ -232,11 +233,18 @@ def check_dims(new_maps):
     #check dimensions of maps and resample to dimensions of first image in sequence if need be.
     #note that maps.shape lists the dimensions as (y,x) but maps.resample takes the arguments
     #as (x,y).
-    ref_dim = new_maps[0].shape[::-1]
+    ref_dim = [100000, 100000]
+    for Map in new_maps:
+        dim = Map.shape[::-1]
+        if dim[0] < ref_dim[0]:
+            ref_dim[0] = dim[0]
+        if dim[1] < ref_dim[1]:
+            ref_dim[1] = dim[1]
+    ref_dim = tuple(ref_dim)
     resampled_maps = []
     for i, Map in enumerate(new_maps):
         if Map.shape[::-1] != ref_dim:
-            tmp = Map.resample(ref_dim, method='linear', minusone=True)
+            tmp = Map.resample(ref_dim, method='linear')
             print('Notice: resampling performed on frame ' + str(i) +
                   ' to maintain consistent dimensions.')
             resampled_maps.append(tmp)
@@ -256,24 +264,26 @@ def linesampleindex(a, b, np=1000):
 def map_diff(maps):
     """ calculate running difference images """
     diffs = []
-    for i in range(0,len(maps)-1):
+    for i in range(0, len(maps) - 1):
         # take the difference
-        diffmap = (maps[i+1] - maps[i])
+        diffmap = (maps[i + 1] - maps[i])
         # keep
         diffs.append(diffmap)
     return diffs
 
+
 def map_threshold(maps, factor):
     threshold_maps = []
-    for i in range(1,len(maps)):
+    for i in range(1, len(maps)):
         sqrt_map = np.sqrt(maps[i]) * factor
         threshold_maps.append(sqrt_map)
     return threshold_maps
 
+
 def map_binary(diffs, threshold_maps):
     """turn difference maps into binary images"""
     binary_maps = []
-    for i in range(0,len(diffs)):
+    for i in range(0, len(diffs)):
         #for values > threshold_map in the diffmap, return True, otherwise False
         filtered_map = diffs[i] > threshold_maps[i]
         binary_maps.append(filtered_map)
@@ -294,7 +304,7 @@ that region
 def hough_detect(diffs, vote_thresh=12):
     """ Use the Hough detection method to detect lines in the data.
     With enough lines, you can fill in the wave front."""
-    detection=[]
+    detection = []
     print("Performing hough transform on binary maps...")
     for img in diffs:
         # Perform the hough transform on each of the difference maps

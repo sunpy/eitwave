@@ -2,13 +2,14 @@
 from visualize import visualize
 import eitwaveutils
 import copy
+import os
 from test_wave2d import test_wave2d
-from sunpy.time import TimeRange
+from sunpy.time import TimeRange, parse_time
 from sunpy.net import hek
 
 
 def main(source_data='.jp2',
-         time_range=TimeRange('2011/10/01 09:00:00', '2011/10/01 10:15:59'),
+         time_range=TimeRange('2011/10/01 09:45:00', '2011/10/01 10:15:59'),
          algorithm='hough', feed_directory='~/Data/eitwave/jp2/20111001/'):
     '''
     source_data { jp2 | fits | test }
@@ -36,8 +37,8 @@ def main(source_data='.jp2',
     # Query the HEK for flare information we need
     client = hek.HEKClient()
     hek_result = client.query(hek.attrs.Time(time_range.t1, time_range.t2),
-                              hek.attrs.EventType('FL'),
-                              hek.attrs.FRM.Name == 'SEC standard')
+                              hek.attrs.EventType('FL'))
+                              #hek.attrs.FRM.Name == '')
     # no flares, no analysis possible
     if hek_result is None:
         return None
@@ -45,16 +46,29 @@ def main(source_data='.jp2',
     # Flares!
     print('Number of flares found = ' + str(len(hek_result)))
 
-    for flare in hek_result:
+    for flare in hek_result[10:11]:
 
         if feed_directory is None:
             print('Acquiring data for flare')
-            files = eitwaveutils.acquire_data(data_storage, source_data, flare)
+            filelist = eitwaveutils.acquire_data(data_storage, source_data,
+                                                 flare)
         else:
             # Assumes that the necessary files are already present
-            files = eitwaveutils.listdir_fullpath(feed_directory)
+            filelist = eitwaveutils.listdir_fullpath(feed_directory)
 
-        print files
+        # reduce the number of files to those that happen after the flare has
+        # started
+        files = []
+        for f in filelist:
+            fhv = f.split(os.sep)[-1]
+            if eitwaveutils.hv_filename2datetime(fhv) > \
+            parse_time(flare['event_starttime']):
+                files.append(f)
+        print('Number of files :' + str(len(files)))
+        if len(files) == 0:
+            print('No files found.  Returning.')
+            return None
+
         # Define the transform parameters
         # params = eitwaveutils.params(flare='test')
         params = eitwaveutils.params(flare)

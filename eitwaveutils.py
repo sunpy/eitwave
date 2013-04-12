@@ -11,17 +11,30 @@ import sunpy
 import os
 import util
 from sunpy.net import helioviewer
-from sunpy.time import TimeRange
-from sunpy.time import parse_time
+from sunpy.time import TimeRange, parse_time
+from sunpy.wcs import convert_hcc_hg
+from sunpy.coords import pb0r
 from datetime import timedelta, datetime
 
 def params(flare,**kwargs):
-    
+
     m2deg = 360./(2*3.1415926*6.96e8)
+    if flare["event_coordunit"] == "degrees":
+        flare_event_coord1 = flare['event_coord1']
+        flare_event_coord2 = flare['event_coord2']
+    elif flare["event_coordunit"] == "arcseconds":
+        info = pb0r(flare["event_starttime"])
+        flare_coords = convert_hcc_hg(info["sd"]/60.0, info["b0"], info["l0"],
+                                        flare['event_coord1']/3600.0,
+                                        flare['event_coord2']/3600.0)
+        flare_event_coord1 = flare_coords[0]
+        flare_event_coord2 = flare_coords[1]
+
+
 
     """ Define the parameters we will use for the unraveling of the maps"""
-    params = {"epi_lat": flare['event_coord1'], #30., #degrees, HG latitude of wave epicenter
-              "epi_lon": flare['event_coord2'], #45., #degrees, HG longitude of wave epicenter
+    params = {"epi_lat": flare_event_coord1, #30., #degrees, HG latitude of wave epicenter
+              "epi_lon": flare_event_coord2, #45., #degrees, HG longitude of wave epicenter
               #HG grid, probably would only want to change the bin sizes
               "lat_min": -90.,
               "lat_max": 90.,
@@ -119,15 +132,21 @@ def get_jp2_dict(directory):
     directory_listing = {}
     l = sorted(os.listdir(os.path.expanduser(directory)))
     for f in l:
-        try:
-            ymd = f.split('__')[0]
-            hmsbit = f.split('__')[1]
-            hms = hmsbit.split('_')[0] + '_' + hmsbit.split('_')[1] + '_' + hmsbit.split('_')[2]
-            dt = datetime.strptime(ymd + '__' + hms, '%Y_%m_%d__%H_%M_%S')
-            directory_listing[dt] = os.path.join(os.path.expanduser(directory), f)
-        except:
-            print("Non Helioviewer-timestamp formatted file present.")
+        dt = hv_filename2datetime(f)
+        directory_listing[dt] = os.path.join(os.path.expanduser(directory), f)
     return directory_listing
+
+
+def hv_filename2datetime(f):
+    try:
+        ymd = f.split('__')[0]
+        hmsbit = f.split('__')[1]
+        hms = hmsbit.split('_')[0] + '_' + hmsbit.split('_')[1] + '_' + \
+            hmsbit.split('_')[2]
+        dt = datetime.strptime(ymd + '__' + hms, '%Y_%m_%d__%H_%M_%S')
+    except:
+        dt = None
+    return dt
 
 
 def acquire_jp2(directory, time_range, observatory='SDO', instrument='AIA',

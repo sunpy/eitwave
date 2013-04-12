@@ -112,12 +112,12 @@ def acquire_data(directory, extension, flare, duration=60, verbose=True):
 
 def listdir_fullpath(d):
     dd = os.path.expanduser(d)
-    return [os.path.join(dd, f) for f in os.listdir(dd)]
+    return sorted([os.path.join(dd, f) for f in os.listdir(dd)])
 
 
 def get_jp2_dict(directory):
     directory_listing = {}
-    l = os.listdir(os.path.expanduser(directory))
+    l = sorted(os.listdir(os.path.expanduser(directory)))
     for f in l:
         try:
             ymd = f.split('__')[0]

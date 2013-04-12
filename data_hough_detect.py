@@ -9,7 +9,7 @@ from sunpy.net import hek
 
 def main(source_data='.jp2',
          time_range=TimeRange('2011/10/01 09:00:00', '2011/10/01 10:15:59'),
-         algorithm='hough', feed_directory='~/Data/eitwave/test_jp2/'):
+         algorithm='hough', feed_directory='~/Data/eitwave/jp2/20111001/'):
     '''
     source_data { jp2 | fits | test }
     look for helioviewer JP2 files, FITS files, or load the test data
@@ -54,6 +54,7 @@ def main(source_data='.jp2',
             # Assumes that the necessary files are already present
             files = eitwaveutils.listdir_fullpath(feed_directory)
 
+        print files
         # Define the transform parameters
         # params = eitwaveutils.params(flare='test')
         params = eitwaveutils.params(flare)
@@ -79,7 +80,7 @@ def main(source_data='.jp2',
 
         # transform difference maps into binary maps
         binary_maps = eitwaveutils.map_binary(diffs, threshold_maps)
-
+        '''
         if algorithm == 'hough':
             # detection based on the hough transform
             detection = eitwaveutils.hough_detect(binary_maps, vote_thresh=12)
@@ -118,8 +119,9 @@ def main(source_data='.jp2',
         pos_width = eitwaveutils.wavefront_position_and_width(wavefront[0])
 
         visualize(detection)
-    return maps, new_maps, diffs, threshold_maps, binary_maps, detection,
-    wavefront, velocity, pos_width
+        '''
+    return maps, new_maps, diffs, threshold_maps, binary_maps
+    #, detection,wavefront, velocity, pos_width
 
 if __name__ == '__main__':
     main()

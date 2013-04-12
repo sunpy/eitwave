@@ -64,6 +64,21 @@ def map_unravel(maps, params, verbose=False):
         new_maps += [unraveled]
     return new_maps
 
+def map_reravel(unravelled_maps, params, verbose=False):
+    """ Unravel the maps into a rectangular image. """
+    reraveled_maps =[]
+    for index, m in enumerate(unravelled_maps):
+        if verbose:
+            print("Unraveling map %(#)i of %(n)i " % {'#':index+1, 'n':len(unravelled_maps)})
+        reraveled = util.map_hg_to_hpc(m,
+                                        epi_lon=params.get('epi_lon'),
+                                        epi_lat=params.get('epi_lat'),
+                                        xbin=5,
+                                        ybin=0.2)
+        reraveled[np.isnan(reraveled)]=0.0
+        reraveled_maps += [reraveled]
+    return reraveled_maps
+
 def check_dims(new_maps):
     """ Check the dimensions of unravelled maps for any inconsistencies. Perform a resampling
     if necessary to maintain consistent dimensions."""
@@ -110,12 +125,12 @@ def map_threshold(maps, factor):
 
 def map_persistence(maps):
     persistence_maps = []
-    persistence_maps.append(maps[0])
+    persistence_maps.append(maps[0] - maps[0])
     for i in range(1,len(maps)):
-        tmp = maps[i] > persistence_maps[i-1]
-        invtemp=maps[i] < persistence_maps[i-1]
+        tmp = maps[i]/maps[i].max() > persistence_maps[i-1]
+        invtemp=maps[i]/maps[i].max() < persistence_maps[i-1]
         per=copy.copy(persistence_maps[i-1])
-        per[tmp] = maps[i][tmp]
+        per[tmp] = maps[i][tmp]/maps[i].max()
         persistence_maps.append(per)
     return persistence_maps
         

@@ -143,6 +143,9 @@ def main():
 
     #strip out the position and width information from the wavefront fitting
     pos_width = eitwaveutils.wavefront_position_and_width(wavefront[0])
+
+    #make the re-ravelled detection maps
+    #reraveled_maps=eitwaveutils.map_reravel(wavefront,params)
     
     visualize(detection)
     return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity, pos_width, persistence_maps

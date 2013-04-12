@@ -90,14 +90,14 @@ def main(source_data='.jp2',
 
         #determine the threshold to apply to the difference maps.
         #diffs > diff_thresh will be True, otherwise False.
-        threshold_maps = eitwaveutils.map_threshold(new_maps, factor=0.7)
+        threshold_maps = eitwaveutils.map_threshold(new_maps, factor=0.2)
 
         # transform difference maps into binary maps
         binary_maps = eitwaveutils.map_binary(diffs, threshold_maps)
-        '''
+
         if algorithm == 'hough':
             # detection based on the hough transform
-            detection = eitwaveutils.hough_detect(binary_maps, vote_thresh=12)
+            detection = eitwaveutils.hough_detect(binary_maps, vote_thresh=10)
         elif algorithm == 'prob_hough':
             # detection based on the probabilistic hough transform.  Takes the
             # keywords of the probabilistic hough transform - see the documentation
@@ -108,13 +108,13 @@ def main(source_data='.jp2',
         detection = eitwaveutils.cleanup(detection,
                                          size_thresh=50,
                                          inv_thresh=8)
-    
+
         #If there is anything left in 'detection', fit a function to the original
         #diffmaps in the region defined by 'detection'. Simplest case: fit a
         #Gaussian in the y-direction for some x or range of x.
         #eitwaveutils.fit_wavefront should probably take the arguments of fitfunc.
         #use 'detection' to guess starting fit parameters?
-    
+
         #get just the positive elements of the difference map. Perform fitting on
         #these positive diffmaps.
         posdiffs = copy.deepcopy(diffs)
@@ -133,7 +133,7 @@ def main(source_data='.jp2',
         pos_width = eitwaveutils.wavefront_position_and_width(wavefront[0])
 
         visualize(detection)
-        '''
+
     return maps, new_maps, diffs, threshold_maps, binary_maps
     #, detection,wavefront, velocity, pos_width
 

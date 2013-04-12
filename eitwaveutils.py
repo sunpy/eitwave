@@ -24,13 +24,12 @@ def params(flare,**kwargs):
         flare_event_coord2 = flare['event_coord2']
     elif flare["event_coordunit"] == "arcseconds":
         info = pb0r(flare["event_starttime"])
-        flare_coords = convert_hcc_hg(info["sd"]/60.0, info["b0"], info["l0"],
-                                        flare['event_coord1']/3600.0,
-                                        flare['event_coord2']/3600.0)
+        flare_coords = convert_hcc_hg(info["sd"] / 60.0,
+                                      info["b0"], info["l0"],
+                                      flare['event_coord1'] / 3600.0,
+                                      flare['event_coord2'] / 3600.0)
         flare_event_coord1 = flare_coords[0]
         flare_event_coord2 = flare_coords[1]
-
-
 
     """ Define the parameters we will use for the unraveling of the maps"""
     params = {"epi_lat": flare_event_coord1, #30., #degrees, HG latitude of wave epicenter
@@ -50,9 +49,9 @@ def params(flare,**kwargs):
               "hpcy_max": 1023.,
               "hpcy_bin": 2.,
               "hglt_obs": 0,
-              "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
+              "rotation": 360. / (27. * 86400.), #degrees/s, rigid solar rotation
               }
-    
+
     #params = {
     #    "cadence": 12., #seconds
     #    

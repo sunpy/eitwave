@@ -153,9 +153,6 @@ def simulate_raw(params, verbose = False):
         "CTYPE2": "HG",
         "HGLT_OBS": 0,
         "HGLN_OBS": 0,
-        "RSUN_OBS": 963.879683,
-        "RSUN_REF": 696000000.0,
-        "DSUN_OBS": 148940609626.98
     }
     
     header = sunpy.map.MapHeader(dict_header)
@@ -245,9 +242,6 @@ def transform(params, wave_maps, verbose = False):
         "CTYPE2": "HPLT-TAN",
         "HGLT_OBS": hglt_obs,
         "HGLN_OBS": 0,
-        "RSUN_OBS": 963.879683,
-        "RSUN_REF": 696000000.0,
-        "DSUN_OBS": 148940609626.98
     }
     
     header = sunpy.map.MapHeader(dict_header)

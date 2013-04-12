@@ -9,96 +9,17 @@ import numpy as np
 __authors__ = ["Steven Christe"]
 __email__ = "steven.d.christe@nasa.gov"
 
-def map_hpc_to_hg(map, xbin = 1, ybin = 1):
-    """Take a map (like an AIA map) and convert it from HPC to HG."""
+def map_hpc_to_hg(map, lon_bin = 1, lat_bin = 1):
+    """
+    Transform raw data in HPC coordinates to HG coordinates
+    """
+    return map_hpc_to_hg_rotate(map, lon_bin = lon_bin, lat_bin = lat_bin)
 
-    x, y = sunpy.wcs.convert_pixel_to_data(map.shape[1], map.shape[0], map.scale['x'], map.scale['y'], map.reference_pixel['x'], map.reference_pixel['y'], map.reference_coordinate['x'], map.reference_coordinate['y'], map.coordinate_system['x'])
-
-    lon_map, lat_map = sunpy.wcs.convert_hpc_hg(map.rsun_meters, map.dsun, map.units['x'], map.units['y'], map.heliographic_latitude, map.carrington_longitude, x, y)
-
-    #xbin = 1
-    #ybin = 1
-    lon_bin = xbin
-    lat_bin = ybin
-    lon_range = (np.nanmin(lon_map), np.nanmax(lon_map))
-    lat_range = (np.nanmin(lat_map), np.nanmax(lat_map))
-
-    lon = np.arange(lon_range[0], lon_range[1], lon_bin)
-    lat = np.arange(lat_range[0], lat_range[1], lat_bin)
-    newgrid = np.meshgrid(lon, lat)
-
-        # newgrid = wcs.convert_hg_hpc(map.header, lon_grid, lat_grid, units = 'arcsec')
-    points = np.vstack((lon_map.ravel(), lat_map.ravel())).T
-    values = np.array(map).ravel()
-
-        # get rid of all of the bad (nan) indices (i.e. those off of the sun)
-    index = np.isfinite(points[:,0]) * np.isfinite(points[:,1])
-    points = np.vstack((points[index,0], points[index,1])).T
-
-    values = values[index]
-
-    newdata = griddata(points, values, newgrid, method="linear")
-
-    dict_header = {
-        'CDELT1': lon_bin,
-        'NAXIS1': len(lon),
-        'CRVAL1': lon.min(),
-        'CRPIX1': 1,
-        'CRPIX2': 1,
-        'CUNIT1': "deg",
-        'CTYPE1': "HG",
-        'CDELT2': lat_bin,
-        'NAXIS2': len(lat),
-        'CRVAL2': lat.min(),
-        'CUNIT2': "deg",
-        'CTYPE2': "HG"
-        }
-
-    header = sunpy.map.MapHeader(dict_header)
-    transformed_map = sunpy.make_map(newdata, header)
-    transformed_map.heliographic_latitude = map.heliographic_latitude
-
-    return transformed_map
-
-def map_hg_to_hpc(map, xbin = 10, ybin = 10):
-    """Take a map in heliographic coordinates (HG) and convert it to
-    helioprojective cartesian coordinates (HPC)."""
-    #xbin = 10
-    #ybin = 10
-    lon, lat = sunpy.wcs.convert_pixel_to_data(map.shape[1], map.shape[0], map.scale['x'], map.scale['y'], map.reference_pixel['x'], map.reference_pixel['y'], map.reference_coordinate['x'], map.reference_coordinate['y'], map.coordinate_system['x'])
-
-    x_map, y_map = sunpy.wcs.convert_hg_hpc(map.rsun_meters, map.dsun, map.heliographic_latitude, map.carrington_longitude, lon, lat, units = 'arcsec')
-
-    x_range = (np.nanmin(x_map), np.nanmax(x_map))
-    y_range = (np.nanmin(y_map), np.nanmax(y_map))
-
-    x = np.arange(x_range[0], x_range[1], xbin)
-    y = np.arange(y_range[0], y_range[1], ybin)
-    newgrid = np.meshgrid(x, y)
-
-    points = np.vstack((x_map.ravel(), y_map.ravel())).T
-    values = np.array(map).ravel()
-    newdata = griddata(points, values, newgrid, method="linear")
-
-    dict_header = {
-        'CDELT1': xbin,
-        'NAXIS1': len(x),
-        'CRVAL1': x.min(),
-        'CRPIX1': 1,
-        'CRPIX2': 1,
-        'CUNIT1': "arcsec",
-        'CTYPE1': "HPLT-TAN",
-        'CDELT2': ybin,
-        'NAXIS2': len(y),
-        'CRVAL2': y.min(),
-        'CUNIT2': "arcsec",
-        'CTYPE2': "HPLT-TAN"
-        }
-
-    header = sunpy.map.MapHeader(dict_header)
-    transformed_map = sunpy.make_map(newdata, header)
-
-    return transformed_map
+def map_hg_to_hpc(map, xbin = 1, ybin = 1):
+    """
+    Transform raw data in HG coordinates to HPC coordinates
+    """
+    return map_hg_to_hpc_rotate(map, xbin = xbin, ybin = ybin)
 
 def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 90, lon_bin = 1, lat_bin = 1):
     """

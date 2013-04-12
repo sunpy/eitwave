@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 from sim import wave2d
 from visualize import visualize
@@ -11,12 +12,13 @@ params = {
     "cadence": 12., #seconds
     
     "hglt_obs": 0., #degrees
-    "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
+#    "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
+    "rotation": 0., #degrees/s, rigid solar rotation
     
     #Wave parameters that are initial conditions
     "direction": 25., #degrees, measured CCW from HG +latitude
-    "epi_lat": 30., #degrees, HG latitude of wave epicenter
-    "epi_lon": 45., #degrees, HG longitude of wave epicenter
+    "epi_lat": 0., #degrees, HG latitude of wave epicenter
+    "epi_lon": 0., #degrees, HG longitude of wave epicenter
     
     #Wave parameters that can evolve over time
     #The first element is constant in time
@@ -40,25 +42,25 @@ params = {
     "struct_num": 10,
     "struct_seed": 13092,
     
-    "max_steps": 20,
+    "max_steps": 4,
     
     "clean_nans": True,
     
     #HG grid, probably would only want to change the bin sizes
     "lat_min": -90.,
     "lat_max": 90.,
-    "lat_bin": 0.2,
+    "lat_bin": 0.05,
     "lon_min": -180.,
     "lon_max": 180.,
-    "lon_bin": 5.,
+    "lon_bin": 1.,
     
     #HPC grid, probably would only want to change the bin sizes
     "hpcx_min": -1228.8,
     "hpcx_max": 1228.8,
-    "hpcx_bin": 2.4,
+    "hpcx_bin": 1.6,
     "hpcy_min": -1228.8,
     "hpcy_max": 1228.8,
-    "hpcy_bin": 2.4
+    "hpcy_bin": 1.6
 }
 
 #wave_maps = wave2d.simulate(params)
@@ -75,7 +77,10 @@ new_wave_maps = []
 
 for wave in wave_maps:
     print("Unraveling map at "+str(wave.date))
-    new_wave_maps += [util.map_hpc_to_hg_rotate(wave, epi_lon = 45., epi_lat = 30., xbin = 5, ybin = 0.2)]
+    new_wave_maps += [util.map_hpc_to_hg_rotate(wave,
+                                                epi_lon = params["epi_lon"],
+                                                epi_lat = params["epi_lat"],
+                                                xbin = 1, ybin = 0.05)]
 
 lat_min = params["lat_min"]
 cadence = params["cadence"]
@@ -93,7 +98,7 @@ wave_thickness = np.dot(wave_thickness_coeff, time_powers).ravel()
 wave_normalization = np.dot(wave_normalization_coeff, time_powers).ravel()
 wave_peak = 90.-(p(time)+(90.-lat_min))
 
-n0 = wave_normalization*width.clip(0,360)/params["lon_bin"]
+n0 = wave_normalization*width.clip(0,360)/360.
 m0 = wave_peak
 s0 = wave_thickness
 
@@ -102,7 +107,7 @@ m1 = []
 s1 = []
 
 for wave in wave_maps_raw:
-    yy = np.sum(np.asarray(wave), axis=1)
+    yy = np.average(np.asarray(wave), axis=1)
     xx = np.arange(wave.yrange[0],wave.yrange[1],wave.scale['y'])+wave.scale['y']/2.
     p, success = util.fitfunc(xx, yy, 'gaussian', [1, 90, 1])
     if p[0] < 0.1:
@@ -118,7 +123,7 @@ s2 = []
 for wave in new_wave_maps:
     data = np.array(wave)
     data[np.isnan(data)] = 0.
-    yy = np.sum(data, axis=1)
+    yy = np.average(data, axis=1)
     xx = np.linspace(wave.yrange[0],wave.yrange[1],wave.shape[0])+wave.scale['y']/2.
     p, success = util.fitfunc(xx, yy, 'gaussian', [1, 90, 1])
     if p[0] < 0.1:
@@ -127,34 +132,36 @@ for wave in new_wave_maps:
     m2 += [p[1]]
     s2 += [p[2]]
 
-"""
+plt.figure()
 plt.plot(n0)
 plt.plot(n1,'+')
 plt.plot(n2,'x')
 
+plt.figure()
 plt.plot(m0)
 plt.plot(m1,'+')
 plt.plot(m2,'x')
 
+plt.figure()
 plt.plot(s0)
 plt.plot(s1,'+')
 plt.plot(s2,'x')
-"""
 
 xx0 = np.linspace(params["lat_min"],params["lat_max"],num=10000,endpoint=True)
 
 wave = wave_maps_raw[3]
 data1 = np.array(wave)
-yy1 = np.sum(data1, axis=1)
+yy1 = np.average(data1, axis=1)
 xx1 = np.arange(wave.yrange[0],wave.yrange[1],wave.scale['y'])+wave.scale['y']/2.
 
 wave = new_wave_maps[3]
 data2 = np.array(wave)
 data2[np.isnan(data2)] = 0.
-yy2 = np.sum(data2, axis=1)
+yy2 = np.average(data2, axis=1)
 xx2 = np.linspace(wave.yrange[0],wave.yrange[1],wave.shape[0])+wave.scale['y']/2.
 
-"""
+
+plt.figure()
 plt.plot(xx0,util.str2func('gaussian')([n0[3],m0[3],s0[3]],xx0))
 plt.plot(xx1,yy1,'+')
 plt.plot(xx2,yy2,'x')

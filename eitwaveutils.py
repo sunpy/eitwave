@@ -11,33 +11,193 @@ import sunpy
 import os
 import util
 import copy
+from sunpy.net import helioviewer
+from sunpy.time import TimeRange
+from sunpy.time import parse_time
+from datetime import timedelta, datetime
+
+def params(flare,**kwargs):
+    
+    m2deg = 360./(2*3.1415926*6.96e8)
+
+    """ Define the parameters we will use for the unraveling of the maps"""
+    params = {"epi_lat": flare['event_coord1'], #30., #degrees, HG latitude of wave epicenter
+              "epi_lon": flare['event_coord2'], #45., #degrees, HG longitude of wave epicenter
+              #HG grid, probably would only want to change the bin sizes
+              "lat_min": -90.,
+              "lat_max": 90.,
+              "lat_bin": 0.2,
+              "lon_min": -180.,
+              "lon_max": 180.,
+              "lon_bin": 5.,
+              #    #HPC grid, probably would only want to change the bin sizes
+              "hpcx_min": -1025.,
+              "hpcx_max": 1023.,
+              "hpcx_bin": 2.,
+              "hpcy_min": -1025.,
+              "hpcy_max": 1023.,
+              "hpcy_bin": 2.,
+              "hglt_obs": 0,
+              "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
+              }
+    
+    #params = {
+    #    "cadence": 12., #seconds
+    #    
+    #    "hglt_obs": 0., #degrees
+    #    "rotation": 360./(27.*86400.), #degrees/s, rigid solar rotation
+    #   
+    #    #Wave parameters that are initial conditions
+    #    "direction": 25., #degrees, measured CCW from HG +latitude
+    #    "epi_lat": 30., #degrees, HG latitude of wave epicenter
+    #    "epi_lon": 45., #degrees, HG longitude of wave epicenter
+    #    
+    #    #Wave parameters that can evolve over time
+    #    #The first element is constant in time
+    #    #The second element (if present) is linear in time
+    #    #The third element (if present) is quadratic in time
+    #    #Be very careful of non-physical behavior
+    #    "width": [90., 1.5], #degrees, full angle in azimuth, centered at 'direction'
+    #    "wave_thickness": [6.0e6*m2deg,6.0e4*m2deg], #degrees, sigma of Gaussian profile in longitudinal direction
+    #    "wave_normalization": [1.], #integrated value of the 1D Gaussian profile
+    #    "speed": [9.33e5*m2deg, -1.495e3*m2deg], #degrees/s, make sure that wave propagates all the way to lat_min for polynomial speed
+    #    
+    #    #Noise parameters
+    #    "noise_type": "Poisson", #can be None, "Normal", or "Poisson"
+    #    "noise_scale": 0.3,
+    #    "noise_mean": 1.,
+    #    "noise_sdev": 1.,
+    #    
+    #    "max_steps": 20,
+    #    
+    #    #HG grid, probably would only want to change the bin sizes
+    #    "lat_min": -90.,
+    #    "lat_max": 90.,
+    #    "lat_bin": 0.2,
+    #    "lon_min": -180.,
+    #    "lon_max": 180.,
+    #    "lon_bin": 5.,
+    #    
+    #    #HPC grid, probably would only want to change the bin sizes
+    #    "hpcx_min": -1025.,
+    #    "hpcx_max": 1023.,
+    #    "hpcx_bin": 2.,
+    #    "hpcy_min": -1025.,
+    #    "hpcy_max": 1023.,
+    #    "hpcy_bin": 2.
+    #}
+
+    return params
+
+
+def acquire_data(directory, extension, flare, duration=60, verbose=True):
+
+    # vals = eitwaveutils.goescls2number( [hek['fl_goescls'] for hek in
+    # hek_result] )
+    # flare_strength_index = sorted(range(len(vals)), key=vals.__getitem__)
+    # Get the data for each flare.
+    if verbose:
+        print('Event start time: ' + flare['event_starttime'])
+        print('GOES Class: ' + flare['fl_goescls'])
+    data_range = TimeRange(parse_time(flare['event_starttime']),
+                           parse_time(flare['event_starttime']) +
+                           timedelta(minutes=duration))
+    if extension.lower() == '.jp2':
+        data = acquire_jp2(directory, data_range)
+    if extension.lower() in ('.fits', '.fts'):
+        data = []
+    # Return the flare list from the HEK and a list of files for each flare in
+    # the HEK flare list
+    return data
+
+
+def listdir_fullpath(d):
+    dd = os.path.expanduser(d)
+    return [os.path.join(dd, f) for f in os.listdir(dd)]
+
+
+def get_jp2_dict(directory):
+    directory_listing = {}
+    l = os.listdir(os.path.expanduser(directory))
+    for f in l:
+        try:
+            ymd = f.split('__')[0]
+            hmsbit = f.split('__')[1]
+            hms = hmsbit.split('_')[0] + '_' + hmsbit.split('_')[1] + '_' + hmsbit.split('_')[2]
+            dt = datetime.strptime(ymd + '__' + hms, '%Y_%m_%d__%H_%M_%S')
+            directory_listing[dt] = os.path.join(os.path.expanduser(directory), f)
+        except:
+            print("Non Helioviewer-timestamp formatted file present.")
+    return directory_listing
+
+
+def acquire_jp2(directory, time_range, observatory='SDO', instrument='AIA',
+                detector='AIA', measurement='193', verbose=True):
+    """Acquire Helioviewer JPEG2000 files between the two specified times"""
+
+    # Create a Helioviewer Client
+    hv = helioviewer.HelioviewerClient()
+
+    # Start the search
+    jp2_list = []
+    this_time = time_range.t1
+    while this_time <= time_range.t2:
+        # update the directory dictionary with the latest contents
+        directory_dict = get_jp2_dict(directory)
+
+        # find what the closest image to the requested time is
+        response = hv.get_closest_image(this_time, observatory=observatory,
+                              instrument=instrument, detector=detector,
+                              measurement=measurement)
+
+        # if this date is not already present, download it
+        if not(response["date"] in directory_dict):
+            if verbose:
+                print('Downloading new file:')
+            jp2 = hv.download_jp2(this_time, observatory=observatory,
+                              instrument=instrument, detector=detector,
+                              measurement=measurement, directory=directory,
+                              overwrite=True)
+        else:
+            # Otherwise, get its location
+            jp2 = directory_dict[response["date"]]
+        # Only one instance of this file should exist
+        if not(jp2 in jp2_list):
+            jp2_list.append(jp2)
+            if verbose:
+                print('Found file ' + jp2 + '. Total found: ' + str(len(jp2_list)))
+
+        # advance the time
+        this_time = this_time + timedelta(seconds=6)
+    return jp2_list
 
 def loaddata(directory, extension):
     """ get the file list and sort it.  For well behaved file names the file
     name list is returned ordered by time"""
     lst = []
-    dir = os.path.expanduser(directory)
-    for f in os.listdir(dir):
+    loc = os.path.expanduser(directory)
+    for f in os.listdir(loc):
         if f.endswith(extension):
-            lst.append(os.path.join(dir,f))
+            lst.append(os.path.join(loc, f))
     return sorted(lst)
 
-def accumulate(filelist, accum=2, super=4, verbose=False):
-    """Add up data in time and space. Accumulate 'accum' files in time, and 
+
+def accumulate(filelist, accum=2, nsuper=4, verbose=False):
+    """Add up data in time and space. Accumulate 'accum' files in time, and
     then form the images into super by super superpixels."""
     # counter for number of files.
     j = 0
     # storage for the returned maps
     maps = []
     nfiles = len(filelist)
-    while j+accum <= nfiles:
+    while j + accum <= nfiles:
         i = 0
         while i < accum:
-            filename = filelist[i+j]
+            filename = filelist[i + j]
             if verbose:
-                print('File %(#)i out of %(nfiles)i' % {'#':i+j, 'nfiles':nfiles})
-                print('Reading in file '+filename)
-            map1 = (sunpy.make_map(filename)).superpixel((super,super))
+                print('File %(#)i out of %(nfiles)i' % {'#': i + j, 'nfiles':nfiles})
+                print('Reading in file ' + filename)
+            map1 = (sunpy.make_map(filename)).superpixel((nsuper, nsuper))
             if i == 0:
                 m = map1
             else:
@@ -46,12 +206,13 @@ def accumulate(filelist, accum=2, super=4, verbose=False):
         j = j + accum
         maps.append(m)
         if verbose:
-            print('Accumulated map List has length %(#)i' % {'#':len(maps)} )
+            print('Accumulated map List has length %(#)i' % {'#': len(maps)})
     return maps
+
 
 def map_unravel(maps, params, verbose=False):
     """ Unravel the maps into a rectangular image. """
-    new_maps =[]
+    new_maps = []
     for index, m in enumerate(maps):
         if verbose:
             print("Unraveling map %(#)i of %(n)i " % {'#':index+1, 'n':len(maps)})
@@ -60,7 +221,7 @@ def map_unravel(maps, params, verbose=False):
                                                epi_lat=params.get('epi_lat'),
                                                xbin=5,
                                                ybin=0.2)
-        unraveled[np.isnan(unraveled)]=0.0
+        unraveled[np.isnan(unraveled)] = 0.0
         new_maps += [unraveled]
     return new_maps
 
@@ -86,38 +247,48 @@ def check_dims(new_maps):
     #check dimensions of maps and resample to dimensions of first image in sequence if need be.
     #note that maps.shape lists the dimensions as (y,x) but maps.resample takes the arguments
     #as (x,y).
-    ref_dim=new_maps[0].shape[::-1]
-    ref_dim=[ref_dim[0],ref_dim[1]-1]
-    resampled_maps=[]
-    for i in range(0,len(new_maps)):
-        if new_maps[i].shape[::-1] != ref_dim:
-            tmp=new_maps[i].resample(ref_dim,method='linear')
-            print('Notice: resampling performed on frame ' +str(i) + ' to maintain consistent dimensions.')
+    ref_dim = [100000, 100000]
+    for Map in new_maps:
+        dim = Map.shape[::-1]
+        if dim[0] < ref_dim[0]:
+            ref_dim[0] = dim[0]
+        if dim[1] < ref_dim[1]:
+            ref_dim[1] = dim[1]
+    ref_dim = tuple(ref_dim)
+    resampled_maps = []
+    for i, Map in enumerate(new_maps):
+        if Map.shape[::-1] != ref_dim:
+            tmp = Map.resample(ref_dim, method='linear')
+            print('Notice: resampling performed on frame ' + str(i) +
+                  ' to maintain consistent dimensions.')
             resampled_maps.append(tmp)
         else:
-            resampled_maps.append(new_maps[i])
+            resampled_maps.append(Map)
     return resampled_maps
+
 
 def linesampleindex(a, b, np=1000):
     """ Get the indices in an array along a line"""
-    x, y = np.linspace(a[0],b[0],np), np.linspace(a[1],b[1],np)
+    x, y = np.linspace(a[0], b[0], np), np.linspace(a[1], b[1], np)
     xi = x.astype(np.int)
     yi = y.astype(np.int)
     return xi, yi
 
+
 def map_diff(maps):
     """ calculate running difference images """
     diffs = []
-    for i in range(0,len(maps)-1):
+    for i in range(0, len(maps) - 1):
         # take the difference
-        diffmap = (maps[i+1] - maps[i])
+        diffmap = (maps[i + 1] - maps[i])
         # keep
         diffs.append(diffmap)
     return diffs
 
+
 def map_threshold(maps, factor):
     threshold_maps = []
-    for i in range(1,len(maps)):
+    for i in range(1, len(maps)):
         sqrt_map = np.sqrt(maps[i]) * factor
         #threshold_maps.append(sqrt_map)
         threshold_maps.append(0.05 * maps[0])
@@ -137,31 +308,43 @@ def map_persistence(maps):
 def map_binary(diffs, threshold_maps):
     """turn difference maps into binary images"""
     binary_maps = []
-    for i in range(0,len(diffs)):
+    for i in range(0, len(diffs)):
         #for values > threshold_map in the diffmap, return True, otherwise False
         filtered_map = diffs[i] > threshold_maps[i]
         
         binary_maps.append(filtered_map)
     return binary_maps
 
+
+'''Ideas
+
+extract a submap that is where we expect the wave to be and just concentrate on
+that region
+ - will speed up processing
+
+ adaptive thresholding; as time increases the threshold decreases, anticipating
+ the decreasing amplitude of the wave.
+
+'''
+
 def hough_detect(diffs, vote_thresh=12):
     """ Use the Hough detection method to detect lines in the data.
     With enough lines, you can fill in the wave front."""
-    detection=[]
+    detection = []
     print("Performing hough transform on binary maps...")
     for img in diffs:
         # Perform the hough transform on each of the difference maps
         transform, theta, d = hough(img)
-    
+
         # Filter the hough transform results and find the best lines in the
         # data.  Keep detections that exceed the Hough vote threshold.
-        indices =  (transform>vote_thresh).nonzero()
+        indices = (transform>vote_thresh).nonzero()
         distances = d[indices[0]]
         theta = theta[indices[1]]
-    
+
         # Perform the inverse transform to get a series of rectangular
         # images that show where the wavefront is.
-        # Create a map which is the same as the 
+        # Create a map which is the same as the
         invTransform = sunpy.make_map(np.zeros(img.shape), img._original_header)
         invTransform.data = np.zeros(img.shape)
         
@@ -238,7 +421,7 @@ def fit_wavefront(diffs, detection):
     wavefront_maps=[]
     for i in range (0, len(diffs)):
         if (detection[i].max() == 0.0):
-             #if the 'detection' array is empty then skip this image
+            #if the 'detection' array is empty then skip this image
             fit_map=sunpy.make_map(np.zeros(dims),diffs[0]._original_header)
             print("Nothing detected in image " + str(i) + ". Skipping.")
             answers.append([])
@@ -401,5 +584,4 @@ def htLine(distance,angle,img):
         img[:,distance] = 1
 
     return img
-
 

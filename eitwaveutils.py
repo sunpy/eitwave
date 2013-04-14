@@ -122,9 +122,17 @@ def acquire_data(directory, extension, flare, duration=60, verbose=True):
     return data
 
 
-def listdir_fullpath(d):
+def listdir_fullpath(d, filetype=None):
     dd = os.path.expanduser(d)
-    return sorted([os.path.join(dd, f) for f in os.listdir(dd)])
+    filelist = os.listdir(dd)
+    if filetype == None:
+        return sorted([os.path.join(dd, f) for f in filelist])
+    else:
+        filtered_list = []
+        for f in filelist:
+            if f[-len(filetype):] == filetype:
+                filtered_list.append(f)
+        return sorted([os.path.join(dd, f) for f in filtered_list])
 
 
 def get_jp2_dict(directory):
@@ -278,6 +286,12 @@ def linesampleindex(a, b, np=1000):
     yi = y.astype(np.int)
     return xi, yi
 
+def make_array(maplist):
+    """ take a list of maps and make a numpy array - much more useful """
+    tup =()
+    for m in maplist:
+        tup = tup + (np.asarray(m),)
+    return np.dstack(tup)
 
 def map_diff(maps):
     """ calculate running difference images """
@@ -288,7 +302,6 @@ def map_diff(maps):
         # keep
         diffs.append(diffmap)
     return diffs
-
 
 def map_threshold(maps, factor):
     threshold_maps = []

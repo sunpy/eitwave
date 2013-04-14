@@ -3,6 +3,7 @@ from visualize import visualize
 import eitwaveutils
 import copy
 import os
+import cPickle as pickle
 from test_wave2d import test_wave2d
 from sunpy.time import TimeRange, parse_time
 from sunpy.net import hek
@@ -10,7 +11,8 @@ from sunpy.net import hek
 
 def main(source_data='.jp2',
          time_range=TimeRange('2011/10/01 09:45:00', '2011/10/01 10:15:59'),
-         algorithm='hough', feed_directory='~/Data/eitwave/jp2/20111001/'):
+         algorithm='hough', feed_directory='~/Data/eitwave/jp2/20111001/',
+         use_pickle=None):
     '''
     source_data { jp2 | fits | test }
     look for helioviewer JP2 files, FITS files, or load the test data
@@ -26,19 +28,21 @@ def main(source_data='.jp2',
     algorithm: { 'hough' : 'phough' }
     algorithm used to find the wave
     '''
+    if feed_directory != None:
+        feed_directory = os.path.expanduser(feed_directory)
 
     if source_data == 'test':
         # where to store those data
         maps = test_wave2d()
     elif source_data == '.jp2':
         # where to store those data
-        data_storage = "~/Data/eitwave/jp2/AGU/"
+        data_storage = "~/Data/eitwave/jp2/20111001/"
 
     # Query the HEK for flare information we need
     client = hek.HEKClient()
     hek_result = client.query(hek.attrs.Time(time_range.t1, time_range.t2),
                               hek.attrs.EventType('FL'))
-                              #hek.attrs.FRM.Name == '')
+    #hek.attrs.FRM.Name == '')
     # no flares, no analysis possible
     if hek_result is None:
         return None
@@ -54,7 +58,8 @@ def main(source_data='.jp2',
                                                  flare)
         else:
             # Assumes that the necessary files are already present
-            filelist = eitwaveutils.listdir_fullpath(feed_directory)
+            filelist = eitwaveutils.listdir_fullpath(feed_directory,
+                                                     filetype ='jp2')
 
         # reduce the number of files to those that happen after the flare has
         # started
@@ -74,19 +79,32 @@ def main(source_data='.jp2',
         params = eitwaveutils.params(flare)
 
         # read in files and accumulate them
-        maps = eitwaveutils.accumulate(files, accum=1, nsuper=4,
+        if use_pickle != None:
+            # load in a pickle file of the data
+            pfile = open(feed_directory + 'map.pkl', 'rb')
+            maps, new_maps, diffs = pickle.load(pfile)
+            pfile.close()
+            
+        else:
+            maps = eitwaveutils.accumulate(files, accum=1, nsuper=4,
                                    verbose=True)
+            # Unravel the maps
+            new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
 
-        # Unravel the maps
-        new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
+            #sometimes unravelling maps leads to slight variations in the unraveled
+            #image dimensions.  check dimensions of maps and resample to dimensions
+            #of first image in sequence if need be.
+            new_maps = eitwaveutils.check_dims(new_maps)
 
-        #sometimes unravelling maps leads to slight variations in the unraveled
-        #image dimensions.  check dimensions of maps and resample to dimensions
-        #of first image in sequence if need be.
-        new_maps = eitwaveutils.check_dims(new_maps)
+            # calculate the differences
+            diffs = eitwaveutils.map_diff(new_maps)
+            
+            # save the outpout
+            output = open(feed_directory + 'maps.pkl', 'wb')
+            pickle.dump([maps, new_maps, diffs], output, protocol=-1)
+            output.close()
+            
 
-        # calculate the differences
-        diffs = eitwaveutils.map_diff(new_maps)
 
         #determine the threshold to apply to the difference maps.
         #diffs > diff_thresh will be True, otherwise False.

@@ -44,9 +44,14 @@ def velocity_polyfit(position, column):
             if position[i][column] == []:
                 pos.append(np.nan)
             else:
-                pos.append(position[i][column])
+                if i == 1:
+                    #position[i][column] = []:
+                    pos.append(np.nan)
+                else:
+                    pos.append(position[i][column])
 
-    x=np.linspace(1,19,19)
+    xlen=len(pos)+1
+    x=np.linspace(1,xlen,xlen)
     #ignore NaN values
     u=np.isnan(pos)
     u=np.invert(u)

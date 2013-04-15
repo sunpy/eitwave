@@ -7,6 +7,7 @@ import cPickle as pickle
 from test_wave2d import test_wave2d
 from sunpy.time import TimeRange, parse_time
 from sunpy.net import hek
+import os
 
 
 def main(source_data='.jp2',
@@ -38,6 +39,9 @@ def main(source_data='.jp2',
         # where to store those data
         data_storage = "~/Data/eitwave/jp2/20111001/"
 
+    if not os.path.exists(os.path.expanduser(data_storage)):
+            os.makedirs(os.path.expanduser(data_storage))
+
     # Query the HEK for flare information we need
     client = hek.HEKClient()
     hek_result = client.query(hek.attrs.Time(time_range.t1, time_range.t2),
@@ -58,13 +62,21 @@ def main(source_data='.jp2',
                                                  flare)
         else:
             # Assumes that the necessary files are already present
+
             filelist = eitwaveutils.listdir_fullpath(feed_directory,
                                                      filetype ='jp2')
+
+        #filter to only grab the data files with the source_data extn in the directory
+        files_tmp = []
+        for f in filelist:
+            if f.endswith(source_data):
+                files_tmp.append(f)
+            files = files_tmp
 
         # reduce the number of files to those that happen after the flare has
         # started
         files = []
-        for f in filelist:
+        for f in files_tmp:
             fhv = f.split(os.sep)[-1]
             if eitwaveutils.hv_filename2datetime(fhv) > \
             parse_time(flare['event_starttime']):
@@ -90,6 +102,7 @@ def main(source_data='.jp2',
         else:
             maps = eitwaveutils.accumulate(files[0:2], accum=1, nsuper=4,
                                    verbose=True)
+
             # Unravel the maps
             new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
 
@@ -100,12 +113,26 @@ def main(source_data='.jp2',
 
             # calculate the differences
             diffs = eitwaveutils.map_diff(new_maps)
-            
+
             # save the outpout
             output = open(feed_directory + 'maps.pkl', 'wb')
             pickle.dump([maps, new_maps, diffs], output, protocol=0)
             output.close()
-            
+
+        # Unravel the maps
+        new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
+
+        #sometimes unravelling maps leads to slight variations in the unraveled
+        #image dimensions.  check dimensions of maps and resample to dimensions
+        #of first image in sequence if need be.
+        new_maps = eitwaveutils.check_dims(new_maps)
+
+        # calculate the differences
+        diffs = eitwaveutils.map_diff(new_maps)
+
+        #generate persistence maps
+        persistence_maps = eitwaveutils.map_persistence(diffs)
+
         #determine the threshold to apply to the difference maps.
         #diffs > diff_thresh will be True, otherwise False.
         threshold_maps = eitwaveutils.map_threshold(new_maps, factor=0.2)
@@ -152,8 +179,8 @@ def main(source_data='.jp2',
 
         visualize(detection)
 
-    return maps, new_maps, diffs, threshold_maps, binary_maps
-    #, detection,wavefront, velocity, pos_width
+    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity, pos_width, persistence_maps
+
 
 if __name__ == '__main__':
     main()

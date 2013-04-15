@@ -30,7 +30,7 @@ m2deg = 360./(2*3.1415926*6.96e8)
 
 max_steps = 20
 
-params = {
+waveparams = {
     # "cadence": 12., #seconds
     "cadence": 30., #seconds
     

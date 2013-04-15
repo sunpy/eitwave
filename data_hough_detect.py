@@ -87,7 +87,6 @@ def main(source_data='.jp2',
             new_maps = a[1]
             diffs = a[2]
             pfile.close()
-            
         else:
             maps = eitwaveutils.accumulate(files[0:2], accum=1, nsuper=4,
                                    verbose=True)
@@ -104,11 +103,9 @@ def main(source_data='.jp2',
             
             # save the outpout
             output = open(feed_directory + 'maps.pkl', 'wb')
-            pickle.dump([maps, new_maps, diffs], output, protocol=-1)
+            pickle.dump([maps, new_maps, diffs], output, protocol=0)
             output.close()
             
-
-
         #determine the threshold to apply to the difference maps.
         #diffs > diff_thresh will be True, otherwise False.
         threshold_maps = eitwaveutils.map_threshold(new_maps, factor=0.2)

@@ -219,8 +219,8 @@ def map_unravel(maps, params, verbose=False):
         unraveled = util.map_hpc_to_hg_rotate(m,
                                                epi_lon=params.get('epi_lon'),
                                                epi_lat=params.get('epi_lat'),
-                                               xbin=5,
-                                               ybin=0.2)
+                                               lon_bin=5,
+                                               lat_bin=0.2)
         unraveled[np.isnan(unraveled)] = 0.0
         new_maps += [unraveled]
     return new_maps

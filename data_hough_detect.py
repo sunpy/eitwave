@@ -5,11 +5,11 @@ import copy
 from test_wave2d import test_wave2d
 from sunpy.time import TimeRange
 from sunpy.net import hek
-
+import os
 
 def main(source_data='.jp2',
          time_range=TimeRange('2011/10/01 09:00:00', '2011/10/01 10:15:59'),
-         algorithm='hough', feed_directory='~/Data/eitwave/test_jp2/'):
+         algorithm='hough', feed_directory=None):
     '''
     source_data { jp2 | fits | test }
     look for helioviewer JP2 files, FITS files, or load the test data
@@ -31,7 +31,9 @@ def main(source_data='.jp2',
         maps = test_wave2d()
     elif source_data == '.jp2':
         # where to store those data
-        data_storage = "~/Data/eitwave/jp2/AGU/"
+        data_storage = "~/Data/eitwave/jp2/"
+        if not os.path.exists(os.path.expanduser(data_storage)):
+             os.makedirs(os.path.expanduser(data_storage))
 
     # Query the HEK for flare information we need
     client = hek.HEKClient()
@@ -53,7 +55,12 @@ def main(source_data='.jp2',
         else:
             # Assumes that the necessary files are already present
             files = eitwaveutils.listdir_fullpath(feed_directory)
-
+            #filter to only grab the data files with the source_data extn in the directory
+            files_tmp = []
+            for file in files:
+                 if file.endswith(source_data) == True:
+                      files_tmp.append(file)
+            files=files_tmp
         # Define the transform parameters
         # params = eitwaveutils.params(flare='test')
         params = eitwaveutils.params(flare)
@@ -72,6 +79,9 @@ def main(source_data='.jp2',
 
         # calculate the differences
         diffs = eitwaveutils.map_diff(new_maps)
+
+        #generate persistence maps
+        persistence_maps = eitwaveutils.map_persistence(diffs)
 
         #determine the threshold to apply to the difference maps.
         #diffs > diff_thresh will be True, otherwise False.
@@ -107,6 +117,7 @@ def main(source_data='.jp2',
             temp = diffs[i] < 0
             posdiffs[i][temp] = 0
 
+
         #fit a function to the difference maps in the cases where there has been a
         #detection
         wavefront = eitwaveutils.fit_wavefront(posdiffs, detection)
@@ -118,8 +129,7 @@ def main(source_data='.jp2',
         pos_width = eitwaveutils.wavefront_position_and_width(wavefront[0])
 
         visualize(detection)
-    return maps, new_maps, diffs, threshold_maps, binary_maps, detection,
-    wavefront, velocity, pos_width
+    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity, pos_width, persistence_maps
 
 if __name__ == '__main__':
     main()

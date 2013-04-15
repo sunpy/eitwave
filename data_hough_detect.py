@@ -12,7 +12,7 @@ from sunpy.net import hek
 def main(source_data='.jp2',
          time_range=TimeRange('2011/10/01 09:45:00', '2011/10/01 10:15:59'),
          algorithm='hough', feed_directory='~/Data/eitwave/jp2/20111001/',
-         use_pickle=None):
+         use_pickle='maps.pkl'):
     '''
     source_data { jp2 | fits | test }
     look for helioviewer JP2 files, FITS files, or load the test data
@@ -43,8 +43,8 @@ def main(source_data='.jp2',
     hek_result = client.query(hek.attrs.Time(time_range.t1, time_range.t2),
                               hek.attrs.EventType('FL'))
     #hek.attrs.FRM.Name == '')
-    # no flares, no analysis possible
     if hek_result is None:
+    # no flares, no analysis possible
         return None
 
     # Flares!
@@ -81,12 +81,15 @@ def main(source_data='.jp2',
         # read in files and accumulate them
         if use_pickle != None:
             # load in a pickle file of the data
-            pfile = open(feed_directory + 'map.pkl', 'rb')
-            maps, new_maps, diffs = pickle.load(pfile)
+            pfile = open(feed_directory + use_pickle, 'rb')
+            a = pickle.load(pfile)
+            maps = a[0]
+            new_maps = a[1]
+            diffs = a[2]
             pfile.close()
             
         else:
-            maps = eitwaveutils.accumulate(files, accum=1, nsuper=4,
+            maps = eitwaveutils.accumulate(files[0:2], accum=1, nsuper=4,
                                    verbose=True)
             # Unravel the maps
             new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)

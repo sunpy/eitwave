@@ -23,7 +23,7 @@ def params(flare,**kwargs):
     if flare["event_coordunit"] == "degrees":
         flare_event_coord1 = flare['event_coord1']
         flare_event_coord2 = flare['event_coord2']
-    elif flare["event_coordunit"] == "arcseconds":
+    elif flare["event_coordunit"] == "arcsec" or flare["event_coordunit"] == "arcseconds":
         info = pb0r(flare["event_starttime"])
         flare_coords = convert_hcc_hg(info["sd"] / 60.0,
                                       info["b0"], info["l0"],
@@ -33,8 +33,8 @@ def params(flare,**kwargs):
         flare_event_coord2 = flare_coords[1]
 
     """ Define the parameters we will use for the unraveling of the maps"""
-    params = {"epi_lat": flare_event_coord1, #30., #degrees, HG latitude of wave epicenter
-              "epi_lon": flare_event_coord2, #45., #degrees, HG longitude of wave epicenter
+    params = {"epi_lat": flare_event_coord2, #30., #degrees, HG latitude of wave epicenter
+              "epi_lon": flare_event_coord1, #45., #degrees, HG longitude of wave epicenter
               #HG grid, probably would only want to change the bin sizes
               "lat_min": -90.,
               "lat_max": 90.,
@@ -158,7 +158,7 @@ def hv_filename2datetime(f):
 
 
 def acquire_jp2(directory, time_range, observatory='SDO', instrument='AIA',
-                detector='AIA', measurement='193', verbose=True):
+                detector='AIA', measurement='211', verbose=True):
     """Acquire Helioviewer JPEG2000 files between the two specified times"""
 
     # Create a Helioviewer Client
@@ -316,6 +316,17 @@ def map_diff(maps):
         # keep
         diffs.append(diffmap)
     return diffs
+
+def map_basediff(maps):
+    """ calculate running difference images """
+    diffs = []
+    for i in range(0, len(maps) - 1):
+        # take the difference
+        diffmap = (maps[i + 1] - maps[0])
+        # keep
+        diffs.append(diffmap)
+    return diffs
+
 
 def map_threshold(maps, factor):
     threshold_maps = []

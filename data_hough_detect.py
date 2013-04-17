@@ -13,7 +13,7 @@ import os
 def main(source_data='.jp2',
          time_range=TimeRange('2011/10/01 09:45:00', '2011/10/01 10:15:59'),
          algorithm='hough', feed_directory='~/Data/eitwave/jp2/20111001/',
-         use_pickle='maps.pkl'):
+         use_pickle='maps.pkl',diff_type='running'):
     '''
     source_data { jp2 | fits | test }
     look for helioviewer JP2 files, FITS files, or load the test data
@@ -37,7 +37,7 @@ def main(source_data='.jp2',
         maps = test_wave2d()
     elif source_data == '.jp2':
         # where to store those data
-        data_storage = "~/Data/eitwave/jp2/20111001/"
+        data_storage = "~/Data/eitwave/jp2/"
 
     if not os.path.exists(os.path.expanduser(data_storage)):
             os.makedirs(os.path.expanduser(data_storage))
@@ -100,8 +100,15 @@ def main(source_data='.jp2',
             diffs = a[2]
             pfile.close()
         else:
-            maps = eitwaveutils.accumulate(files[0:2], accum=1, nsuper=4,
+            maps = eitwaveutils.accumulate(files[0:30], accum=1, nsuper=4,
                                    verbose=True)
+
+            #temporary fix for exposure control and S/N changes
+            long_maps = []
+            for m in maps:
+                if m.exposure_time > 2.0:
+                    long_maps.append(m)
+            maps=long_maps
 
             # Unravel the maps
             new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
@@ -112,23 +119,26 @@ def main(source_data='.jp2',
             new_maps = eitwaveutils.check_dims(new_maps)
 
             # calculate the differences
-            diffs = eitwaveutils.map_diff(new_maps)
+            if diff_type == 'base':
+                diffs=eitwaveutils.map_basediff(new_maps)
+            else:
+                diffs = eitwaveutils.map_diff(new_maps)
 
             # save the outpout
-            output = open(feed_directory + 'maps.pkl', 'wb')
-            pickle.dump([maps, new_maps, diffs], output, protocol=0)
-            output.close()
+            #output = open(feed_directory + 'maps.pkl', 'wb')
+            ##pickle.dump([maps, new_maps, diffs], output, protocol=0)
+            #output.close()
 
         # Unravel the maps
-        new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
+        #new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
 
         #sometimes unravelling maps leads to slight variations in the unraveled
         #image dimensions.  check dimensions of maps and resample to dimensions
         #of first image in sequence if need be.
-        new_maps = eitwaveutils.check_dims(new_maps)
+        #new_maps = eitwaveutils.check_dims(new_maps)
 
         # calculate the differences
-        diffs = eitwaveutils.map_diff(new_maps)
+        #diffs = eitwaveutils.map_diff(new_maps)
 
         #generate persistence maps
         persistence_maps = eitwaveutils.map_persistence(diffs)

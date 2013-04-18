@@ -318,7 +318,7 @@ def map_diff(maps):
     return diffs
 
 def map_basediff(maps):
-    """ calculate running difference images """
+    """ calculate base difference images """
     diffs = []
     for i in range(0, len(maps) - 1):
         # take the difference

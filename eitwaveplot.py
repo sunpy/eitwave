@@ -33,6 +33,127 @@ def width_histogram(width):
         else:
             print('No width data for frame ' + str(i) + '. Skipping')
 
+def mean_width_vs_time(width,maps):
+
+    w=[]
+    times=[]
+    m=maps[0]
+    base_time=m.date
+    for i in range(0,len(width)):
+        m=maps[i]
+        sec=m.date-base_time
+        times.append(sec.seconds)
+        if width[i] == []:
+            w.append(np.nan)
+        else:
+            noz=np.nonzero(width[i])
+            noz=np.array(noz)
+            w_tmp=np.array(width[i])
+            w.append(w_tmp[noz].mean())
+    x=times
+    #ignore NaN values
+    u=np.isnan(w)
+    u=np.invert(u)
+    #convert from list to numpy array to avoid type error
+    w=np.array(w)
+    x=np.array(x)
+    #keep everything that's not NaN
+    w=w[u]
+    x=x[u]
+    x2=np.linspace(0,x[-1],x[-1])
+
+    #make a plot of the width vs time.
+    plt.title('Mean wavefront width')
+    plt.xlabel('Elapsed time (s)')
+    plt.ylabel('Mean width (deg)')
+    plt.plot(x,w,'b-',ms=6)
+    plt.plot(x,w,'bs',ms=6)
+    #plt.plot(x2,p(x2),'b-',linewidth=2.0)
+    #plt.plot(x,line,'r-')
+    #plt.annotate('v = '+ str(vel) + ' km/s' + ' + ' + str(acc) + ' km/s^2',[200,86])
+    plt.show()
+
+def amplitude_vs_time(wavefront,maps,column):
+    a=[]
+    times=[]
+    m=maps[0]
+    base_time=m.date
+    for i in range(0,len(wavefront)):
+        m=maps[i]
+        sec=m.date-base_time
+        times.append(sec.seconds)
+        if wavefront[i] == []:
+            a.append(np.nan)
+        else:
+            w_tmp=wavefront[i][0:,column]
+            if w_tmp.max() == 0:
+                a.append(np.nan)
+            else:
+                a.append(w_tmp.max())
+            
+    x=times
+    #ignore NaN values
+    u=np.isnan(a)
+    u=np.invert(u)
+    #convert from list to numpy array to avoid type error
+    a=np.array(a)
+    x=np.array(x)
+    #keep everything that's not NaN
+    a=a[u]
+    x=x[u]
+    x2=np.linspace(0,x[-1],x[-1])
+
+    #make a plot of the width vs time.
+    plt.title('Amplitude vs time')
+    plt.xlabel('Elapsed time (s)')
+    plt.ylabel('Amplitude (arb.)')
+    plt.plot(x,a,'b-',ms=6,linewidth=2.0)
+    plt.plot(x,a,'bs',ms=4)
+    #plt.plot(x2,p(x2),'b-',linewidth=2.0)
+    #plt.plot(x,line,'r-')
+    #plt.annotate('v = '+ str(vel) + ' km/s' + ' + ' + str(acc) + ' km/s^2',[200,86])
+    plt.show()
+
+def width_vs_time(width,maps,column):
+    w=[]
+    times=[]
+    m=maps[0]
+    base_time=m.date
+    for i in range(0,len(width)):
+        m=maps[i]
+        sec=m.date-base_time
+        times.append(sec.seconds)
+        if width[i] == []:
+            w.append(np.nan)
+        else:
+            if width[i][column] == []:
+                w.append(np.nan)
+            else:
+                w.append(width[i][column])
+    x=times
+    #ignore NaN values
+    u=np.isnan(w)
+    u=np.invert(u)
+    #convert from list to numpy array to avoid type error
+    w=np.array(w)
+    x=np.array(x)
+    #keep everything that's not NaN
+    w=w[u]
+    x=x[u]
+    x2=np.linspace(0,x[-1],x[-1])
+
+    #make a plot of the width vs time.
+    plt.title('Wavefront width')
+    plt.xlabel('Elapsed time (s)')
+    plt.ylabel('Width (deg)')
+    plt.plot(x,w,'bs',ms=10)
+    #plt.plot(x2,p(x2),'b-',linewidth=2.0)
+    #plt.plot(x,line,'r-')
+    #plt.annotate('v = '+ str(vel) + ' km/s' + ' + ' + str(acc) + ' km/s^2',[200,86])
+    plt.show()
+    
+    
+
 def width_vs_longitude(width,ref_map):
     """Plot the width of the wavefront as a function of longitude for a given image frame"""
     #convert list to numpy array
@@ -113,13 +234,15 @@ def velocity_polyfit(position, maps, column):
     vel=round(vel,1)
     acc=round(acc,1)
     #plot the polynomial fit over the original position data
-    plt.title('Velocity fit')
-    plt.xlabel('Elapsed time (s)')
-    plt.ylabel('Position (deg)')
+    plt.title('Velocity fit',fontsize=20)
+    plt.tick_params(labelsize=20)
+    plt.xlabel('Elapsed time (s)',fontsize=20)
+    plt.ylabel('Position (deg)',fontsize=20)
     plt.plot(x,pos,'g.',ms=10)
     plt.plot(x2,p(x2),'b-',linewidth=2.0)
     #plt.plot(x,line,'r-')
-    plt.annotate('v = '+ str(vel) + ' km/s' + ' + ' + str(acc) + ' km/s^2',[200,86])
+    plt.annotate('v = '+ str(vel) + ' km/s',[500,86],fontsize=20)
+    plt.annotate('a = '+ str(acc) + 'km/s^2',[500,83],fontsize=20)
     plt.show()
 
     

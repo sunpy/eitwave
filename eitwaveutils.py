@@ -245,23 +245,23 @@ def map_unravel(maps, params, verbose=False):
         unraveled = util.map_hpc_to_hg_rotate(m,
                                                epi_lon=params.get('epi_lon'),
                                                epi_lat=params.get('epi_lat'),
-                                               lon_bin=5,
-                                               lat_bin=0.2)
+                                               lon_bin=params.get('lon_bin'),
+                                               lat_bin=params.get('lat_bin'))
         unraveled[np.isnan(unraveled)] = 0.0
         new_maps += [unraveled]
     return new_maps
 
 def map_reravel(unravelled_maps, params, verbose=False):
-    """ Unravel the maps into a rectangular image. """
+    """ Transform rectangular maps back into heliocentric image. """
     reraveled_maps =[]
     for index, m in enumerate(unravelled_maps):
         if verbose:
-            print("Unraveling map %(#)i of %(n)i " % {'#':index+1, 'n':len(unravelled_maps)})
-        reraveled = util.map_hg_to_hpc(m,
+            print("Transforming back to heliocentric coordinates map %(#)i of %(n)i " % {'#':index+1, 'n':len(unravelled_maps)})
+        reraveled = util.map_hg_to_hpc_rotate(m,
                                         epi_lon=params.get('epi_lon'),
                                         epi_lat=params.get('epi_lat'),
-                                        xbin=5,
-                                        ybin=0.2)
+                                        xbin=2.4,
+                                        ybin=2.4)
         reraveled[np.isnan(reraveled)]=0.0
         reraveled_maps += [reraveled]
     return reraveled_maps

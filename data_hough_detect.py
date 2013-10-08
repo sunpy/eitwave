@@ -45,7 +45,7 @@ def main(source_data='.jp2',
     # Query the HEK for flare information we need
     client = hek.HEKClient()
     hek_result = client.query(hek.attrs.Time(time_range.t1, time_range.t2),
-                              hek.attrs.EventType('FL'))
+                              hek.attrs.EventType('FL'),hek.attrs.OBS.ChannelID == '211')
     #hek.attrs.FRM.Name == '')
     if hek_result is None:
     # no flares, no analysis possible
@@ -54,7 +54,7 @@ def main(source_data='.jp2',
     # Flares!
     print('Number of flares found = ' + str(len(hek_result)))
 
-    for flare in hek_result[12:13]:
+    for flare in hek_result[0]:
 
         if feed_directory is None:
             print('Acquiring data for flare')

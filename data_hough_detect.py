@@ -45,7 +45,7 @@ def main(source_data='.jp2',
     # Query the HEK for flare information we need
     client = hek.HEKClient()
     hek_result = client.query(hek.attrs.Time(time_range.t1, time_range.t2),
-                              hek.attrs.EventType('FL'))
+                              hek.attrs.EventType('FL'),hek.attrs.OBS.ChannelID == '211')
     #hek.attrs.FRM.Name == '')
     if hek_result is None:
     # no flares, no analysis possible
@@ -54,7 +54,7 @@ def main(source_data='.jp2',
     # Flares!
     print('Number of flares found = ' + str(len(hek_result)))
 
-    for flare in hek_result[10:11]:
+    for flare in hek_result[0]:
 
         if feed_directory is None:
             print('Acquiring data for flare')
@@ -181,6 +181,9 @@ def main(source_data='.jp2',
         #detection
         wavefront = eitwaveutils.fit_wavefront(posdiffs, detection)
 
+        #transform the detected model wavefront back into heliocentric coordinates so it can be overlayed
+        wavefront_hc = eitwaveutils.map_reravel(wavefront[1],params,verbose=True)
+
         #strip out the velocity information from the wavefront fitting
         velocity = eitwaveutils.wavefront_velocity(wavefront[0])
 
@@ -189,7 +192,7 @@ def main(source_data='.jp2',
 
         visualize(detection)
 
-    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity, pos_width, persistence_maps
+    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity, pos_width, persistence_maps, wavefront_hc,params
 
 
 if __name__ == '__main__':

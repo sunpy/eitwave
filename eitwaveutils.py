@@ -3,18 +3,19 @@
 #
 from visualize import visualize
 from sim import wave2d
-from skimage.transform import hough
-from skimage.transform import probabilistic_hough
+from skimage.transform import hough_line
+from skimage.transform import probabilistic_hough_line
 import scipy
 import numpy as np
 import sunpy
+import sunpy.map
 import os
 import util
 import copy
 from sunpy.net import helioviewer
 from sunpy.time import TimeRange, parse_time
 from sunpy.wcs import convert_hcc_hg
-from sunpy.coords import pb0r
+from pb0r import pb0r
 from datetime import timedelta, datetime
 
 def params(flare,**kwargs):
@@ -223,7 +224,7 @@ def accumulate(filelist, accum=2, nsuper=4, verbose=False):
             if verbose:
                 print('File %(#)i out of %(nfiles)i' % {'#': i + j, 'nfiles':nfiles})
                 print('Reading in file ' + filename)
-            map1 = (sunpy.make_map(filename)).superpixel((nsuper, nsuper))
+            map1 = (sunpy.map.Map(filename)).superpixel((nsuper, nsuper))
             if i == 0:
                 m = map1
             else:

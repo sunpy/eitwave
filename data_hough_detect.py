@@ -12,7 +12,7 @@ import os
 
 def main(source_data='.jp2',
          time_range=TimeRange('2011/10/01 09:45:00', '2011/10/01 10:15:59'),
-         algorithm='hough', feed_directory='~/Data/eitwave/jp2/20111001/',
+         algorithm='hough', feed_directory='~/Data/eitwave/jp2/20111001_jp2/',
          use_pickle='maps.pkl',diff_type='running'):
     '''
     source_data { jp2 | fits | test }
@@ -37,7 +37,7 @@ def main(source_data='.jp2',
         maps = test_wave2d()
     elif source_data == '.jp2':
         # where to store those data
-        data_storage = "~/Data/eitwave/jp2/"
+        data_storage = "~/Data/eitwave/jp2/20120607/"
 
     if not os.path.exists(os.path.expanduser(data_storage)):
             os.makedirs(os.path.expanduser(data_storage))
@@ -54,7 +54,7 @@ def main(source_data='.jp2',
     # Flares!
     print('Number of flares found = ' + str(len(hek_result)))
 
-    for flare in hek_result[0]:
+    for flare in hek_result[0:1]:
 
         if feed_directory is None:
             print('Acquiring data for flare')
@@ -100,7 +100,7 @@ def main(source_data='.jp2',
             diffs = a[2]
             pfile.close()
         else:
-            maps = eitwaveutils.accumulate(files[0:30], accum=1, nsuper=4,
+            maps = eitwaveutils.accumulate(files[6:30], accum=1, nsuper=4,
                                    verbose=True)
 
             #temporary fix for exposure control and S/N changes

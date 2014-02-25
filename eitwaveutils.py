@@ -248,7 +248,12 @@ def map_unravel(maps, params, verbose=False):
                                                epi_lat=params.get('epi_lat'),
                                                lon_bin=params.get('lon_bin'),
                                                lat_bin=params.get('lat_bin'))
-        unraveled[np.isnan(unraveled)] = 0.0
+            #print type(unraveled)
+            #test=np.isnan(unraveled)
+            #print len(test)
+            #print test[0:10]
+            #print unraveled.data[0:10]
+        unraveled.data[np.isnan(unraveled)] = 0.0
         new_maps += [unraveled]
     return new_maps
 

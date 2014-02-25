@@ -109,15 +109,17 @@ def main(source_data='.jp2',
                 if m.exposure_time > 2.0:
                     long_maps.append(m)
             maps=long_maps
-
+            return long_maps
             # Unravel the maps
             new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
 
             #sometimes unravelling maps leads to slight variations in the unraveled
             #image dimensions.  check dimensions of maps and resample to dimensions
             #of first image in sequence if need be.
+            new_maps[0].peek()
             new_maps = eitwaveutils.check_dims(new_maps)
 
+            return new_maps
             # calculate the differences
             if diff_type == 'base':
                 diffs=eitwaveutils.map_basediff(new_maps)

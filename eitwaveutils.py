@@ -379,14 +379,14 @@ that region
 
 '''
 
-def hough_detect(diffs, vote_thresh=12):
+def hough_detect(binary_maps, vote_thresh=12):
     """ Use the Hough detection method to detect lines in the data.
     With enough lines, you can fill in the wave front."""
     detection = []
     print("Performing hough transform on binary maps...")
-    for img in diffs:
+    for img in binary_maps:
         # Perform the hough transform on each of the difference maps
-        transform, theta, d = hough_line(img)
+        transform, theta, d = hough_line(img.data)
 
         # Filter the hough transform results and find the best lines in the
         # data.  Keep detections that exceed the Hough vote threshold.
@@ -397,8 +397,8 @@ def hough_detect(diffs, vote_thresh=12):
         # Perform the inverse transform to get a series of rectangular
         # images that show where the wavefront is.
         # Create a map which is the same as the
-        invTransform = sunpy.make_map(np.zeros(img.shape), img._original_header)
-        invTransform.data = np.zeros(img.shape)
+        invTransform = sunpy.map.Map(np.zeros(img.data.shape), img.meta)
+        invTransform.data = np.zeros(img.data.shape)
         
         # Add up all the detected lines over each other.  The idea behind
         # adding up all the lines on top of each other is that pixels that
@@ -407,7 +407,7 @@ def hough_detect(diffs, vote_thresh=12):
         # to detect lines - to detect and fill in a region.  You might see this
         # as an abuse of the Hough transform!
         for i in range(0,len(indices[1])):
-            nextLine = htLine(distances[i], theta[i], np.zeros(shape=img.shape))
+            nextLine = htLine(distances[i], theta[i], np.zeros(shape=img.data.shape))
             invTransform = invTransform + nextLine
 
         detection.append(invTransform)
@@ -474,7 +474,7 @@ def fit_wavefront(diffs, detection):
     for i in range (0, len(diffs)):
         if (detection[i].max() == 0.0):
             #if the 'detection' array is empty then skip this image
-            fit_map=sunpy.make_map(np.zeros(dims),diffs[0]._original_header)
+            fit_map=sunpy.map.Map(np.zeros(dims),diffs[0]._original_header)
             print("Nothing detected in image " + str(i) + ". Skipping.")
             answers.append([])
             wavefront_maps.append(fit_map)
@@ -496,13 +496,13 @@ def fit_wavefront(diffs, detection):
             #for each column in image, fit along the y-direction a function to find wave parameters
             for n in range (0,dims[1]):
                 #guess the amplitude of the Gaussian fit from the difference image
-                guess_amp=np.float(img[guess_index[0],n])
+                guess_amp=np.float(img.data[guess_index[0],n])
                 
                 #put the guess input parameters into a vector
                 guess_params=[guess_amp,guess_position,5]
 
                 #get the current image column
-                y=img[:,n]
+                y=img.data[:,n]
                 y=y.flatten()                
                 #call Albert's fitting function
                 result = util.fitfunc(x,y,'Gaussian',guess_params)
@@ -534,7 +534,7 @@ def fit_wavefront(diffs, detection):
                 #save the drawn column in fit_map
                 fit_map[:,n] = fit_column
             #save the fit parameters for the image in 'answers' and the drawn map in 'wavefront_maps'
-            fit_map=sunpy.make_map(fit_map,diffs[0]._original_header)
+            fit_map=sunpy.map.Map(fit_map,diffs[0].meta)
             answers.append(column_fits)
             wavefront_maps.append(fit_map)
 

@@ -109,17 +109,17 @@ def main(source_data='.jp2',
                 if m.exposure_time > 2.0:
                     long_maps.append(m)
             maps=long_maps
-            return long_maps
+
             # Unravel the maps
             new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
+            #return new_maps
 
             #sometimes unravelling maps leads to slight variations in the unraveled
             #image dimensions.  check dimensions of maps and resample to dimensions
             #of first image in sequence if need be.
-            new_maps[0].peek()
+            #new_maps[0].peek()
             new_maps = eitwaveutils.check_dims(new_maps)
 
-            return new_maps
             # calculate the differences
             if diff_type == 'base':
                 diffs=eitwaveutils.map_basediff(new_maps)
@@ -131,23 +131,14 @@ def main(source_data='.jp2',
             ##pickle.dump([maps, new_maps, diffs], output, protocol=0)
             #output.close()
 
-        # Unravel the maps
-        #new_maps = eitwaveutils.map_unravel(maps, params, verbose=True)
-
-        #sometimes unravelling maps leads to slight variations in the unraveled
-        #image dimensions.  check dimensions of maps and resample to dimensions
-        #of first image in sequence if need be.
-        #new_maps = eitwaveutils.check_dims(new_maps)
-
-        # calculate the differences
-        #diffs = eitwaveutils.map_diff(new_maps)
-
         #generate persistence maps
-        persistence_maps = eitwaveutils.map_persistence(diffs)
+        #persistence_maps = eitwaveutils.map_persistence(diffs)
+        persistence_maps=[]
 
         #determine the threshold to apply to the difference maps.
         #diffs > diff_thresh will be True, otherwise False.
         threshold_maps = eitwaveutils.map_threshold(new_maps, factor=0.2)
+        #return threshold_maps
 
         # transform difference maps into binary maps
         binary_maps = eitwaveutils.map_binary(diffs, threshold_maps)
@@ -166,6 +157,9 @@ def main(source_data='.jp2',
                                          size_thresh=50,
                                          inv_thresh=8)
 
+        detection_maps = copy.deepcopy(binary_maps)
+        for i in range(0,len(detection)):
+            detection_maps[i].data = detection[i]
         #If there is anything left in 'detection', fit a function to the original
         #diffmaps in the region defined by 'detection'. Simplest case: fit a
         #Gaussian in the y-direction for some x or range of x.
@@ -176,8 +170,8 @@ def main(source_data='.jp2',
         #these positive diffmaps.
         posdiffs = copy.deepcopy(diffs)
         for i in range(0, len(diffs)):
-            temp = diffs[i] < 0
-            posdiffs[i][temp] = 0
+            temp = diffs[i].data < 0
+            posdiffs[i].data[temp] = 0
 
         #fit a function to the difference maps in the cases where there has been a
         #detection
@@ -192,7 +186,7 @@ def main(source_data='.jp2',
         #strip out the position and width information from the wavefront fitting
         pos_width = eitwaveutils.wavefront_position_and_width(wavefront[0])
 
-        visualize(detection)
+        visualize(detection_maps)
 
     return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity, pos_width, persistence_maps, wavefront_hc,params
 

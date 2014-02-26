@@ -111,8 +111,8 @@ def map_hg_to_hpc_rotate(map, epi_lon = 90, epi_lat = 0, xbin = 2.4, ybin = 2.4)
 
     #Origin grid, HCC to HPC (arcsec)
     #xx, yy = sunpy.wcs.convert_hcc_hpc(current_wave_map.header, xpp, ypp)
-    xx, yy = sunpy.wcs.convert_hcc_hpc(xpp, ypp,
-                                       map.dsun)
+    xx, yy = sunpy.wcs.convert_hcc_hpc(xpp, ypp)
+                                       #dsun_meters=map.dsun)
 
     #Destination HPC grid
     hpcx_range = (np.nanmin(xx), np.nanmax(xx))

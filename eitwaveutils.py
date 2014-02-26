@@ -268,7 +268,7 @@ def map_reravel(unravelled_maps, params, verbose=False):
                                         epi_lat=params.get('epi_lat'),
                                         xbin=2.4,
                                         ybin=2.4)
-        reraveled[np.isnan(reraveled)]=0.0
+        reraveled.data[np.isnan(reraveled)]=0.0
         reraveled_maps += [reraveled]
     return reraveled_maps
 

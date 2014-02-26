@@ -15,20 +15,47 @@ def main(source_data='.jp2',
          algorithm='hough', feed_directory='~/Data/eitwave/jp2/20111001_jp2/',
          use_pickle=None,diff_type='running'):
     '''
-    source_data { jp2 | fits | test }
-    look for helioviewer JP2 files, FITS files, or load the test data
-    respectively
+    This is the main executable for the Automated EUV Wave Analysis and Reduction (AWARE)
+    code. The procedure is as follows:
+        - Query the HEK to find whether any flares were observed in SDO/AIA 211A during the input time range
+        - If yes, then read in (or download) a sequence of solar images corresponding to the time range
+        - Transform these images from Helioprojective Coordinates to Heliographic Coordinates,
+          with the origin centered at the flare origin
+        - Create a sequence of difference maps from these transformed maps
+        - Use a threshold method to create a binary map from the the difference maps.
+        - Apply the Hough Transform to the binary map to search for strong lines in the image
+        - Use the results of the Hough Transform to detect whether an EUV wave is present
+        - Fit an appropriate function (e.g. Gaussian) to the detected wavefront as a function of longitude
+        - Record fit results and return data products
+    
+    Parameters
+    ----------    
+    source_data : string
+        description of the type of data being input. Allowed is 'jp2', 'fits', or 'test'.
+        will look for helioviewer JP2 files, FITS files, or load the test data respectively
 
     time_range : a TimeRange object
-    time range that is searched for EUV waves
+        time range within which to search for EUV waves
 
-    feed_directory
-    If set to a string, look in this directory for the jp2 files.  Assumes that
-    all the JP2 files are relevant to the flare detection.
+    feed_directory : string
+        A directory containing data files to be analysed. If set, AWARE will assume data files are
+        already download and will search in this directory instead. Assumes that all files in the
+        directory with the appropriate extension (e.g. .jp2, .fits) are relevant to the flare detection.
 
-    algorithm: { 'hough' : 'phough' }
-    algorithm used to find the wave
+    use_pickle : string
+        BUGGED - currently not supported, always set to None
+
+    diff_type : string
+        The type of image differencing to use. Allowed values are 'running' or 'base'. Default is 'running'
+        Will perform either running differencing or base differencing on the image sequence.
+
+    Returns
+    -------
+
+    Outputs a pickle file containing the following data products (in order):
+        1) a list of maps modelling the detected wavefront, transformed back to original HPC coordinates  
     '''
+    
     if feed_directory != None:
         feed_directory = os.path.expanduser(feed_directory)
 
@@ -42,18 +69,21 @@ def main(source_data='.jp2',
     if not os.path.exists(os.path.expanduser(data_storage)):
             os.makedirs(os.path.expanduser(data_storage))
 
-    # Query the HEK for flare information we need
+    # Query the HEK to see whether there were any flares during the time range specified
+    # Concentrate on the AIA 211A channel as it has clearest observations of global waves
     client = hek.HEKClient()
     hek_result = client.query(hek.attrs.Time(time_range.t1, time_range.t2),
                               hek.attrs.EventType('FL'),hek.attrs.OBS.ChannelID == '211')
-    #hek.attrs.FRM.Name == '')
     if hek_result is None:
-    # no flares, no analysis possible
+    # if no flares found, no analysis possible. Return
+        print 'No flares found in HEK database during specified time range.'
+        print 'No analysis possible. Returning.'
         return None
 
-    # Flares!
+    # Otherwise, we have found at least one flare
     print('Number of flares found = ' + str(len(hek_result)))
 
+    #assume the first result of the HEK query has the correct information
     for flare in hek_result[0:1]:
 
         if feed_directory is None:
@@ -62,7 +92,6 @@ def main(source_data='.jp2',
                                                  flare)
         else:
             # Assumes that the necessary files are already present
-
             filelist = aware_utils.listdir_fullpath(feed_directory,
                                                      filetype ='jp2')
 
@@ -131,7 +160,7 @@ def main(source_data='.jp2',
         persistence_maps=[]
 
         #determine the threshold to apply to the difference maps.
-        #diffs > diff_thresh will be True, otherwise False.
+        #diffs > diff_thresh will be 1, otherwise 0.
         threshold_maps = aware_utils.map_threshold(new_maps, factor=0.2)
         #return threshold_maps
 
@@ -156,9 +185,8 @@ def main(source_data='.jp2',
         for i in range(0,len(detection)):
             detection_maps[i].data = detection[i]
         #If there is anything left in 'detection', fit a function to the original
-        #diffmaps in the region defined by 'detection'. Simplest case: fit a
-        #Gaussian in the y-direction for some x or range of x.
-        #eitwaveutils.fit_wavefront should probably take the arguments of fitfunc.
+        #diffmaps in the region defined by 'detection'. Currently fits a
+        #Gaussian in the y-direction for each x
         #use 'detection' to guess starting fit parameters.
 
         #get just the positive elements of the difference map. Perform fitting on
@@ -170,20 +198,36 @@ def main(source_data='.jp2',
 
         #fit a function to the difference maps in the cases where there has been a
         #detection
-        wavefront = aware_utils.fit_wavefront(posdiffs, detection)
+        fitparams, wavefront = aware_utils.fit_wavefront(posdiffs, detection)
 
         #transform the detected model wavefront back into heliocentric coordinates so it can be overlayed
-        wavefront_hc = aware_utils.map_reravel(wavefront[1],params,verbose=True)
+        wavefront_hc = aware_utils.map_reravel(wavefront,params,verbose=True)
 
         #strip out the velocity information from the wavefront fitting
-        velocity = aware_utils.wavefront_velocity(wavefront[0])
+        velocity = aware_utils.wavefront_velocity(fitparams)
 
         #strip out the position and width information from the wavefront fitting
-        pos_width = aware_utils.wavefront_position_and_width(wavefront[0])
+        pos_width = aware_utils.wavefront_position_and_width(fitparams)
 
-        visualize(detection_maps)
+        #now save products we have created in a pickle file for future reference
+        #Will save output in ~/aware_results
+        extn=time_range.start().strftime('%Y%m%d_%H%M')
+        save_path=os.path.expanduser('~/aware_results/')
+        save_file='aware_results_' + extn + '.pickle'
+        
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+                          
+        output=open(save_path + save_file,'wb')
+        print 'Saving result products to: '+ save_path + save_file
+                           
+        pickle.dump(wavefront_hc,output)
+        output.close()
 
-    return maps, new_maps, diffs, threshold_maps, binary_maps, detection, wavefront, velocity, pos_width, persistence_maps, wavefront_hc,params
+        #visualize the model wavefront
+        visualize(wavefront_hc)
+        
+    return maps, new_maps, diffs, threshold_maps, binary_maps, detection_maps, wavefront, velocity, pos_width, persistence_maps, wavefront_hc
 
 
 if __name__ == '__main__':

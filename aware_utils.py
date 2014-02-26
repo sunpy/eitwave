@@ -3,18 +3,19 @@
 #
 from visualize import visualize
 from sim import wave2d
-from skimage.transform import hough
-from skimage.transform import probabilistic_hough
+from skimage.transform import hough_line
+from skimage.transform import probabilistic_hough_line
 import scipy
 import numpy as np
 import sunpy
+import sunpy.map
 import os
 import util
 import copy
 from sunpy.net import helioviewer
 from sunpy.time import TimeRange, parse_time
-from sunpy.wcs import convert_hcc_hg
-from sunpy.coords import pb0r
+from sunpy.wcs import convert_hpc_hg
+from pb0r import pb0r
 from datetime import timedelta, datetime
 
 def params(flare,**kwargs):
@@ -25,10 +26,10 @@ def params(flare,**kwargs):
         flare_event_coord2 = flare['event_coord2']
     elif flare["event_coordunit"] == "arcsec" or flare["event_coordunit"] == "arcseconds":
         info = pb0r(flare["event_starttime"])
-        flare_coords = convert_hcc_hg(info["sd"] / 60.0,
-                                      info["b0"], info["l0"],
-                                      flare['event_coord1'] / 3600.0,
-                                      flare['event_coord2'] / 3600.0)
+        #Caution: the following conversion does not take dsun into account (i.e., apparent radius)
+        flare_coords = convert_hpc_hg(flare['event_coord1'],
+                                      flare['event_coord2'],
+                                      info["b0"], info["l0"])
         flare_event_coord1 = flare_coords[0]
         flare_event_coord2 = flare_coords[1]
 
@@ -223,7 +224,7 @@ def accumulate(filelist, accum=2, nsuper=4, verbose=False):
             if verbose:
                 print('File %(#)i out of %(nfiles)i' % {'#': i + j, 'nfiles':nfiles})
                 print('Reading in file ' + filename)
-            map1 = (sunpy.make_map(filename)).superpixel((nsuper, nsuper))
+            map1 = (sunpy.map.Map(filename)).superpixel((nsuper, nsuper))
             if i == 0:
                 m = map1
             else:
@@ -247,7 +248,12 @@ def map_unravel(maps, params, verbose=False):
                                                epi_lat=params.get('epi_lat'),
                                                lon_bin=params.get('lon_bin'),
                                                lat_bin=params.get('lat_bin'))
-        unraveled[np.isnan(unraveled)] = 0.0
+            #print type(unraveled)
+            #test=np.isnan(unraveled)
+            #print len(test)
+            #print test[0:10]
+            #print unraveled.data[0:10]
+        unraveled.data[np.isnan(unraveled)] = 0.0
         new_maps += [unraveled]
     return new_maps
 
@@ -262,7 +268,7 @@ def map_reravel(unravelled_maps, params, verbose=False):
                                         epi_lat=params.get('epi_lat'),
                                         xbin=2.4,
                                         ybin=2.4)
-        reraveled[np.isnan(reraveled)]=0.0
+        reraveled.data[np.isnan(reraveled)]=0.0
         reraveled_maps += [reraveled]
     return reraveled_maps
 
@@ -312,8 +318,8 @@ def map_diff(maps):
     diffs = []
     for i in range(0, len(maps) - 1):
         # take the difference
-        diffmap = (maps[i + 1] - maps[i])
-        # keep
+        diffmap = copy.deepcopy(maps[i + 1])
+        diffmap.data=diffmap.data - maps[i].data
         diffs.append(diffmap)
     return diffs
 
@@ -321,9 +327,9 @@ def map_basediff(maps):
     """ calculate base difference images """
     diffs = []
     for i in range(0, len(maps) - 1):
-        # take the difference
-        diffmap = (maps[i + 1] - maps[0])
-        # keep
+        # take the base difference
+        diffmap = copy.deepcopy(maps[i + 1])
+        diffmap.data = diffmap.data - maps[0].data
         diffs.append(diffmap)
     return diffs
 
@@ -331,9 +337,11 @@ def map_basediff(maps):
 def map_threshold(maps, factor):
     threshold_maps = []
     for i in range(1, len(maps)):
-        sqrt_map = np.sqrt(maps[i]) * factor
+        #sqrt_map = np.sqrt(maps[i]) * factor
         #threshold_maps.append(sqrt_map)
-        threshold_maps.append(0.05 * maps[0])
+        thresh=copy.deepcopy(maps[0])
+        thresh.data=thresh.data*0.05
+        threshold_maps.append(thresh)
     return threshold_maps
 
 def map_persistence(maps):
@@ -352,8 +360,10 @@ def map_binary(diffs, threshold_maps):
     binary_maps = []
     for i in range(0, len(diffs)):
         #for values > threshold_map in the diffmap, return True, otherwise False
-        filtered_map = diffs[i] > threshold_maps[i]
-        
+        filtered_indices = diffs[i].data > threshold_maps[i].data
+        filtered_map=copy.deepcopy(diffs[i])
+        filtered_map.data[:,:]=0
+        filtered_map.data[filtered_indices]=1
         binary_maps.append(filtered_map)
     return binary_maps
 
@@ -369,14 +379,14 @@ that region
 
 '''
 
-def hough_detect(diffs, vote_thresh=12):
+def hough_detect(binary_maps, vote_thresh=12):
     """ Use the Hough detection method to detect lines in the data.
     With enough lines, you can fill in the wave front."""
     detection = []
     print("Performing hough transform on binary maps...")
-    for img in diffs:
+    for img in binary_maps:
         # Perform the hough transform on each of the difference maps
-        transform, theta, d = hough(img)
+        transform, theta, d = hough_line(img.data)
 
         # Filter the hough transform results and find the best lines in the
         # data.  Keep detections that exceed the Hough vote threshold.
@@ -387,8 +397,8 @@ def hough_detect(diffs, vote_thresh=12):
         # Perform the inverse transform to get a series of rectangular
         # images that show where the wavefront is.
         # Create a map which is the same as the
-        invTransform = sunpy.make_map(np.zeros(img.shape), img._original_header)
-        invTransform.data = np.zeros(img.shape)
+        invTransform = sunpy.map.Map(np.zeros(img.data.shape), img.meta)
+        invTransform.data = np.zeros(img.data.shape)
         
         # Add up all the detected lines over each other.  The idea behind
         # adding up all the lines on top of each other is that pixels that
@@ -397,7 +407,7 @@ def hough_detect(diffs, vote_thresh=12):
         # to detect lines - to detect and fill in a region.  You might see this
         # as an abuse of the Hough transform!
         for i in range(0,len(indices[1])):
-            nextLine = htLine(distances[i], theta[i], np.zeros(shape=img.shape))
+            nextLine = htLine(distances[i], theta[i], np.zeros(shape=img.data.shape))
             invTransform = invTransform + nextLine
 
         detection.append(invTransform)
@@ -464,7 +474,7 @@ def fit_wavefront(diffs, detection):
     for i in range (0, len(diffs)):
         if (detection[i].max() == 0.0):
             #if the 'detection' array is empty then skip this image
-            fit_map=sunpy.make_map(np.zeros(dims),diffs[0]._original_header)
+            fit_map=sunpy.map.Map(np.zeros(dims),diffs[0]._original_header)
             print("Nothing detected in image " + str(i) + ". Skipping.")
             answers.append([])
             wavefront_maps.append(fit_map)
@@ -486,13 +496,13 @@ def fit_wavefront(diffs, detection):
             #for each column in image, fit along the y-direction a function to find wave parameters
             for n in range (0,dims[1]):
                 #guess the amplitude of the Gaussian fit from the difference image
-                guess_amp=np.float(img[guess_index[0],n])
+                guess_amp=np.float(img.data[guess_index[0],n])
                 
                 #put the guess input parameters into a vector
                 guess_params=[guess_amp,guess_position,5]
 
                 #get the current image column
-                y=img[:,n]
+                y=img.data[:,n]
                 y=y.flatten()                
                 #call Albert's fitting function
                 result = util.fitfunc(x,y,'Gaussian',guess_params)
@@ -524,7 +534,7 @@ def fit_wavefront(diffs, detection):
                 #save the drawn column in fit_map
                 fit_map[:,n] = fit_column
             #save the fit parameters for the image in 'answers' and the drawn map in 'wavefront_maps'
-            fit_map=sunpy.make_map(fit_map,diffs[0]._original_header)
+            fit_map=sunpy.map.Map(fit_map,diffs[0].meta)
             answers.append(column_fits)
             wavefront_maps.append(fit_map)
 

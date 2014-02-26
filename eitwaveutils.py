@@ -318,8 +318,8 @@ def map_diff(maps):
     diffs = []
     for i in range(0, len(maps) - 1):
         # take the difference
-        diffmap = (maps[i + 1] - maps[i])
-        # keep
+        diffmap = copy.deepcopy(maps[i + 1])
+        diffmap.data=diffmap.data - maps[i].data
         diffs.append(diffmap)
     return diffs
 
@@ -327,9 +327,9 @@ def map_basediff(maps):
     """ calculate base difference images """
     diffs = []
     for i in range(0, len(maps) - 1):
-        # take the difference
-        diffmap = (maps[i + 1] - maps[0])
-        # keep
+        # take the base difference
+        diffmap = copy.deepcopy(maps[i + 1])
+        diffmap.data = diffmap.data - maps[0].data
         diffs.append(diffmap)
     return diffs
 

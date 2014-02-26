@@ -14,7 +14,7 @@ import util
 import copy
 from sunpy.net import helioviewer
 from sunpy.time import TimeRange, parse_time
-from sunpy.wcs import convert_hcc_hg
+from sunpy.wcs import convert_hpc_hg
 from pb0r import pb0r
 from datetime import timedelta, datetime
 

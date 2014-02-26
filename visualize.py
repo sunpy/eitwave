@@ -20,7 +20,7 @@ def visualize(wave_maps, delay = 0.1, range = None):
     axes.set_title("%s %s" % (wave_maps[0].name, wave_maps[0].date))
     params = {
         "cmap": wave_maps[0].cmap,
-        "norm": wave_maps[0].norm()
+        "norm": wave_maps[0].norm
     }
     if range != None:
         params["norm"] = colors.Normalize(range[0],range[1])

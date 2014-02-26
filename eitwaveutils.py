@@ -337,9 +337,11 @@ def map_basediff(maps):
 def map_threshold(maps, factor):
     threshold_maps = []
     for i in range(1, len(maps)):
-        sqrt_map = np.sqrt(maps[i]) * factor
+        #sqrt_map = np.sqrt(maps[i]) * factor
         #threshold_maps.append(sqrt_map)
-        threshold_maps.append(0.05 * maps[0])
+        thresh=copy.deepcopy(maps[0])
+        thresh.data=thresh.data*0.05
+        threshold_maps.append(thresh)
     return threshold_maps
 
 def map_persistence(maps):
@@ -358,8 +360,10 @@ def map_binary(diffs, threshold_maps):
     binary_maps = []
     for i in range(0, len(diffs)):
         #for values > threshold_map in the diffmap, return True, otherwise False
-        filtered_map = diffs[i] > threshold_maps[i]
-        
+        filtered_indices = diffs[i].data > threshold_maps[i].data
+        filtered_map=copy.deepcopy(diffs[i])
+        filtered_map.data[:,:]=0
+        filtered_map.data[filtered_indices]=1
         binary_maps.append(filtered_map)
     return binary_maps
 
@@ -382,7 +386,7 @@ def hough_detect(diffs, vote_thresh=12):
     print("Performing hough transform on binary maps...")
     for img in diffs:
         # Perform the hough transform on each of the difference maps
-        transform, theta, d = hough(img)
+        transform, theta, d = hough_line(img)
 
         # Filter the hough transform results and find the best lines in the
         # data.  Keep detections that exceed the Hough vote threshold.

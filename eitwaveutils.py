@@ -26,10 +26,10 @@ def params(flare,**kwargs):
         flare_event_coord2 = flare['event_coord2']
     elif flare["event_coordunit"] == "arcsec" or flare["event_coordunit"] == "arcseconds":
         info = pb0r(flare["event_starttime"])
-        flare_coords = convert_hcc_hg(info["sd"] / 60.0,
-                                      info["b0"], info["l0"],
-                                      flare['event_coord1'] / 3600.0,
-                                      flare['event_coord2'] / 3600.0)
+        #Caution: the following conversion does not take dsun into account (i.e., apparent radius)
+        flare_coords = convert_hpc_hg(flare['event_coord1'],
+                                      flare['event_coord2'],
+                                      info["b0"], info["l0"])
         flare_event_coord1 = flare_coords[0]
         flare_event_coord2 = flare_coords[1]
 

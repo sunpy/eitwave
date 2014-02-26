@@ -27,7 +27,7 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 90, lon_bin = 1, lat_bin = 
 
     HG' = HG, except center at wave epicenter
     """
-    x, y = sunpy.wcs.convert_pixel_to_data(map.shape,
+    x, y = sunpy.wcs.convert_pixel_to_data([map.shape[1], map.shape[0]],
                                            [map.scale['x'], map.scale['y']],
                                            [map.reference_pixel['x'], map.reference_pixel['y']],
                                            [map.reference_coordinate['x'],map.reference_coordinate['y']])
@@ -58,7 +58,7 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 90, lon_bin = 1, lat_bin = 
 
     # get rid of all of the bad (nan) indices (i.e. those off of the sun)
     index = np.isfinite(points[:,0]) * np.isfinite(points[:,1])
-    points = np.vstack((points[index,0], points[index,1])).T
+    #points = np.vstack((points[index,0], points[index,1])).T
     points = points[index]
     values = values[index]
 
@@ -78,13 +78,12 @@ def map_hpc_to_hg_rotate(map, epi_lon = 0, epi_lat = 90, lon_bin = 1, lat_bin = 
         'CRVAL2': lat.min(),
         'CUNIT2': "deg",
         'CTYPE2': "HG",
-        'DATE-OBS': map.meta['date-obs']
+        'DATE_OBS': map.meta['date-obs']
     }
 
     header = dict_header
     transformed_map = sunpy.map.Map(newdata, header)
-    #transformed_map.name = map.name
-    #transformed_map.date = map.date
+    transformed_map.name = map.name
 
     return transformed_map
 
@@ -96,19 +95,14 @@ def map_hg_to_hpc_rotate(map, epi_lon = 90, epi_lat = 0, xbin = 2.4, ybin = 2.4)
     """
 
     #Origin grid, HG'
-    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data(map.shape[1],
-                                                         map.shape[0],
-                                                         map.scale['x'],
-                                                         map.scale['y'],
-                                                         map.reference_pixel['x'],
-                                                         map.reference_pixel['y'],
-                                                         map.reference_coordinate['x'],
-                                                         map.reference_coordinate['y'],
-                                                         map.coordinate_system['x'])
+    lon_grid, lat_grid = sunpy.wcs.convert_pixel_to_data([map.shape[1], map.shape[0]],
+                                                         [map.scale['x'], map.scale['y']],
+                                                         [map.reference_pixel['x'], map.reference_pixel['y']],
+                                                         [map.reference_coordinate['x'], map.reference_coordinate['y']])
 
     #Origin grid, HG' to HCC'
     #HCC' = HCC, except centered at wave epicenter
-    x, y, z = sunpy.wcs.convert_hg_hcc(lon_grid, lat_grid)
+    x, y, z = sunpy.wcs.convert_hg_hcc(lon_grid, lat_grid, z=True)
 
     #Origin grid, HCC' to HCC''
     #Moves the wave epicenter to initial conditions
@@ -117,12 +111,8 @@ def map_hg_to_hpc_rotate(map, epi_lon = 90, epi_lat = 0, xbin = 2.4, ybin = 2.4)
 
     #Origin grid, HCC to HPC (arcsec)
     #xx, yy = sunpy.wcs.convert_hcc_hpc(current_wave_map.header, xpp, ypp)
-    xx, yy = sunpy.wcs.convert_hcc_hpc(map.rsun_meters,
-                                       map.dsun,
-                                       xpp,
-                                       ypp)
-    xx *= 3600
-    yy *= 3600
+    xx, yy = sunpy.wcs.convert_hcc_hpc(xpp, ypp,
+                                       map.dsun)
 
     #Destination HPC grid
     hpcx_range = (np.nanmin(xx), np.nanmax(xx))
@@ -130,7 +120,7 @@ def map_hg_to_hpc_rotate(map, epi_lon = 90, epi_lat = 0, xbin = 2.4, ybin = 2.4)
 
     hpcx = np.arange(hpcx_range[0], hpcx_range[1], xbin)
     hpcy = np.arange(hpcy_range[0], hpcy_range[1], ybin)
-    newgrid = np.meshgrid(hpcx, hpcy)
+    newgrid_x, newgrid_y = np.meshgrid(hpcx, hpcy)
 
     #Coordinate positions (HPC) with corresponding map data
     points = np.vstack((xx.ravel(), yy.ravel())).T
@@ -138,7 +128,7 @@ def map_hg_to_hpc_rotate(map, epi_lon = 90, epi_lat = 0, xbin = 2.4, ybin = 2.4)
 
     #2D interpolation from origin grid to destination grid
     newdata = griddata(points[zpp.ravel() >= 0], values[zpp.ravel() >= 0],
-                       newgrid, method="linear")
+                       (newgrid_x, newgrid_y), method="linear")
 
     dict_header = {
         "CDELT1": xbin,
@@ -155,13 +145,13 @@ def map_hg_to_hpc_rotate(map, epi_lon = 90, epi_lat = 0, xbin = 2.4, ybin = 2.4)
         "CTYPE2": "HPLT-TAN",
         "HGLT_OBS": 0,
         "HGLN_OBS": 0,
+        'DATE_OBS': map.meta['date-obs'],
     }
 
-    header = sunpy.map.MapHeader(dict_header)
+    header = sunpy.map.MapMeta(dict_header)
 
-    transformed_map = sunpy.make_map(newdata, header)
+    transformed_map = sunpy.map.Map(newdata, header)
     transformed_map.name = map.name
-    transformed_map.date = map.date
 
     return transformed_map
 

@@ -1,13 +1,14 @@
 
-from visualize import visualize
-import aware_utils
 import copy
 import os
 import cPickle as pickle
-from test_wave2d import test_wave2d
+
 from sunpy.time import TimeRange, parse_time
 from sunpy.net import hek
-import os
+
+from test_wave2d import test_wave2d
+from visualize import visualize
+import aware_utils
 
 
 def main(source_data='.jp2',

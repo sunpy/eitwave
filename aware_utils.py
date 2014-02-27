@@ -132,7 +132,7 @@ def listdir_fullpath(d, filetype=None):
     else:
         filtered_list = []
         for f in filelist:
-            if f[-len(filetype):] == filetype:
+            if f.endswith(filetype):
                 filtered_list.append(f)
         return sorted([os.path.join(dd, f) for f in filtered_list])
 
@@ -474,7 +474,7 @@ def fit_wavefront(diffs, detection):
     for i in range (0, len(diffs)):
         if (detection[i].max() == 0.0):
             #if the 'detection' array is empty then skip this image
-            fit_map=sunpy.map.Map(np.zeros(dims),diffs[0]._original_header)
+            fit_map=sunpy.map.Map(np.zeros(dims),diffs[0].meta)
             print("Nothing detected in image " + str(i) + ". Skipping.")
             answers.append([])
             wavefront_maps.append(fit_map)

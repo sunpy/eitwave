@@ -14,7 +14,7 @@ import aware_utils
 def main(source_data='.jp2',
          time_range=TimeRange('2011/10/01 09:45:00', '2011/10/01 10:15:59'),
          algorithm='hough', feed_directory='~/Data/eitwave/jp2/20111001_jp2/',
-         use_pickle=None,diff_type='running'):
+         use_pickle=None,diff_type='running',data_savedir=None):
     '''
     This is the main executable for the Automated EUV Wave Analysis and Reduction (AWARE)
     code. The procedure is as follows:
@@ -32,7 +32,7 @@ def main(source_data='.jp2',
     Parameters
     ----------    
     source_data : string
-        description of the type of data being input. Allowed is 'jp2', 'fits', or 'test'.
+        description of the type of data being input. Allowed is '.jp2', 'fits', or 'test'.
         will look for helioviewer JP2 files, FITS files, or load the test data respectively
 
     time_range : a TimeRange object
@@ -50,25 +50,32 @@ def main(source_data='.jp2',
         The type of image differencing to use. Allowed values are 'running' or 'base'. Default is 'running'
         Will perform either running differencing or base differencing on the image sequence.
 
+    data_savedir : string
+        directory in which to save downloaded jp2 files from Helioviewer. If None, then AWARE will construct a directory
+        based on the start time of the query.
+
     Returns
     -------
 
     Outputs a pickle file containing the following data products (in order):
         1) a list of maps modelling the detected wavefront, transformed back to original HPC coordinates  
     '''
-    
+
+
     if feed_directory != None:
         feed_directory = os.path.expanduser(feed_directory)
 
+    #Check which type of data is being analysed, and establish the directory to store downloaded files,
+    #if appropriate
     if source_data == 'test':
-        # where to store those data
         maps = test_wave2d()
-    elif source_data == '.jp2':
-        # where to store those data
-        data_storage = "~/Data/eitwave/jp2/20120607/"
-
-    if not os.path.exists(os.path.expanduser(data_storage)):
-            os.makedirs(os.path.expanduser(data_storage))
+    elif source_data == '.jp2' and data_savedir == None:
+        data_savedir = '~/aware_data/jp2/' + time_range.start().strftime('%Y%m%d_%H%M')
+    elif source_data == '.fits' and data_savedir == None:
+        data_savedir = '~/aware_data/fits/' + time_range.start().strftime('%Y%m%d_%H%M')
+            
+    if not os.path.exists(os.path.expanduser(data_savedir)):
+        os.makedirs(os.path.expanduser(data_savedir))
 
     # Query the HEK to see whether there were any flares during the time range specified
     # Concentrate on the AIA 211A channel as it has clearest observations of global waves
@@ -89,14 +96,15 @@ def main(source_data='.jp2',
 
         if feed_directory is None:
             print('Acquiring data for flare')
-            filelist = aware_utils.acquire_data(data_storage, source_data,
+            filelist = aware_utils.acquire_data(data_savedir, source_data,
                                                  flare)
         else:
             # Assumes that the necessary files are already present
             filelist = aware_utils.listdir_fullpath(feed_directory,
-                                                     filetype ='jp2')
+                                                     filetype = source_data)
 
         #filter to only grab the data files with the source_data extn in the directory
+        #this looks like duplication of listdir_fullpath
         files_tmp = []
         for f in filelist:
             if f.endswith(source_data):

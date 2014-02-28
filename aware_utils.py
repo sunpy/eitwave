@@ -12,7 +12,7 @@ import sunpy.map
 import os
 import util
 import copy
-from sunpy.net import helioviewer
+from sunpy.net import helioviewer, vso
 from sunpy.time import TimeRange, parse_time
 from sunpy.wcs import convert_hpc_hg
 from pb0r import pb0r
@@ -118,7 +118,7 @@ def acquire_data(directory, extension, flare, duration=60, verbose=True):
     if extension.lower() == '.jp2':
         data = acquire_jp2(directory, data_range)
     if extension.lower() in ('.fits', '.fts'):
-        data = []
+        data = acquire_fits(directory,data_range)
     # Return the flare list from the HEK and a list of files for each flare in
     # the HEK flare list
     return data
@@ -197,6 +197,12 @@ def acquire_jp2(directory, time_range, observatory='SDO', instrument='AIA',
         # advance the time
         this_time = this_time + timedelta(seconds=6)
     return jp2_list
+
+def acquire_fits(directory, time_range, observatory='SDO', instrument='AIA',
+                detector='AIA', measurement='211', verbose=True):
+    """Acquire FITS files within the specified time range."""
+    data=[]
+    return data
 
 def loaddata(directory, extension):
     """ get the file list and sort it.  For well behaved file names the file

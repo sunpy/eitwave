@@ -205,9 +205,11 @@ def acquire_fits(directory, time_range, observatory='SDO', instrument='AIA',
     tstart=time_range.t1.strftime('%Y/%m/%d %H:%M')
     tend=time_range.t2.strftime('%Y/%m/%d %H:%M')
     #search VSO for FITS files within the time range, searching for AIA 211A only at a 36s cadence
-    qr=client.query(vso.attrs.Time(tstart,tend),vso.attrs.Instrument(detector),vso.attrs.Wave(211,211),vso.attrs.Sample(36))
-    res=client.get(qr,path=os.path.join(directory,'{file}.fits')).wait()
-    fits_list=[f for f in os.listdir(directory) if f.endswith('.fits')]
+    print 'Querying VSO to find FITS files...'
+    qr=client.query(vso.attrs.Time(tstart,tend),vso.attrs.Instrument('aia'),vso.attrs.Wave(211,211),vso.attrs.Sample(36))
+    print 'Downloading '+str(len(qr))+ ' files from VSO to ' + os.path.expanduser(directory)
+    res=client.get(qr,path=os.path.join(os.path.expanduser(directory),'{file}.fits')).wait()
+    fits_list=[f for f in os.listdir(os.path.expanduser(directory)) if f.endswith('.fits')]
 
     return fits_list
 

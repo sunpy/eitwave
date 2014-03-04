@@ -226,7 +226,7 @@ def acquire_fits(directory, time_range, observatory='SDO', instrument='AIA',
                 exists.append(False)
 
         if not any(exists) == True:
-            res=client.get(qr,path=os.path.join(os.path.expanduser(directory),'{file}.fits')).wait()
+            res=client.get([q],path=os.path.join(os.path.expanduser(directory),'{file}.fits')).wait()
         else:
             print 'File at time ' + filetimestring + ' already exists. Skipping'
 

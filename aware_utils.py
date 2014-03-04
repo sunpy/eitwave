@@ -204,11 +204,32 @@ def acquire_fits(directory, time_range, observatory='SDO', instrument='AIA',
     client=vso.VSOClient()
     tstart=time_range.t1.strftime('%Y/%m/%d %H:%M')
     tend=time_range.t2.strftime('%Y/%m/%d %H:%M')
+
+    #check if any files are already in the directory
+    current_files=[f for f in os.listdir(os.path.expanduser(directory)) if f.endswith('.fits')]
+    
     #search VSO for FITS files within the time range, searching for AIA 211A only at a 36s cadence
     print 'Querying VSO to find FITS files...'
     qr=client.query(vso.attrs.Time(tstart,tend),vso.attrs.Instrument('aia'),vso.attrs.Wave(211,211),vso.attrs.Sample(36))
+    
     print 'Downloading '+str(len(qr))+ ' files from VSO to ' + os.path.expanduser(directory)
-    res=client.get(qr,path=os.path.join(os.path.expanduser(directory),'{file}.fits')).wait()
+
+    for q in qr:
+        filetimestring=q.time.start[0:4] + '_' + q.time.start[4:6] + '_' + q.time.start[6:8] + 't' \
+          + q.time.start[8:10] + '_' +q.time.start[10:12] + '_' + q.time.start[12:14]
+
+        exists=[]
+        for c in current_files:
+            if filetimestring in c:
+                exists.append(True)
+            else:
+                exists.append(False)
+
+        if not any(exists) == True:
+            res=client.get(qr,path=os.path.join(os.path.expanduser(directory),'{file}.fits')).wait()
+        else:
+            print 'File at time ' + filetimestring + ' already exists. Skipping'
+
     fits_list=[f for f in os.listdir(os.path.expanduser(directory)) if f.endswith('.fits')]
 
     return fits_list

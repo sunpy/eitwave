@@ -114,15 +114,18 @@ def main(source_data='.jp2',
         # reduce the number of files to those that happen after the flare has
         # started
         files = []
-        for f in files_tmp:
-            fhv = f.split(os.sep)[-1]
-            if aware_utils.hv_filename2datetime(fhv) > \
-            parse_time(flare['event_starttime']):
-                files.append(f)
-        print('Number of files :' + str(len(files)))
-        if len(files) == 0:
-            print('No files found.  Returning.')
-            return None
+        if source_data == '.jp2':
+            for f in files_tmp:
+                fhv = f.split(os.sep)[-1]
+                if aware_utils.hv_filename2datetime(fhv) > \
+                parse_time(flare['event_starttime']):
+                    files.append(f)
+            print('Number of files :' + str(len(files)))
+            if len(files) == 0:
+                print('No files found.  Returning.')
+                return None
+        else:
+            files = files_tmp
 
         # Define the transform parameters
         params = aware_utils.params(flare)

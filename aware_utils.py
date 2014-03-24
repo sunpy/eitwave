@@ -12,7 +12,7 @@ import sunpy.map
 import os
 import util
 import copy
-from sunpy.net import helioviewer
+from sunpy.net import helioviewer, vso
 from sunpy.time import TimeRange, parse_time
 from sunpy.wcs import convert_hpc_hg
 from pb0r import pb0r
@@ -118,7 +118,7 @@ def acquire_data(directory, extension, flare, duration=60, verbose=True):
     if extension.lower() == '.jp2':
         data = acquire_jp2(directory, data_range)
     if extension.lower() in ('.fits', '.fts'):
-        data = []
+        data = acquire_fits(directory,data_range)
     # Return the flare list from the HEK and a list of files for each flare in
     # the HEK flare list
     return data
@@ -197,6 +197,43 @@ def acquire_jp2(directory, time_range, observatory='SDO', instrument='AIA',
         # advance the time
         this_time = this_time + timedelta(seconds=6)
     return jp2_list
+
+def acquire_fits(directory, time_range, observatory='SDO', instrument='AIA',
+                detector='AIA', measurement='211', verbose=True):
+    """Acquire FITS files within the specified time range."""
+    client=vso.VSOClient()
+    tstart=time_range.t1.strftime('%Y/%m/%d %H:%M')
+    tend=time_range.t2.strftime('%Y/%m/%d %H:%M')
+
+    #check if any files are already in the directory
+    current_files=[f for f in os.listdir(os.path.expanduser(directory)) if f.endswith('.fits')]
+    
+    #search VSO for FITS files within the time range, searching for AIA 211A only at a 36s cadence
+    print 'Querying VSO to find FITS files...'
+    qr=client.query(vso.attrs.Time(tstart,tend),vso.attrs.Instrument('aia'),vso.attrs.Wave(211,211),vso.attrs.Sample(36))
+
+    dir=os.path.expanduser(directory)
+    print 'Downloading '+str(len(qr))+ ' files from VSO to ' + dir
+
+    for q in qr:
+        filetimestring=q.time.start[0:4] + '_' + q.time.start[4:6] + '_' + q.time.start[6:8] + 't' \
+          + q.time.start[8:10] + '_' +q.time.start[10:12] + '_' + q.time.start[12:14]
+
+        exists=[]
+        for c in current_files:
+            if filetimestring in c:
+                exists.append(True)
+            else:
+                exists.append(False)
+
+        if not any(exists) == True:
+            res=client.get([q],path=os.path.join(dir,'{file}.fits')).wait()
+        else:
+            print 'File at time ' + filetimestring + ' already exists. Skipping'
+
+    fits_list=[os.path.join(dir,f) for f in os.listdir(dir) if f.endswith('.fits')]
+
+    return fits_list
 
 def loaddata(directory, extension):
     """ get the file list and sort it.  For well behaved file names the file
